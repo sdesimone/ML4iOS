@@ -51,6 +51,12 @@
 
 #pragma mark -
 
+/** Property to check which username/key are used. Used when
+ allowing handling multiple accounts (SDS).
+ */
+@property (nonatomic, readonly) NSString* username;
+@property (nonatomic, readonly) NSString* key;
+
 /**
  * Property used to set the delegate for asynchronous responses
  */
