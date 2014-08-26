@@ -172,6 +172,54 @@
 -(void)modelIsReady:(BOOL)ready;
 
 //*******************************************************************************
+//*************************** CLUSTERS *******************************************
+//************* https://bigml.com/developers/clusters *****************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Clusters
+
+/**
+ * Async response to createClusterWithDataSetId
+ * @param cluster The cluster created if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)clusterCreated:(NSDictionary*)cluster statusCode:(NSInteger)code;
+
+/**
+ * Async response to updateClusterNameWithId
+ * @param cluster The cluster updated if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)clusterUpdated:(NSDictionary*)cluster statusCode:(NSInteger)code;
+
+/**
+ * Async response to deleteClusterWithId
+ * @param code The HTTP status code
+ */
+-(void)clusterDeletedWithStatusCode:(NSInteger)code;
+
+/**
+ * Async response to getAllClustersWithName
+ * @param clusters The clusters retrieved
+ * @param code The HTTP status code
+ */
+-(void)clustersRetrieved:(NSDictionary*)clusters statusCode:(NSInteger)code;
+
+/**
+ * Async response to getClusterWithId
+ * @param cluster The cluster retrieved
+ * @param code The HTTP status code
+ */
+-(void)clusterRetrieved:(NSDictionary*)cluster statusCode:(NSInteger)code;
+
+/**
+ * Async response to checkClusterIsReadyWithId
+ * @param ready true if cluster status is FINISHED, else false
+ */
+-(void)clusterIsReady:(BOOL)ready;
+
+//*******************************************************************************
 //*************************** PREDICTIONS  **************************************
 //************* https://bigml.com/developers/predictions ************************
 //*******************************************************************************
