@@ -290,10 +290,10 @@
         [urlString appendFormat:@"name=%@;", name];
      
     if(offset > 0)
-        [urlString appendFormat:@"offset=%d;", offset];
+        [urlString appendFormat:@"offset=%d;", (int)offset];
     
     if(limit > 0)
-        [urlString appendFormat:@"limit=%d;", limit];
+        [urlString appendFormat:@"limit=%d;", (int)limit];
     
     return [self listItemsWithURL:urlString statusCode:code];
 }
@@ -354,10 +354,10 @@
         [urlString appendFormat:@"name=%@;", name];
     
     if(offset > 0)
-        [urlString appendFormat:@"offset=%d;", offset];
+        [urlString appendFormat:@"offset=%d;", (int)offset];
     
     if(limit > 0)
-        [urlString appendFormat:@"limit=%d;", limit];
+        [urlString appendFormat:@"limit=%d;", (int)limit];
     
     return [self listItemsWithURL:urlString statusCode:code];
 }
@@ -418,10 +418,10 @@
         [urlString appendFormat:@"name=%@;", name];
     
     if(offset > 0)
-        [urlString appendFormat:@"offset=%d;", offset];
+        [urlString appendFormat:@"offset=%d;", (int)offset];
     
     if(limit > 0)
-        [urlString appendFormat:@"limit=%d;", limit];
+        [urlString appendFormat:@"limit=%d;", (int)limit];
     
     return [self listItemsWithURL:urlString statusCode:code];
 }
@@ -482,10 +482,10 @@
         [urlString appendFormat:@"name=%@;", name];
     
     if(offset > 0)
-        [urlString appendFormat:@"offset=%d;", offset];
+        [urlString appendFormat:@"offset=%d;", (int)offset];
     
     if(limit > 0)
-        [urlString appendFormat:@"limit=%d;", limit];
+        [urlString appendFormat:@"limit=%d;", (int)limit];
     
     return [self listItemsWithURL:urlString statusCode:code];
 }
@@ -552,10 +552,10 @@
         [urlString appendFormat:@"name=%@;", name];
     
     if(offset > 0)
-        [urlString appendFormat:@"offset=%d;", offset];
+        [urlString appendFormat:@"offset=%d;", (int)offset];
     
     if(limit > 0)
-        [urlString appendFormat:@"limit=%d;", limit];
+        [urlString appendFormat:@"limit=%d;", (int)limit];
     
     return [self listItemsWithURL:urlString statusCode:code];
 }
