@@ -93,6 +93,12 @@
 
 @implementation ML4iOS
 
+- (HTTPCommsManager*)commsManager {
+    
+    return commsManager;
+}
+
+
 #pragma mark -
 
 @synthesize delegate;

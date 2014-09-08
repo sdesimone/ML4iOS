@@ -325,4 +325,11 @@
  */
 -(NSDictionary*)getPredictionWithId:(NSString*)identifier statusCode:(NSInteger*)code;
 
+//*******************************************************************************
+//**************************  LOW LEVEL  **************************************
+//*******************************************************************************
+- (NSInteger)deleteItemWithURL:(NSString*)url;
+- (NSString*)apiBaseURL;
+- (NSString*)authToken;
+
 @end
