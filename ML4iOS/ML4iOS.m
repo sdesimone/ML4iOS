@@ -50,12 +50,12 @@
 #pragma mark -
 #pragma mark DataSources Async Callbacks
 
--(void)createDataSourceAction:(NSDictionary*)params;
--(void)updateDataSourceAction:(NSDictionary*)params;
--(void)deleteDataSourceAction:(NSDictionary*)params;
--(void)getAllDataSourcesAction:(NSDictionary*)params;
--(void)getDataSourceAction:(NSDictionary*)params;
--(void)checkDataSourceIsReadyAction:(NSDictionary*)params;
+-(void)createSourceAction:(NSDictionary*)params;
+-(void)updateSourceAction:(NSDictionary*)params;
+-(void)deleteSourceAction:(NSDictionary*)params;
+-(void)getAllSourcesAction:(NSDictionary*)params;
+-(void)getSourceAction:(NSDictionary*)params;
+-(void)checkSourceIsReadyAction:(NSDictionary*)params;
 
 #pragma mark -
 #pragma mark Datasets Async Callbacks
@@ -92,6 +92,12 @@
 #pragma mark -
 
 @implementation ML4iOS
+
+- (HTTPCommsManager*)commsManager {
+    
+    return commsManager;
+}
+
 
 #pragma mark -
 
@@ -150,21 +156,21 @@
 #pragma mark -
 #pragma mark DataSources
 
--(NSDictionary*)createDataSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code
+-(NSDictionary*)createSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code
 {
     return [commsManager createDataSourceWithName:name filePath:filePath statusCode:code];
 }
 
--(NSOperation*)createDataSourceWithName:(NSString*)name filePath:(NSString*)filePath
+-(NSOperation*)createSourceWithName:(NSString*)name filePath:(NSString*)filePath
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
     params[@"name"] = name;
     params[@"filePath"] = filePath;
     
-    return [self launchOperationWithSelector:@selector(createDataSourceAction:) params:params];
+    return [self launchOperationWithSelector:@selector(createSourceAction:) params:params];
 }
 
--(void)createDataSourceAction:(NSDictionary*)params
+-(void)createSourceAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* name = params[@"name"];
@@ -175,21 +181,21 @@
     [delegate dataSourceCreated:dataSource statusCode:statusCode];
 }
 
--(NSDictionary*)updateDataSourceNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)updateSourceNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
 {
     return [commsManager updateDataSourceNameWithId:identifier name:name statusCode:code];
 }
 
--(NSOperation*)updateDataSourceNameWithId:(NSString*)identifier name:(NSString*)name
+-(NSOperation*)updateSourceNameWithId:(NSString*)identifier name:(NSString*)name
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
     params[@"identifier"] = identifier;
     params[@"name"] = name;
     
-    return [self launchOperationWithSelector:@selector(updateDataSourceAction:) params:params];
+    return [self launchOperationWithSelector:@selector(updateSourceAction:) params:params];
 }
 
--(void)updateDataSourceAction:(NSDictionary*)params
+-(void)updateSourceAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* identifier = params[@"identifier"];
@@ -200,42 +206,42 @@
     [delegate dataSourceUpdated:dataSource statusCode:statusCode];
 }
 
--(NSInteger)deleteDataSourceWithIdSync:(NSString*)identifier
+-(NSInteger)deleteSourceWithIdSync:(NSString*)identifier
 {
     return [commsManager deleteDataSourceWithId:identifier];
 }
 
--(NSOperation*)deleteDataSourceWithId:(NSString*)identifier
+-(NSOperation*)deleteSourceWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(deleteDataSourceAction:) params:params];
+    return [self launchOperationWithSelector:@selector(deleteSourceAction:) params:params];
 }
 
--(void)deleteDataSourceAction:(NSDictionary*)params
+-(void)deleteSourceAction:(NSDictionary*)params
 {
     NSInteger statusCode = [commsManager deleteDataSourceWithId:params[@"identifier"]];
     
     [delegate dataSourceDeletedWithStatusCode:statusCode];
 }
 
--(NSDictionary*)getAllDataSourcesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+-(NSDictionary*)getAllSourcesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
 {
     return [commsManager getAllDataSourcesWithName:name offset:offset limit:limit statusCode:code];
 }
 
--(NSOperation*)getAllDataSourcesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+-(NSOperation*)getAllSourcesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"name"] = name;
     params[@"offset"] = @(offset);
     params[@"limit"] = @(limit);
     
-    return [self launchOperationWithSelector:@selector(getAllDataSourcesAction:) params:params];
+    return [self launchOperationWithSelector:@selector(getAllSourcesAction:) params:params];
 }
 
--(void)getAllDataSourcesAction:(NSDictionary*)params
+-(void)getAllSourcesAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* name = params[@"name"];
@@ -247,20 +253,20 @@
     [delegate dataSourcesRetrieved:dataSources statusCode:statusCode];
 }
 
--(NSDictionary*)getDataSourceWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
+-(NSDictionary*)getSourceWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
 {
     return [commsManager getDataSourceWithId:identifier statusCode:code];
 }
 
--(NSOperation*)getDataSourceWithId:(NSString*)identifier
+-(NSOperation*)getSourceWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(getDataSourceAction:) params:params];
+    return [self launchOperationWithSelector:@selector(getSourceAction:) params:params];
 }
 
--(void)getDataSourceAction:(NSDictionary*)params
+-(void)getSourceAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSDictionary* dataSource = [commsManager getDataSourceWithId:params[@"identifier"] statusCode:&statusCode];
@@ -268,7 +274,7 @@
     [delegate dataSourceRetrieved:dataSource statusCode:statusCode];
 }
 
--(BOOL)checkDataSourceIsReadyWithIdSync:(NSString*)identifier
+-(BOOL)checkSourceIsReadyWithIdSync:(NSString*)identifier
 {
     BOOL ready = NO;
     
@@ -281,15 +287,15 @@
     return ready;
 }
 
--(NSOperation*)checkDataSourceIsReadyWithId:(NSString*)identifier
+-(NSOperation*)checkSourceIsReadyWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(checkDataSourceIsReadyAction:) params:params];
+    return [self launchOperationWithSelector:@selector(checkSourceIsReadyAction:) params:params];
 }
 
--(void)checkDataSourceIsReadyAction:(NSDictionary*)params
+-(void)checkSourceIsReadyAction:(NSDictionary*)params
 {
     BOOL ready = NO;
     

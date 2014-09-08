@@ -62,6 +62,8 @@
  */
 @property(nonatomic, weak) id<ML4iOSDelegate> delegate;
 
+@property (nonatomic, readonly) HTTPCommsManager* commsManager;
+
 #pragma mark -
 
 /**
@@ -98,7 +100,7 @@
  * @param code The HTTP status code returned
  * @return The data source created if success, else nil
  */
--(NSDictionary*)createDataSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code;
+-(NSDictionary*)createSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code;
 
 /**
  * Creates a data source from a given .csv file. The response is provided in the method dataSourceCreated of the delegate.
@@ -107,7 +109,7 @@
  * @param filePath The full path of the csv in the filesystem
  * @return The async NSOperation created
  */
--(NSOperation*)createDataSourceWithName:(NSString*)name filePath:(NSString*)filePath;
+-(NSOperation*)createSourceWithName:(NSString*)name filePath:(NSString*)filePath;
 
 /**
  * Updates the name of a given data source. 
@@ -116,7 +118,7 @@
  * @param code The HTTP status code returned
  * @return The data source updated if success, else nil
  */
--(NSDictionary*)updateDataSourceNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)updateSourceNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given data source. The response is provided in the method dataSourceUpdated of the delegate.
@@ -124,21 +126,21 @@
  * @param name The new name of the data source
  * @return The async NSOperation created
  */
--(NSOperation*)updateDataSourceNameWithId:(NSString*)identifier name:(NSString*)name;
+-(NSOperation*)updateSourceNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
  * Deletes a given data source. 
  * @param identifier The identifier of the data source to delete 
  * @return The HTTP status code returned
  */
--(NSInteger)deleteDataSourceWithIdSync:(NSString*)identifier;
+-(NSInteger)deleteSourceWithIdSync:(NSString*)identifier;
 
 /**
  * Deletes a given data source. The response is provided in the method dataSourceDeletedWithStatusCode of the delegate.
  * @param identifier The identifier of the data source to delete 
  * @return The async NSOperation created
  */
--(NSOperation*)deleteDataSourceWithId:(NSString*)identifier;
+-(NSOperation*)deleteSourceWithId:(NSString*)identifier;
 
 /**
  * Get a list of data sources filtered by name.
@@ -149,7 +151,7 @@
  * @param code The HTTP status code returned
  * @return The list of data sources found if success, else nil
  */
--(NSDictionary*)getAllDataSourcesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+-(NSDictionary*)getAllSourcesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
 
 /**
  * Get a list of data sources filtered by name. The response is provided in the method dataSourcesRetrieved of the delegate.
@@ -159,7 +161,7 @@
  * @param limit The maximum number of results
  * @return The async NSOperation created
  */
--(NSOperation*)getAllDataSourcesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+-(NSOperation*)getAllSourcesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
 
 /**
  * Get a data source.
@@ -167,28 +169,28 @@
  * @param code The HTTP status code returned
  * @return The data source if success, else nil
  */
--(NSDictionary*)getDataSourceWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+-(NSDictionary*)getSourceWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
 
 /**
  * Get a data source. The response is provided in the method dataSourceRetrieved of the delegate.
  * @param identifier The identifier of the data source to get 
  * @return The async NSOperation created
  */
--(NSOperation*)getDataSourceWithId:(NSString*)identifier;
+-(NSOperation*)getSourceWithId:(NSString*)identifier;
 
 /**
  * Check if the status of the data source is FINISHED.
  * @param identifier The identifier of the data source to check the status 
  * @return true if the status of the data source is FINISHED, else false
  */
--(BOOL)checkDataSourceIsReadyWithIdSync:(NSString*)identifier;
+-(BOOL)checkSourceIsReadyWithIdSync:(NSString*)identifier;
 
 /**
  * Check if the status of the data source is FINISHED. The response is provided in the method dataSourceIsReady of the delegate.
  * @param identifier The identifier of the data source to check the status
  * @return The async NSOperation created
  */
--(NSOperation*)checkDataSourceIsReadyWithId:(NSString*)identifier;
+-(NSOperation*)checkSourceIsReadyWithId:(NSString*)identifier;
 
 //*******************************************************************************
 //*************************** DATASETS  *****************************************
