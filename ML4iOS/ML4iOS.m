@@ -102,6 +102,17 @@
 #pragma mark -
 
 @synthesize delegate;
+@dynamic queryString;
+
+- (NSString*)queryString {
+    
+    return commsManager.queryString;
+}
+
+- (void)setQueryString:(NSString*)queryString {
+    
+    commsManager.queryString = queryString;
+}
 
 #pragma mark -
 

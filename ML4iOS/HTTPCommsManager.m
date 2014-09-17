@@ -191,6 +191,9 @@
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
     
+    if ([_queryString length] > 0)
+        url = [NSString stringWithFormat:@"%@%@", url, _queryString];
+    
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];

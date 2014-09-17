@@ -57,6 +57,10 @@
 @property (nonatomic, readonly) NSString* username;
 @property (nonatomic, readonly) NSString* key;
 
+/** This property is used when fetching multiple resource to filter/order results (SDS).
+ */
+@property (nonatomic, copy) NSString* queryString;
+
 /**
  * Property used to set the delegate for asynchronous responses
  */

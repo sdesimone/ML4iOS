@@ -53,6 +53,10 @@
     NSString* authToken;
 }
 
+/** This property is used when fetching multiple resource to filter/order results (SDS).
+ */
+@property (nonatomic, copy) NSString* queryString;
+
 //*******************************************************************************
 //**************************  INITIALIZER  **************************************
 //*******************************************************************************
