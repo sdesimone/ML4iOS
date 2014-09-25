@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSDictionary* scales;
 
 //@property (nonatomic, strong) NSDictionary* invertedFields;
-@property (nonatomic, strong) NSString* description;
+@property (nonatomic, strong) NSString* clusterDescription;
 @property (nonatomic, strong) NSString* locale;
 @property (nonatomic) BOOL ready;
 
@@ -35,6 +35,13 @@ to generate centroid predictions locally.
 
 **/
 @implementation LocalPredictionCluster
+
++ (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
+                              arguments:(NSDictionary*)args
+                             argsByName:(BOOL)byName {
+    
+    return [[[self alloc] initWithCluster:jsonCluster] computeNearest:args];
+}
 
 - (void)fillStructureForResource:(NSDictionary*)resourceDict {
     
@@ -52,15 +59,17 @@ to generate centroid predictions locally.
     for (NSString* fieldId in [fields allKeys]) {
         
         NSDictionary* field = fields[fieldId];
-        if ([field[@"optype"] isEqualToString:@"text"]) {
-            self.termForms[fieldId] = field[@"summary"][@"term_forms"];
-            self.tagClouds[fieldId] = field[@"summary"][@"tag_cloud"];
+        if ([field[@"optype"] isEqualToString:@"categorical"]) {
+            if (field[@"summary"][@"term_forms"])
+                self.termForms[fieldId] = field[@"summary"][@"term_forms"]; //-- cannot be found
+            if (field[@"summary"][@"tag_cloud"])
+                self.tagClouds[fieldId] = field[@"summary"][@"tag_cloud"]; //-- cannot be found
             self.termAnalysis[fieldId] = field[@"term_analysis"];
         }
     }
     self.fields = fields;
 //    self.invertedFields = utils.invertObject(fields);
-    self.description = resourceDict.description;
+    self.clusterDescription = resourceDict[@"description"];
     self.locale = resourceDict[@"locale"] ?: @"";
     self.ready = true;
 }
@@ -160,7 +169,7 @@ to generate centroid predictions locally.
     
     NSMutableDictionary* nearest = [@{ @"centroidId":@"",
                                       @"centroidName":@"",
-                                      @"distance":@"" } mutableCopy];
+                                      @"distance":@(INFINITY) } mutableCopy];
     
     for (LocalPredictionCentroid* centroid in self.centroids) {
         
