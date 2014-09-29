@@ -267,4 +267,52 @@
  */
 -(void)predictionIsReady:(BOOL)ready;
 
+//*******************************************************************************
+//*************************** PROJECTS  **************************************
+//************* https://bigml.com/developers/projects ************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Projects
+
+/**
+ * Async response to createProjectWithModelId
+ * @param project The project created if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)projectCreated:(NSDictionary*)project statusCode:(NSInteger)code;
+
+/**
+ * Async response to updateProjectWithId
+ * @param project The project updated if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)projectUpdated:(NSDictionary*)project statusCode:(NSInteger)code;
+
+/**
+ * Async response to deleteProjectWithId
+ * @param code The HTTP status code
+ */
+-(void)projectDeletedWithStatusCode:(NSInteger)code;
+
+/**
+ * Async response to getAllProjectsWithName
+ * @param projects The projects retrieved
+ * @param code The HTTP status code
+ */
+-(void)projectsRetrieved:(NSDictionary*)projects statusCode:(NSInteger)code;
+
+/**
+ * Async response to getProjectWithId
+ * @param project The project retrieved
+ * @param code The HTTP status code
+ */
+-(void)projectRetrieved:(NSDictionary*)project statusCode:(NSInteger)code;
+
+/**
+ * Async response to checkProjectIsReadyWithId
+ * @param ready true if project status is FINISHED, else false
+ */
+-(void)projectIsReady:(BOOL)ready;
+
 @end

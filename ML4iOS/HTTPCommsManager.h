@@ -330,6 +330,59 @@
 -(NSDictionary*)getPredictionWithId:(NSString*)identifier statusCode:(NSInteger*)code;
 
 //*******************************************************************************
+//**************************  PROJECTS  **************************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Projects
+
+/**
+ * Creates a project from a given model.
+ * @param modelId The identifier of the model
+ * @param name This optional parameter provides the name of the project to be created
+ * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
+ * It initializes the values of the given fields before creating the project.
+ * @param code The HTTP status code returned
+ * @return The model created if success, else nil
+ */
+-(NSDictionary*)createProjectWithName:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Updates the name of a given project.
+ * @param identifier The identifier of the project to update
+ * @param name The new name of the project
+ * @param code The HTTP status code returned
+ * @return The model updated if success, else nil
+ */
+-(NSDictionary*)updateProjectWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Deletes a given project.
+ * @param identifier The identifier of the project to delete
+ * @return The HTTP status code returned
+ */
+-(NSInteger)deleteProjectWithId:(NSString*)identifier;
+
+/**
+ * Get a list of projects filtered by name.
+ * @param name This optional parameter provides the name of the projects to be retrieved. If it is nil then will be
+ * retrieved all projects without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @param code The HTTP status code returned
+ * @return The list of projects found if success, else nil
+ */
+-(NSDictionary*)getAllProjectsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+
+/**
+ * Get a project.
+ * @param identifier The identifier of the project to get
+ * @param code The HTTP status code returned
+ * @return The project if success, else nil
+ */
+-(NSDictionary*)getProjectWithId:(NSString*)identifier statusCode:(NSInteger*)code;
+
+//*******************************************************************************
 //**************************  LOW LEVEL  **************************************
 //*******************************************************************************
 - (NSInteger)deleteItemWithURL:(NSString*)url;
