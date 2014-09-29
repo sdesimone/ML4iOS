@@ -973,4 +973,162 @@
     return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:NO];
 }
 
+//*******************************************************************************
+//*************************** PROJECTS  **************************************
+//************* https://bigml.com/developers/projects ************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Projects
+
+-(NSDictionary*)createProjectWithNameSync:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager createProjectWithName:name statusCode:code];
+}
+
+-(NSOperation*)createProjectWithName:(NSString*)name inputData:(NSString*)inputData
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(createProjectAction:) params:params];
+}
+
+-(void)createProjectAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* name = params[@"name"];
+    
+    NSDictionary* project = [commsManager createProjectWithName:name statusCode:&statusCode];
+    
+    [delegate projectCreated:project statusCode:statusCode];
+}
+
+-(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager updateProjectWithId:identifier name:name statusCode:code];
+}
+
+-(NSOperation*)updateProjectWithId:(NSString*)identifier name:(NSString*)name
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"identifier"] = identifier;
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(updateProjectAction:) params:params];
+}
+
+-(void)updateProjectAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* identifier = params[@"identifier"];
+    NSString* name = params[@"name"];
+    
+    NSDictionary* project = [commsManager updateProjectWithId:identifier name:name statusCode:&statusCode];
+    
+    [delegate projectUpdated:project statusCode:statusCode];
+}
+
+-(NSInteger)deleteProjectWithIdSync:(NSString*)identifier
+{
+    return [commsManager deleteProjectWithId:identifier];
+}
+
+-(NSOperation*)deleteProjectWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(deleteProjectAction:) params:params];
+}
+
+-(void)deleteProjectAction:(NSDictionary*)params
+{
+    NSInteger statusCode = [commsManager deleteProjectWithId:params[@"identifier"]];
+    
+    [delegate projectDeletedWithStatusCode:statusCode];
+}
+
+-(NSDictionary*)getAllProjectsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+{
+    return [commsManager getAllProjectsWithName:name offset:offset limit:limit statusCode:code];
+}
+
+-(NSOperation*)getAllProjectsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"name"] = name;
+    params[@"offset"] = @(offset);
+    params[@"limit"] = @(limit);
+    
+    return [self launchOperationWithSelector:@selector(getAllProjectsAction:) params:params];
+}
+
+-(void)getAllProjectsAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* name = params[@"name"];
+    NSInteger offset = [params[@"offset"]integerValue];
+    NSInteger limit = [params[@"limit"]integerValue];
+    
+    NSDictionary* projects = [commsManager getAllProjectsWithName:name offset:offset limit:limit statusCode:&statusCode];
+    
+    [delegate projectsRetrieved:projects statusCode:statusCode];
+}
+
+-(NSDictionary*)getProjectWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
+{
+    return [commsManager getProjectWithId:identifier statusCode:code];
+}
+
+-(NSOperation*)getProjectWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(getProjectAction:) params:params];
+}
+
+-(void)getProjectAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSDictionary* project = [commsManager getProjectWithId:params[@"identifier"] statusCode:&statusCode];
+    
+    [delegate projectRetrieved:project statusCode:statusCode];
+}
+
+-(BOOL)checkProjectIsReadyWithIdSync:(NSString*)identifier
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* project = [commsManager getProjectWithId:identifier statusCode:&statusCode];
+    
+    if(project != nil && statusCode == HTTP_OK)
+        ready = [project[@"status"][@"code"]intValue] == FINISHED;
+    
+    return ready;
+}
+
+-(NSOperation*)checkProjectIsReadyWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(checkProjectIsReadyAction:) params:params];
+}
+
+-(void)checkProjectIsReadyAction:(NSDictionary*)params
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* project = [commsManager getProjectWithId:params[@"identifier"] statusCode:&statusCode];
+    
+    if(project != nil && statusCode == HTTP_OK)
+        ready = [project[@"status"][@"code"]intValue] == FINISHED;
+    
+    [delegate projectIsReady:ready];
+}
+
 @end

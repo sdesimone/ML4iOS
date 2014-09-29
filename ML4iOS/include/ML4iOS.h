@@ -642,4 +642,115 @@
 -(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName;
 
 
+//*******************************************************************************
+//*************************** PROJECTS  **************************************
+//************* https://bigml.com/developers/projects ************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Projects
+
+/**
+ * Creates a project from a given model.
+ * @param modelId The identifier of the model
+ * @param name This optional parameter provides the name of the project to be created
+ * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
+ * It initializes the values of the given fields before creating the project.
+ * @param code The HTTP status code returned
+ * @return The model created if success, else nil
+ */
+-(NSDictionary*)createProjectWithNameSync:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Creates a project from a given model. The response is provided in the method projectCreated of the delegate.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the project to be created
+ * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
+ * It initializes the values of the given fields before creating the project.
+ * @return The async NSOperation created
+ */
+-(NSOperation*)createProjectWithName:(NSString*)name;
+
+/**
+ * Updates the name of a given project.
+ * @param identifier The identifier of the project to update
+ * @param name The new name of the project
+ * @param code The HTTP status code returned
+ * @return The model updated if success, else nil
+ */
+-(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Updates the name of a given project. The response is provided in the method projectUpdated of the delegate.
+ * @param identifier The identifier of the project to update
+ * @param name The new name of the project
+ * @return The async NSOperation created
+ */
+-(NSOperation*)updateProjectWithId:(NSString*)identifier name:(NSString*)name;
+
+/**
+ * Deletes a given project.
+ * @param identifier The identifier of the project to delete
+ * @return The HTTP status code returned
+ */
+-(NSInteger)deleteProjectWithIdSync:(NSString*)identifier;
+
+/**
+ * Deletes a given project. The response is provided in the method projectDeletedWithStatusCode of the delegate.
+ * @param identifier The identifier of the project to delete
+ * @return The async NSOperation created
+ */
+-(NSOperation*)deleteProjectWithId:(NSString*)identifier;
+
+/**
+ * Get a list of projects filtered by name.
+ * @param name This optional parameter provides the name of the projects to be retrieved. If it is nil then will be
+ * retrieved all projects without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @param code The HTTP status code returned
+ * @return The list of projects found if success, else nil
+ */
+-(NSDictionary*)getAllProjectsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+
+/**
+ * Get a list of projects filtered by name. The response is provided in the method projectsRetrieved of the delegate.
+ * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
+ * retrieved all projects without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getAllProjectsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+
+/**
+ * Get a project.
+ * @param identifier The identifier of the project to get
+ * @param code The HTTP status code returned
+ * @return The project if success, else nil
+ */
+-(NSDictionary*)getProjectWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+
+/**
+ * Get a model. The response is provided in the method projectRetrieved of the delegate.
+ * @param identifier The identifier of the project to get
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getProjectWithId:(NSString*)identifier;
+
+/**
+ * Check if the status of a given project is FINISHED.
+ * @param identifier The identifier of the project to check the status
+ * @return true if the status of the project is FINISHED, else false
+ */
+-(BOOL)checkProjectIsReadyWithIdSync:(NSString*)identifier;
+
+/**
+ * Check if the status of a given project is FINISHED. The response is provided in the method projectIsReady of the delegate.
+ * @param identifier The identifier of the project to check the status
+ * @return The async NSOperation created
+ */
+-(NSOperation*)checkProjectIsReadyWithId:(NSString*)identifier;
+
+
 @end

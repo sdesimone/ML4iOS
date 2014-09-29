@@ -30,6 +30,7 @@
 #define BIGML_IO_MODEL_URL [NSString stringWithFormat:@"%@/model", apiBaseURL]
 #define BIGML_IO_CLUSTER_URL [NSString stringWithFormat:@"%@/cluster", apiBaseURL]
 #define BIGML_IO_PREDICTION_URL [NSString stringWithFormat:@"%@/prediction", apiBaseURL]
+#define BIGML_IO_PROJECT_URL [NSString stringWithFormat:@"%@/project", apiBaseURL]
 
 #pragma mark -
 
@@ -576,6 +577,77 @@
 -(NSDictionary*)getPredictionWithId:(NSString*)identifier statusCode:(NSInteger*)code
 {
     NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_PREDICTION_URL, identifier, authToken];
+    
+    return [self getItemWithURL:urlString statusCode:code];
+}
+
+//*******************************************************************************
+//**************************  PROJECTS  **************************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Projects
+
+-(NSDictionary*)createProjectWithName:(NSString*)name statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@%@", BIGML_IO_PROJECT_URL, authToken];
+    
+    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
+    
+    if([name length] > 0)
+        [bodyString appendFormat:@"{ \"name\":\"%@\"", name];
+    else
+        [bodyString appendFormat:@"{ \"name\":\"Unnamed Project\""];
+
+    
+    [bodyString appendFormat:@", \"description\":\"\""];
+    [bodyString appendFormat:@", \"tags\":[]"];
+    [bodyString appendFormat:@", \"category\":0"];
+    
+    [bodyString appendString:@"}"];
+    
+    return [self createItemWithURL:urlString body:bodyString statusCode:code];
+}
+
+-(NSDictionary*)updateProjectWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_PROJECT_URL, identifier, authToken];
+    
+    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
+    
+    if([name length] > 0)
+        [bodyString appendFormat:@"{\"name\":\"%@\"}", name];
+    
+    return [self updateItemWithURL:urlString body:bodyString statusCode:code];
+}
+
+-(NSInteger)deleteProjectWithId:(NSString*)identifier
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_PROJECT_URL, identifier, authToken];
+    
+    return [self deleteItemWithURL:urlString];
+}
+
+-(NSDictionary*)getAllProjectsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+{
+    NSMutableString* urlString = [NSMutableString stringWithCapacity:30];
+    [urlString appendFormat:@"%@%@", BIGML_IO_PROJECT_URL, authToken];
+    
+    if([name length] > 0)
+        [urlString appendFormat:@"name=%@;", name];
+    
+    if(offset > 0)
+        [urlString appendFormat:@"offset=%d;", (int)offset];
+    
+    if(limit > 0)
+        [urlString appendFormat:@"limit=%d;", (int)limit];
+    
+    return [self listItemsWithURL:urlString statusCode:code];
+}
+
+-(NSDictionary*)getProjectWithId:(NSString*)identifier statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_PROJECT_URL, identifier, authToken];
     
     return [self getItemWithURL:urlString statusCode:code];
 }
