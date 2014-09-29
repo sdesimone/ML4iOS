@@ -167,16 +167,18 @@
 #pragma mark -
 #pragma mark DataSources
 
--(NSDictionary*)createSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code
+-(NSDictionary*)createSourceWithNameSync:(NSString*)name project:(NSString*)fullUUid filePath:(NSString*)filePath statusCode:(NSInteger*)code
 {
-    return [commsManager createDataSourceWithName:name filePath:filePath statusCode:code];
+    return [commsManager createDataSourceWithName:name project:(NSString*)fullUUid filePath:filePath statusCode:code];
 }
 
--(NSOperation*)createSourceWithName:(NSString*)name filePath:(NSString*)filePath
+-(NSOperation*)createSourceWithName:(NSString*)name project:(NSString*)fullUUid filePath:(NSString*)filePath
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
     params[@"name"] = name;
     params[@"filePath"] = filePath;
+    if (fullUUid)
+        params[@"projectFullUuid"] = fullUUid;
     
     return [self launchOperationWithSelector:@selector(createSourceAction:) params:params];
 }
@@ -186,8 +188,9 @@
     NSInteger statusCode = 0;
     NSString* name = params[@"name"];
     NSString* filePath = params[@"filePath"];
+    NSString* fullUuid = params[@"projectFullUuid"];
     
-    NSDictionary* dataSource = [commsManager createDataSourceWithName:name filePath:filePath statusCode:&statusCode];
+    NSDictionary* dataSource = [commsManager createDataSourceWithName:name project:fullUuid filePath:filePath statusCode:&statusCode];
     
     [delegate dataSourceCreated:dataSource statusCode:statusCode];
 }

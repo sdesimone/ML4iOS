@@ -244,7 +244,7 @@
 #pragma mark -
 #pragma mark DataSources
 
--(NSDictionary*)createDataSourceWithName:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code
+-(NSDictionary*)createDataSourceWithName:(NSString*)name project:(NSString*)fullUuid filePath:(NSString*)filePath statusCode:(NSInteger*)code
 {
     NSDictionary* createdDataSource = nil;
     
@@ -254,16 +254,29 @@
     NSMutableURLRequest* request= [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
+    
     NSString *boundary = @"---------------------------14737809831466499882746641449";
     NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
     [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
+    
     NSMutableData *postbody = [NSMutableData data];
+    
+    if ([fullUuid length] > 0) {
+        [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [postbody appendData:[@"Content-Disposition: form-data; name=\"project\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",fullUuid] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
     [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n", name] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[NSData dataWithContentsOfFile:filePath]];
     [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
     [request setHTTPBody:postbody];
+    
+    //    NSString* newStr = [[NSString alloc] initWithData:postbody encoding:NSUTF8StringEncoding];
+    //    NSLog(@"PAYLOAD: %@", newStr);
     
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
