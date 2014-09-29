@@ -86,7 +86,7 @@
  * @param code The HTTP status code returned
  * @return The data source created if success, else nil
  */
--(NSDictionary*)createDataSourceWithName:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code;
+-(NSDictionary*)createDataSourceWithName:(NSString*)name project:(NSString*)fullUuid filePath:(NSString*)filePath statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given data source. 

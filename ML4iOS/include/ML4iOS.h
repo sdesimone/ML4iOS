@@ -104,7 +104,7 @@
  * @param code The HTTP status code returned
  * @return The data source created if success, else nil
  */
--(NSDictionary*)createSourceWithNameSync:(NSString*)name filePath:(NSString*)filePath statusCode:(NSInteger*)code;
+-(NSDictionary*)createSourceWithNameSync:(NSString*)name project:(NSString*)fullUUid filePath:(NSString*)filePath statusCode:(NSInteger*)code;
 
 /**
  * Creates a data source from a given .csv file. The response is provided in the method dataSourceCreated of the delegate.
@@ -113,7 +113,7 @@
  * @param filePath The full path of the csv in the filesystem
  * @return The async NSOperation created
  */
--(NSOperation*)createSourceWithName:(NSString*)name filePath:(NSString*)filePath;
+-(NSOperation*)createSourceWithName:(NSString*)name project:(NSString*)fullUUid filePath:(NSString*)filePath;
 
 /**
  * Updates the name of a given data source. 
