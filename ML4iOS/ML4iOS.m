@@ -989,7 +989,7 @@
     return [commsManager createProjectWithName:name statusCode:code];
 }
 
--(NSOperation*)createProjectWithName:(NSString*)name inputData:(NSString*)inputData
+-(NSOperation*)createProjectWithName:(NSString*)name
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"name"] = name;
