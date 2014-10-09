@@ -52,7 +52,7 @@
     
     //CREATES A DATA SOURCE FROM A .CSV
     NSString *path = [[NSBundle bundleForClass:[ML4iOSTests class]] pathForResource:@"iris" ofType:@"csv"];
-    NSDictionary* dataSource = [apiLibrary createSourceWithNameSync:@"iris_source" filePath:path statusCode:&httpStatusCode];
+    NSDictionary* dataSource = [apiLibrary createSourceWithNameSync:@"iris_source" project:@"testP" filePath:path statusCode:&httpStatusCode];
     
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating data source from iris.csv");
     
@@ -258,6 +258,52 @@
 
 -(void)predictionIsReady:(BOOL)ready
 {
+}
+
+-(void)projectCreated:(NSDictionary*)project statusCode:(NSInteger)code
+{
+}
+
+-(void)projectUpdated:(NSDictionary*)project statusCode:(NSInteger)code
+{
+}
+
+-(void)projectDeletedWithStatusCode:(NSInteger)code
+{
+}
+
+-(void)projectsRetrieved:(NSDictionary*)projects statusCode:(NSInteger)code
+{
+}
+
+-(void)projectRetrieved:(NSDictionary*)project statusCode:(NSInteger)code
+{
+}
+
+-(void)projectIsReady:(BOOL)ready
+{
+}
+
+-(void)clusterCreated:(NSDictionary*)cluster statusCode:(NSInteger)code
+{
+}
+
+-(void)clusterUpdated:(NSDictionary*)cluster statusCode:(NSInteger)code
+{
+}
+
+-(void)clusterDeletedWithStatusCode:(NSInteger)code
+{
+}
+
+-(void)clustersRetrieved:(NSDictionary*)clusters statusCode:(NSInteger)code
+{
+}
+
+-(void)clusterRetrieved:(NSDictionary*)cluster statusCode:(NSInteger)code {
+}
+
+-(void)clusterIsReady:(BOOL)ready {
 }
 
 @end
