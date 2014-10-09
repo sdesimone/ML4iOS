@@ -52,7 +52,7 @@
     
     //CREATES A DATA SOURCE FROM A .CSV
     NSString *path = [[NSBundle bundleForClass:[ML4iOSTests class]] pathForResource:@"iris" ofType:@"csv"];
-    NSDictionary* dataSource = [apiLibrary createSourceWithNameSync:@"iris_source" filePath:path statusCode:&httpStatusCode];
+    NSDictionary* dataSource = [apiLibrary createSourceWithNameSync:@"iris_source" project:@"testP" filePath:path statusCode:&httpStatusCode];
     
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating data source from iris.csv");
     
