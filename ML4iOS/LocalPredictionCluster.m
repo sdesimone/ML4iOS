@@ -172,43 +172,35 @@ to generate centroid predictions locally.
     return nearest;
 }
 
+- (id)makeCentroid:(NSDictionary*)inputData callback:(id(^)(NSError*, id))callback {
+    
+    id(^createLocalCentroid)(NSError*, NSDictionary*) = ^id(NSError* error, NSDictionary* inputData) {
+        
+        if (error) {
+            return callback(error, nil);
+        }
+        return callback(nil, [self computeNearest:inputData]);
+    };
+    
+    if (callback) {
+        return [self validateInput:inputData callback:createLocalCentroid];
+    } else {
+        return [self computeNearest:[self validateInput:inputData callback:nil]];
+    }
 
-//LocalCluster.prototype.centroid = function (inputData, cb) {
-//    /**
-//     * Makes a centroid prediction based on a number of field values.
-//     *
-//     * The input fields must be keyed by field name or field id.
-//     * @param {object} inputData Input data to predict
-//     * @param {function} cb Callback
-//     */
-//    var newInputData = {}, field, centroid, clustersLength, self = this;
-//    
-//    function createLocalCentroid(error, inputData) {
-//        /**
-//         * Creates a local centroid using the cluster info.
-//         *
-//         * @param {object} error Error message
-//         * @param {object} data Input data to predict from
-//         */
-//        if (error) {
-//            return cb(error, null);
-//        }
-//        return cb(null, self.computeNearest(inputData));
-//    }
-//    
-//    if (this.ready) {
-//        if (cb) {
-//            this.validateInput(inputData, createLocalCentroid);
-//        } else {
-//            centroid = this.computeNearest(this.validateInput(inputData));
-//            return centroid;
-//        }
-//    } else {
-//        this.on('ready', function (self) {return self.centroid(inputData, cb); });
-//        return;
-//    }
-//};
-//
+}
+
+- (id)validateInput:(NSDictionary*)inputData callback:(id(^)(NSError*, NSDictionary*))createLocalCentroid {
+    
+    NSMutableDictionary* newInputData = [NSMutableDictionary dictionary];
+
+    NSError* error = nil;
+    if (createLocalCentroid)
+        return createLocalCentroid(error, inputData);
+    else
+        return inputData;
+}
+
 //LocalCluster.prototype.validateInput = function (inputData, cb) {
 //    /**
 //     * Validates the syntax of input data.
