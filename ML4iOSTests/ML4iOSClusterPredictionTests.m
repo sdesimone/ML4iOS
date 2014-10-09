@@ -25,22 +25,40 @@
     [super tearDown];
 }
 
-- (void)testExample {
-
+- (void)testIrisModel {
+    
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
-    NSString* path = [bundle pathForResource:@"testCluster" ofType:@"json"];
+    NSString* path = [bundle pathForResource:@"iris" ofType:@"model"];
     NSData* clusterData = [NSData dataWithContentsOfFile:path];
     
     NSError* error = nil;
     NSDictionary* cluster = [NSJSONSerialization JSONObjectWithData:clusterData
                                                             options:0
                                                               error:&error];
-
+    
     NSDictionary* prediction = [LocalPredictionCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"sepal_width":@(1.25)}
-                                                                    argsByName:NO];
+                                                                   argsByName:NO];
     NSLog(@"PREDICTION: %@", prediction);
-    XCTAssert(YES, @"Pass");
+    XCTAssert(prediction, @"Pass");
+}
+
+- (void)testSpanCluster {
+    
+    NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+    NSString* path = [bundle pathForResource:@"spam" ofType:@"cluster"];
+    NSData* clusterData = [NSData dataWithContentsOfFile:path];
+    
+    NSError* error = nil;
+    NSDictionary* cluster = [NSJSONSerialization JSONObjectWithData:clusterData
+                                                            options:0
+                                                              error:&error];
+    
+    NSDictionary* prediction = [LocalPredictionCluster predictWithJSONCluster:cluster
+                                                                    arguments:@{@"Message":@"Hello, how are you doing?"}
+                                                                   argsByName:NO];
+    NSLog(@"PREDICTION: %@", prediction);
+    XCTAssert(prediction, @"Pass");
 }
 
 - (void)testPerformanceExample {

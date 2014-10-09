@@ -18,6 +18,7 @@
 		4962DC6A19DD974700058FF6 /* TemplateIcon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6819DD974700058FF6 /* TemplateIcon2x.png */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
+		49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */ = {isa = PBXBuildFile; fileRef = 49C6CD7C19E6E6B200891301 /* spam.cluster */; };
 		DC3AE94C1570D0AF008D2F79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC3AE94B1570D0AF008D2F79 /* Foundation.framework */; };
 		DC3AE9521570D0B0008D2F79 /* ML4iOS.m in Sources */ = {isa = PBXBuildFile; fileRef = DC3AE9511570D0B0008D2F79 /* ML4iOS.m */; };
 		DC3AE95C1570D0B0008D2F79 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC3AE95B1570D0B0008D2F79 /* UIKit.framework */; };
@@ -59,6 +60,7 @@
 		4962DC6819DD974700058FF6 /* TemplateIcon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TemplateIcon2x.png; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
+		49C6CD7C19E6E6B200891301 /* spam.cluster */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.cluster; sourceTree = "<group>"; };
 		DC3AE9481570D0AF008D2F79 /* libML4iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libML4iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC3AE94B1570D0AF008D2F79 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DC3AE94F1570D0B0008D2F79 /* ML4iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ML4iOS-Prefix.pch"; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				4962DC6819DD974700058FF6 /* TemplateIcon2x.png */,
 				4962DC6B19DDA5DE00058FF6 /* spam.model */,
 				4962DC6D19DDA73B00058FF6 /* iris.model */,
+				49C6CD7C19E6E6B200891301 /* spam.cluster */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 			files = (
 				492CC72419D2B240001829F5 /* testCluster.json in Resources */,
 				DCD306BD1723602400CC9364 /* iris.csv in Resources */,
+				49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */,
 				4962DC6919DD974700058FF6 /* spam.tsv in Resources */,
 				4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */,
 				4962DC6A19DD974700058FF6 /* TemplateIcon2x.png in Resources */,
