@@ -99,9 +99,9 @@ to generate centroid predictions locally.
     return words;
 }
 
-- (NSMutableArray*)uniqueTermsInArray1:(NSArray*)array1
-                                array2:(NSArray*)array2
-                                filter:(NSArray*)filter {
+- (NSMutableArray*)uniqueTermsIn:(NSArray*)terms
+                       termForms:(NSDictionary*)termForms
+                          filter:(NSArray*)filter {
  
     NSMutableDictionary* extendForms = [NSMutableDictionary dictionary];
     NSMutableArray* termSet = [NSMutableArray array];
@@ -110,39 +110,21 @@ to generate centroid predictions locally.
     for (id term in filter)
         [tagTerms addObject:term];
     
-    for (id term in array2) {
-
+    for (id term in [termForms allKeys]) {
+        for (id termForm in term) {
+            extendForms[termForm] = term;
+        }
+    }
+    for (id term in terms) {
+        if ([termSet indexOfObject:term] == NSNotFound && [tagTerms indexOfObject:term] != NSNotFound) {
+            [termSet addObject:term];
+        } else if ([termSet indexOfObject:termSet] == NSNotFound && extendForms[term]) {
+            [termSet addObject:extendForms[term]];
+        }
     }
     
     return termSet;
 }
-
-//function getUniqueTerms(terms, termForms, tagCloud) {
-//    ...
-//    for (term in termForms) {
-//        if (termForms.hasOwnProperty(term)) {
-//            termFormsLength = termForms[term].length;
-//            for (i = 0; i < termFormsLength; i++) {
-//                termForm = termForms[term][i];
-//                extendForms[termForm] = term;
-//            }
-//            extendForms[termForm] = term;
-//        }
-//    }
-//    for (i = 0; i < termsLength; i++) {
-//        term = terms[i];
-//        if ((termsSet.indexOf(term) < 0) && tagTerms.indexOf(term) > -1) {
-//            termsSet.push(term);
-//        } else if ((termsSet.indexOf(term) < 0) &&
-//                   extendForms.hasOwnProperty(term)) {
-//            termsSet.push(extendForms[term]);
-//        }
-//    }
-//    return termsSet;
-//}
-
-
-
 
 - (NSDictionary*)computeNearest:(NSDictionary*)inputData {
     
@@ -162,9 +144,9 @@ to generate centroid predictions locally.
         if (![tokenMode isEqualToString:TM_TOKENS]) {
             [terms addObject:(isCaseSensitive ? inputDataField : [inputDataField lowercaseString])];
         }
-        uniqueTerms[fieldId] = [self uniqueTermsInArray1:terms
-                                                  array2:self.termForms[fieldId]
-                                                  filter: self.tagClouds[fieldId]];
+        uniqueTerms[fieldId] = [self uniqueTermsIn:terms
+                                         termForms:self.termForms[fieldId]
+                                            filter: self.tagClouds[fieldId]];
     }
     
     NSMutableDictionary* nearest = [@{ @"centroidId":@"",
