@@ -34,4 +34,8 @@
 
 @interface LocalPredictionCluster : NSObject
 
++ (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
+                              arguments:(NSDictionary*)args
+                             argsByName:(BOOL)byName;
+
 @end

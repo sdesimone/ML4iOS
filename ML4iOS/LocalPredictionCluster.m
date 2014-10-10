@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSDictionary* scales;
 
 //@property (nonatomic, strong) NSDictionary* invertedFields;
-@property (nonatomic, strong) NSString* description;
+@property (nonatomic, strong) NSString* clusterDescription;
 @property (nonatomic, strong) NSString* locale;
 @property (nonatomic) BOOL ready;
 
@@ -36,6 +36,13 @@ to generate centroid predictions locally.
 **/
 @implementation LocalPredictionCluster
 
++ (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
+                              arguments:(NSDictionary*)args
+                             argsByName:(BOOL)byName {
+    
+    return [[[self alloc] initWithCluster:jsonCluster] computeNearest:args];
+}
+
 - (void)fillStructureForResource:(NSDictionary*)resourceDict {
     
     self.termForms = [NSMutableDictionary dictionary];
@@ -44,7 +51,7 @@ to generate centroid predictions locally.
     
     NSDictionary* clusters = resourceDict[@"clusters"][@"clusters"];
     self.centroids = [NSMutableArray array];
-    for (id cluster in clusters) {
+    for (NSDictionary* cluster in clusters) {
         [_centroids addObject:[[LocalPredictionCentroid alloc] initWithCluster:cluster]];
     }
     self.scales = resourceDict[@"scales"];
@@ -53,14 +60,16 @@ to generate centroid predictions locally.
         
         NSDictionary* field = fields[fieldId];
         if ([field[@"optype"] isEqualToString:@"text"]) {
-            self.termForms[fieldId] = field[@"summary"][@"term_forms"];
-            self.tagClouds[fieldId] = field[@"summary"][@"tag_cloud"];
+            if (field[@"summary"][@"term_forms"])
+                self.termForms[fieldId] = field[@"summary"][@"term_forms"]; //-- cannot be found
+            if (field[@"summary"][@"tag_cloud"])
+                self.tagClouds[fieldId] = field[@"summary"][@"tag_cloud"]; //-- cannot be found
             self.termAnalysis[fieldId] = field[@"term_analysis"];
         }
     }
     self.fields = fields;
 //    self.invertedFields = utils.invertObject(fields);
-    self.description = resourceDict.description;
+    self.clusterDescription = resourceDict[@"description"];
     self.locale = resourceDict[@"locale"] ?: @"";
     self.ready = true;
 }
@@ -69,11 +78,7 @@ to generate centroid predictions locally.
     
     if (self = [super init]) {
         
-//        if ([resourceDict isIncomplete]) {
-        
-//        } else {
         [self fillStructureForResource:resourceDict];
-//        }
     }
     return self;
 }
@@ -90,9 +95,9 @@ to generate centroid predictions locally.
     return words;
 }
 
-- (NSMutableArray*)uniqueTermsInArray1:(NSArray*)array1
-                                array2:(NSArray*)array2
-                                filter:(NSArray*)filter {
+- (NSMutableArray*)uniqueTermsIn:(NSArray*)terms
+                       termForms:(NSDictionary*)termForms
+                          filter:(NSArray*)filter {
  
     NSMutableDictionary* extendForms = [NSMutableDictionary dictionary];
     NSMutableArray* termSet = [NSMutableArray array];
@@ -101,39 +106,21 @@ to generate centroid predictions locally.
     for (id term in filter)
         [tagTerms addObject:term];
     
-    for (id term in array2) {
-
+    for (id term in [termForms allKeys]) {
+        for (id termForm in term) {
+            extendForms[termForm] = term;
+        }
+    }
+    for (id term in terms) {
+        if ([termSet indexOfObject:term] == NSNotFound && [tagTerms indexOfObject:term] != NSNotFound) {
+            [termSet addObject:term];
+        } else if ([termSet indexOfObject:termSet] == NSNotFound && extendForms[term]) {
+            [termSet addObject:extendForms[term]];
+        }
     }
     
     return termSet;
 }
-
-//function getUniqueTerms(terms, termForms, tagCloud) {
-//    ...
-//    for (term in termForms) {
-//        if (termForms.hasOwnProperty(term)) {
-//            termFormsLength = termForms[term].length;
-//            for (i = 0; i < termFormsLength; i++) {
-//                termForm = termForms[term][i];
-//                extendForms[termForm] = term;
-//            }
-//            extendForms[termForm] = term;
-//        }
-//    }
-//    for (i = 0; i < termsLength; i++) {
-//        term = terms[i];
-//        if ((termsSet.indexOf(term) < 0) && tagTerms.indexOf(term) > -1) {
-//            termsSet.push(term);
-//        } else if ((termsSet.indexOf(term) < 0) &&
-//                   extendForms.hasOwnProperty(term)) {
-//            termsSet.push(extendForms[term]);
-//        }
-//    }
-//    return termsSet;
-//}
-
-
-
 
 - (NSDictionary*)computeNearest:(NSDictionary*)inputData {
     
@@ -153,14 +140,14 @@ to generate centroid predictions locally.
         if (![tokenMode isEqualToString:TM_TOKENS]) {
             [terms addObject:(isCaseSensitive ? inputDataField : [inputDataField lowercaseString])];
         }
-        uniqueTerms[fieldId] = [self uniqueTermsInArray1:terms
-                                                  array2:self.termForms[fieldId]
-                                                  filter: self.tagClouds[fieldId]];
+        uniqueTerms[fieldId] = [self uniqueTermsIn:terms
+                                         termForms:self.termForms[fieldId]
+                                            filter: self.tagClouds[fieldId]];
     }
     
     NSMutableDictionary* nearest = [@{ @"centroidId":@"",
                                       @"centroidName":@"",
-                                      @"distance":@"" } mutableCopy];
+                                      @"distance":@(INFINITY) } mutableCopy];
     
     for (LocalPredictionCentroid* centroid in self.centroids) {
         
@@ -181,100 +168,51 @@ to generate centroid predictions locally.
     return nearest;
 }
 
+- (id)makeCentroid:(NSDictionary*)inputData callback:(id(^)(NSError*, id))callback {
+    
+    id(^createLocalCentroid)(NSError*, NSDictionary*) = ^id(NSError* error, NSDictionary* inputData) {
+        
+        if (error) {
+            return callback(error, nil);
+        }
+        return callback(nil, [self computeNearest:inputData]);
+    };
+    
+    if (callback) {
+        return [self validateInput:inputData callback:createLocalCentroid];
+    } else {
+        return [self computeNearest:[self validateInput:inputData callback:nil]];
+    }
 
-//LocalCluster.prototype.centroid = function (inputData, cb) {
-//    /**
-//     * Makes a centroid prediction based on a number of field values.
-//     *
-//     * The input fields must be keyed by field name or field id.
-//     * @param {object} inputData Input data to predict
-//     * @param {function} cb Callback
-//     */
-//    var newInputData = {}, field, centroid, clustersLength, self = this;
-//    
-//    function createLocalCentroid(error, inputData) {
-//        /**
-//         * Creates a local centroid using the cluster info.
-//         *
-//         * @param {object} error Error message
-//         * @param {object} data Input data to predict from
-//         */
-//        if (error) {
-//            return cb(error, null);
-//        }
-//        return cb(null, self.computeNearest(inputData));
-//    }
-//    
-//    if (this.ready) {
-//        if (cb) {
-//            this.validateInput(inputData, createLocalCentroid);
-//        } else {
-//            centroid = this.computeNearest(this.validateInput(inputData));
-//            return centroid;
-//        }
-//    } else {
-//        this.on('ready', function (self) {return self.centroid(inputData, cb); });
-//        return;
-//    }
-//};
-//
-//LocalCluster.prototype.validateInput = function (inputData, cb) {
-//    /**
-//     * Validates the syntax of input data.
-//     *
-//     * The input fields must be keyed by field name or field id.
-//     * @param {object} inputData Input data to predict
-//     * @param {function} cb Callback
-//     */
-//    var newInputData = {}, field, fieldId, inputDataKey;
-//    for (fieldId in this.fields) {
-//        if (this.fields.hasOwnProperty(fieldId)) {
-//            field = this.fields[fieldId];
-//            if (field.optype !== "categorical" && field.optype !== "text" &&
-//                !inputData.hasOwnProperty(fieldId) &&
-//                !inputData.hasOwnProperty(field.name)) {
-//                throw new Error("The input data lacks some numeric fields values." +
-//                                " To find the related centroid, input data must " +
-//                                "contain all numeric fields values.");
-//            }
-//        }
-//    }
-//    if (this.ready) {
-//        for (field in inputData) {
-//            if (inputData.hasOwnProperty(field)) {
-//                if (inputData[field] === null ||
-//                    (typeof this.fields[field] === 'undefined' &&
-//                     typeof this.invertedFields[field] === 'undefined')) {
-//                        delete inputData[field];
-//                    } else {
-//                        // input data keyed by field id
-//                        if (typeof this.fields[field] !== 'undefined') {
-//                            inputDataKey = field;
-//                        } else { // input data keyed by field name
-//                            inputDataKey = String(this.invertedFields[field]);
-//                        }
-//                        newInputData[inputDataKey] = inputData[field];
-//                    }
-//            }
-//        }
-//        try {
-//            inputData = utils.cast(newInputData, this.fields);
-//        } catch (err) {
-//            if (cb) {
-//                return cb(err, null);
-//            }
-//            throw err;
-//        }
-//        if (cb) {
-//            return cb(null, inputData);
-//        }
-//        return inputData;
-//    }
-//    this.on('ready', function (self) {
-//        return self.validateInput(inputData, cb);
-//    });
-//    return;
-//};
+}
+
+- (id)validateInput:(NSDictionary*)inputData callback:(id(^)(NSError*, NSDictionary*))createLocalCentroid {
+    
+    for (NSString* fieldId in [self.fields allKeys]) {
+        
+        NSDictionary* field = self.fields[fieldId];
+        if ([field[@"optype"] isEqualToString:@"categorical"] &&
+            ![field[@"optype"] isEqualToString:@"text"]) {
+         
+            NSAssert(inputData[fieldId] && inputData[field[@"name"]], @"MIIIIII");
+            return nil;
+        }
+    }
+    
+    NSMutableDictionary* newInputData = [NSMutableDictionary dictionary];
+    for (NSString* field in inputData) {
+
+        NSLog(@"INPUT DATA FIELD: %@ (%@)", inputData[field], self.fields[field]);
+        id inputDataKey = field;
+        newInputData[inputDataKey] = inputData[field];
+    }
+    
+    NSError* error = nil;
+    if (createLocalCentroid)
+        return createLocalCentroid(error, inputData);
+    else
+        return inputData;
+}
 
 
 @end
