@@ -51,7 +51,7 @@ to generate centroid predictions locally.
     
     NSDictionary* clusters = resourceDict[@"clusters"][@"clusters"];
     self.centroids = [NSMutableArray array];
-    for (id cluster in clusters) {
+    for (NSDictionary* cluster in clusters) {
         [_centroids addObject:[[LocalPredictionCentroid alloc] initWithCluster:cluster]];
     }
     self.scales = resourceDict[@"scales"];
@@ -59,7 +59,7 @@ to generate centroid predictions locally.
     for (NSString* fieldId in [fields allKeys]) {
         
         NSDictionary* field = fields[fieldId];
-        if ([field[@"optype"] isEqualToString:@"categorical"]) {
+        if ([field[@"optype"] isEqualToString:@"text"]) {
             if (field[@"summary"][@"term_forms"])
                 self.termForms[fieldId] = field[@"summary"][@"term_forms"]; //-- cannot be found
             if (field[@"summary"][@"tag_cloud"])
@@ -78,11 +78,7 @@ to generate centroid predictions locally.
     
     if (self = [super init]) {
         
-//        if ([resourceDict isIncomplete]) {
-        
-//        } else {
         [self fillStructureForResource:resourceDict];
-//        }
     }
     return self;
 }
@@ -192,72 +188,31 @@ to generate centroid predictions locally.
 
 - (id)validateInput:(NSDictionary*)inputData callback:(id(^)(NSError*, NSDictionary*))createLocalCentroid {
     
+    for (NSString* fieldId in [self.fields allKeys]) {
+        
+        NSDictionary* field = self.fields[fieldId];
+        if ([field[@"optype"] isEqualToString:@"categorical"] &&
+            ![field[@"optype"] isEqualToString:@"text"]) {
+         
+            NSAssert(inputData[fieldId] && inputData[field[@"name"]], @"MIIIIII");
+            return nil;
+        }
+    }
+    
     NSMutableDictionary* newInputData = [NSMutableDictionary dictionary];
+    for (NSString* field in inputData) {
 
+        NSLog(@"INPUT DATA FIELD: %@ (%@)", inputData[field], self.fields[field]);
+        id inputDataKey = field;
+        newInputData[inputDataKey] = inputData[field];
+    }
+    
     NSError* error = nil;
     if (createLocalCentroid)
         return createLocalCentroid(error, inputData);
     else
         return inputData;
 }
-
-//LocalCluster.prototype.validateInput = function (inputData, cb) {
-//    /**
-//     * Validates the syntax of input data.
-//     *
-//     * The input fields must be keyed by field name or field id.
-//     * @param {object} inputData Input data to predict
-//     * @param {function} cb Callback
-//     */
-//    var newInputData = {}, field, fieldId, inputDataKey;
-//    for (fieldId in this.fields) {
-//        if (this.fields.hasOwnProperty(fieldId)) {
-//            field = this.fields[fieldId];
-//            if (field.optype !== "categorical" && field.optype !== "text" &&
-//                !inputData.hasOwnProperty(fieldId) &&
-//                !inputData.hasOwnProperty(field.name)) {
-//                throw new Error("The input data lacks some numeric fields values." +
-//                                " To find the related centroid, input data must " +
-//                                "contain all numeric fields values.");
-//            }
-//        }
-//    }
-//    if (this.ready) {
-//        for (field in inputData) {
-//            if (inputData.hasOwnProperty(field)) {
-//                if (inputData[field] === null ||
-//                    (typeof this.fields[field] === 'undefined' &&
-//                     typeof this.invertedFields[field] === 'undefined')) {
-//                        delete inputData[field];
-//                    } else {
-//                        // input data keyed by field id
-//                        if (typeof this.fields[field] !== 'undefined') {
-//                            inputDataKey = field;
-//                        } else { // input data keyed by field name
-//                            inputDataKey = String(this.invertedFields[field]);
-//                        }
-//                        newInputData[inputDataKey] = inputData[field];
-//                    }
-//            }
-//        }
-//        try {
-//            inputData = utils.cast(newInputData, this.fields);
-//        } catch (err) {
-//            if (cb) {
-//                return cb(err, null);
-//            }
-//            throw err;
-//        }
-//        if (cb) {
-//            return cb(null, inputData);
-//        }
-//        return inputData;
-//    }
-//    this.on('ready', function (self) {
-//        return self.validateInput(inputData, cb);
-//    });
-//    return;
-//};
 
 
 @end
