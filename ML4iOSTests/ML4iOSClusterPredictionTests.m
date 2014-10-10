@@ -25,10 +25,10 @@
     [super tearDown];
 }
 
-- (void)testIrisModel {
+- (void)testSpanTextCluster {
     
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
-    NSString* path = [bundle pathForResource:@"iris" ofType:@"model"];
+    NSString* path = [bundle pathForResource:@"spam-text" ofType:@"cluster"];
     NSData* clusterData = [NSData dataWithContentsOfFile:path];
     
     NSError* error = nil;
@@ -37,9 +37,9 @@
                                                               error:&error];
     
     NSDictionary* prediction = [LocalPredictionCluster predictWithJSONCluster:cluster
-                                                                    arguments:@{@"sepal_width":@(1.25)}
+                                                                    arguments:@{@"Message":@"Hello, how are you doing?"}
                                                                    argsByName:NO];
-    NSLog(@"PREDICTION: %@", prediction);
+    NSLog(@"TEXT PREDICTION for 'Hello, how are you doing': %@", prediction);
     XCTAssert(prediction, @"Pass");
 }
 
@@ -57,7 +57,7 @@
     NSDictionary* prediction = [LocalPredictionCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"Message":@"Hello, how are you doing?"}
                                                                    argsByName:NO];
-    NSLog(@"PREDICTION: %@", prediction);
+    NSLog(@"CAT PREDICTIONfor 'Hello, how are you doing': %@", prediction);
     XCTAssert(prediction, @"Pass");
 }
 
