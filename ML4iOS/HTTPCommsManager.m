@@ -455,7 +455,13 @@
 
 -(NSDictionary*)getModelWithId:(NSString*)identifier statusCode:(NSInteger*)code
 {
-    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_MODEL_URL, identifier, authToken];
+    
+    NSString* filterFields = @"only_model=true;limit=-1;"; //-- include all meaningful fields
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@%@",
+                           BIGML_IO_MODEL_URL,
+                           identifier,
+                           authToken,
+                           filterFields];
     
     return [self getItemWithURL:urlString statusCode:code];
 }
