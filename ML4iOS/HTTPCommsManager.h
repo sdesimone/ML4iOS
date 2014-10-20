@@ -37,12 +37,6 @@
     NSString* apiKey;
     
     /**
-     * BigML.io Development Mode 
-     * @see http://blog.bigml.com/2012/07/04/introducing-bigmls-free-machine-learning-sandbox/
-     */
-    BOOL developmentMode;
-    
-    /**
      * BigML.io Base URL
      */
     NSString* apiBaseURL;
@@ -56,6 +50,12 @@
 /** This property is used when fetching multiple resource to filter/order results (SDS).
  */
 @property (nonatomic, copy) NSString* queryString;
+
+/**
+ * BigML.io Development Mode
+ * @see http://blog.bigml.com/2012/07/04/introducing-bigmls-free-machine-learning-sandbox/
+ */
+@property (nonatomic) BOOL developmentMode;
 
 //*******************************************************************************
 //**************************  INITIALIZER  **************************************

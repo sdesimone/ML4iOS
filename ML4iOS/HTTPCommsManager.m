@@ -89,6 +89,8 @@
 
 @implementation HTTPCommsManager
 
+@synthesize developmentMode = developmentMode;
+
 - (NSString*)apiBaseURL {
     
     return apiBaseURL;

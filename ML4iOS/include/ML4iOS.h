@@ -67,6 +67,7 @@
 @property(nonatomic, weak) id<ML4iOSDelegate> delegate;
 
 @property (nonatomic, readonly) HTTPCommsManager* commsManager;
+@property (nonatomic, readonly) BOOL isDevelopmentMode;
 
 #pragma mark -
 

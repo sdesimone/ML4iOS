@@ -146,6 +146,11 @@
     [operationQueue cancelAllOperations];
 }
 
+- (BOOL)isDevelopmentMode {
+    
+    return commsManager.developmentMode;
+}
+
 +(NSString*) getResourceIdentifierFromJSONObject:(NSDictionary*)resouce
 {
     NSString* identifier = nil;
