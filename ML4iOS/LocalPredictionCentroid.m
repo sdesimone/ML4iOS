@@ -63,7 +63,7 @@
                 }
             } else {
                 
-                distance2 += pow(([inputData[fieldId] intValue] - [value intValue]) * [scales[fieldId] floatValue], 2);
+                distance2 += pow(([inputData[fieldId] floatValue] - [value floatValue]) * [scales[fieldId] floatValue], 2);
 
             }
         }

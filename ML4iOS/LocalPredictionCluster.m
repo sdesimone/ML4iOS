@@ -40,7 +40,13 @@ to generate centroid predictions locally.
                               arguments:(NSDictionary*)args
                              argsByName:(BOOL)byName {
     
-    return [[[self alloc] initWithCluster:jsonCluster] computeNearest:args];
+    NSDictionary* fields = jsonCluster[@"clusters"][@"fields"];
+    NSMutableDictionary* inputData = [NSMutableDictionary dictionaryWithCapacity:[fields allKeys].count];
+    for (NSString* key in [fields allKeys]) {
+        [inputData setObject:args[fields[key][@"name"]] forKey:key];
+    }
+    
+    return [[[self alloc] initWithCluster:jsonCluster] computeNearest:inputData];
 }
 
 - (void)fillStructureForResource:(NSDictionary*)resourceDict {
@@ -145,9 +151,9 @@ to generate centroid predictions locally.
                                             filter: self.tagClouds[fieldId]];
     }
     
-    NSMutableDictionary* nearest = [@{ @"centroidId":@"",
-                                      @"centroidName":@"",
-                                      @"distance":@(INFINITY) } mutableCopy];
+    NSDictionary* nearest = @{ @"centroidId":@"",
+                               @"centroidName":@"",
+                               @"distance":@(INFINITY) };
     
     for (LocalPredictionCentroid* centroid in self.centroids) {
         
@@ -158,14 +164,15 @@ to generate centroid predictions locally.
         
         if (distance2 < [nearest[@"distance"] floatValue]) {
             
-            nearest = [@{ @"centroidId":@(centroid.centroidId),
+            nearest = @{ @"centroidId":@(centroid.centroidId),
                          @"centroidName":centroid.name,
-                         @"distance":@(distance2) } mutableCopy];
+                         @"distance":@(distance2) };
         }
     }
     
-    nearest[@"distance"] = @( sqrt([nearest[@"distance"] floatValue]) );
-    return nearest;
+    return @{ @"centroidId":nearest[@"centroidId"],
+              @"centroidName":nearest[@"centroidName"],
+              @"distance":@(sqrt([nearest[@"distance"] floatValue])) };
 }
 
 - (id)makeCentroid:(NSDictionary*)inputData callback:(id(^)(NSError*, id))callback {
