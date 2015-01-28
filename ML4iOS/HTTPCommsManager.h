@@ -51,6 +51,10 @@
  */
 @property (nonatomic, copy) NSString* queryString;
 
+/** This property is used when creating a resource to apply specific settings.
+ */
+@property (nonatomic, copy) NSString* createOptionsString;
+
 /**
  * BigML.io Development Mode
  * @see http://blog.bigml.com/2012/07/04/introducing-bigmls-free-machine-learning-sandbox/

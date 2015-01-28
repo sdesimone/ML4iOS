@@ -275,6 +275,13 @@
         [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",fullUuid] dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
+    if ([_createOptionsString length] > 0) {
+        [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [postbody appendData:[@"Content-Disposition: form-data; name=\"source_parser\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",_createOptionsString] dataUsingEncoding:NSUTF8StringEncoding]];
+        _createOptionsString = nil;
+    }
+
     [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n", name] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];

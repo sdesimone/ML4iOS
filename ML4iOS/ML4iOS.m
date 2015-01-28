@@ -103,6 +103,7 @@
 
 @synthesize delegate;
 @dynamic queryString;
+@dynamic createOptionsString;
 
 - (NSString*)queryString {
     
@@ -111,7 +112,17 @@
 
 - (void)setQueryString:(NSString*)queryString {
     
-    commsManager.queryString = queryString;
+    commsManager.createOptionsString = queryString;
+}
+
+- (NSString*)createOptionsString {
+    
+    return commsManager.createOptionsString;
+}
+
+- (void)setCreateOptionsString:(NSString*)string {
+    
+    commsManager.createOptionsString = string;
 }
 
 #pragma mark -

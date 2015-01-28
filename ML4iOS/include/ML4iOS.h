@@ -61,6 +61,10 @@
  */
 @property (nonatomic, copy) NSString* queryString;
 
+/** This property is used when creating a resource to apply specific settings.
+ */
+@property (nonatomic, copy) NSString* createOptionsString;
+
 /**
  * Property used to set the delegate for asynchronous responses
  */
