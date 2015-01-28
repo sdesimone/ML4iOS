@@ -200,10 +200,16 @@
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
     *code = [response statusCode];
+
+    /* A seemingly known bug (http://stackoverflow.com/questions/14203712/nsurlconnection-sendsynchronousrequest-response-is-nil-upon-invalid-credential)
+     can make sendSynchronousRequest return nil as response when an authentication error (HTTP 401) occurs.
+     In such cases, though, we need to set manually *code since it will not be found in response.
+     */
+    if (responseData != nil && response == nil)
+        *code = HTTP_UNAUTHORIZED;
     
-    if(*code == HTTP_OK && responseData != nil)
+    if (*code == HTTP_OK && responseData != nil)
         items = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&error];
     
     return items;
