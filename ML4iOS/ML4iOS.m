@@ -125,16 +125,6 @@
     commsManager.createOptionsString = string;
 }
 
-- (NSString*)createOptionsString {
-    
-    return commsManager.createOptionsString;
-}
-
-- (void)setCreateOptionsString:(NSString*)string {
-    
-    commsManager.createOptionsString = string;
-}
-
 #pragma mark -
 
 -(ML4iOS*)initWithUsername:(NSString*)username key:(NSString*)key developmentMode:(BOOL)devMode
