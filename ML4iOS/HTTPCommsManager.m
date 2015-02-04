@@ -232,10 +232,14 @@
             apiKey = [[NSString alloc]initWithString:key];
             developmentMode = devMode;
             
+            NSUserDefaults* ud = [[NSUserDefaults alloc] initWithSuiteName:@"io.bigml.x"];
+            NSString* baseUrl = [ud valueForKey:@"base_url"];
+            NSString* baseDevUrl = [ud valueForKey:@"base_dev_url"];
+            
             if(developmentMode)
-                apiBaseURL = @"https://bigml.io/dev/andromeda";
+                apiBaseURL = baseDevUrl ?: @"https://bigml.io/dev/andromeda";
             else
-                apiBaseURL = @"https://bigml.io/andromeda";
+                apiBaseURL = baseUrl ?: @"https://bigml.io/andromeda";
                 
             authToken = [[NSString alloc]initWithFormat:@"?username=%@;api_key=%@;", apiUsername, apiKey];
         }
