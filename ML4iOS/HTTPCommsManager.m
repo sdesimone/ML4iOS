@@ -108,6 +108,20 @@
 #pragma mark -
 #pragma mark Generic Methods
 
+- (NSDictionary*)errorDictionaryWithBody:(NSString*)body response:(NSData*)responseData {
+    
+    id jsonResponse = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+    if (!jsonResponse)
+        jsonResponse = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    return @{@"Payload" : body?:@"", @"Response" : jsonResponse?:@""};
+}
+
+- (NSDictionary*)errorDictionaryWithPayload:(NSData*)payload response:(NSData*)responseData {
+    
+    NSString* body = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
+    return [self errorDictionaryWithBody:body response:responseData];
+}
+
 -(NSDictionary*)createItemWithURL:(NSString*)url body:(NSString*)body statusCode:(NSInteger*)code
 {
     NSDictionary* item = nil;
@@ -125,9 +139,12 @@
     
     *code = [response statusCode];
     
-    if(*code == HTTP_CREATED && responseData != nil)
+    if(*code == HTTP_CREATED && responseData != nil) {
         item = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&error];
-    
+    } else {
+        item = [self errorDictionaryWithBody:body response:responseData];
+    }
+
     return item;
 }
 
@@ -294,9 +311,6 @@
     
     [request setHTTPBody:postbody];
     
-    //    NSString* newStr = [[NSString alloc] initWithData:postbody encoding:NSUTF8StringEncoding];
-    //    NSLog(@"PAYLOAD: %@", newStr);
-    
     NSError *error = nil;
     NSHTTPURLResponse *response = nil;
     
@@ -306,7 +320,9 @@
     
     if((*code == HTTP_CREATED) && responseData != nil)
         createdDataSource = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&error];
-    
+    else {
+        createdDataSource = [self errorDictionaryWithPayload:postbody response:responseData];
+    }
     return createdDataSource;
 }
 
