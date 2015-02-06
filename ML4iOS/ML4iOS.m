@@ -112,7 +112,7 @@
 
 - (void)setQueryString:(NSString*)queryString {
     
-    commsManager.createOptionsString = queryString;
+    commsManager.queryString = queryString;
 }
 
 - (NSString*)createOptionsString {
