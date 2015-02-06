@@ -664,7 +664,7 @@
  * @param code The HTTP status code returned
  * @return The model created if success, else nil
  */
--(NSDictionary*)createProjectWithNameSync:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)createProjectSync:(NSDictionary*)project statusCode:(NSInteger*)code;
 
 /**
  * Creates a project from a given model. The response is provided in the method projectCreated of the delegate.
@@ -674,7 +674,7 @@
  * It initializes the values of the given fields before creating the project.
  * @return The async NSOperation created
  */
--(NSOperation*)createProjectWithName:(NSString*)name;
+-(NSOperation*)createProject:(NSDictionary*)project;
 
 /**
  * Updates the name of a given project.
@@ -683,7 +683,7 @@
  * @param code The HTTP status code returned
  * @return The model updated if success, else nil
  */
--(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier project:(NSDictionary*)project statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given project. The response is provided in the method projectUpdated of the delegate.

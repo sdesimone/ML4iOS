@@ -642,36 +642,48 @@
 #pragma mark -
 #pragma mark Projects
 
--(NSDictionary*)createProjectWithName:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)createProject:(NSDictionary*)project statusCode:(NSInteger*)code
 {
     NSString* urlString = [NSString stringWithFormat:@"%@%@", BIGML_IO_PROJECT_URL, authToken];
     
-    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
-    
-    if([name length] > 0)
-        [bodyString appendFormat:@"{ \"name\":\"%@\"", name];
-    else
-        [bodyString appendFormat:@"{ \"name\":\"Unnamed Project\""];
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:project
+                                                       options:0
+                                                         error:&error];
+    if (!jsonData) {
+        NSLog(@"Got an error: %@", error);
+        return nil;
+    }
+    NSString* bodyString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
-    
-    [bodyString appendFormat:@", \"description\":\"\""];
-    [bodyString appendFormat:@", \"tags\":[]"];
-    [bodyString appendFormat:@", \"category\":0"];
-    
-    [bodyString appendString:@"}"];
+//    if([project[@"name"] length] > 0)
+//        [bodyString appendFormat:@"{ \"name\":\"%@\"", project[@"name"]];
+//    else
+//        [bodyString appendFormat:@"{ \"name\":\"Unnamed Project\""];
+//
+//    [bodyString appendFormat:@", \"description\":\"%@\"", project[@"description"]];
+//    [bodyString appendFormat:@", \"tags\":[%@]", [project[@"tags"] componentsSeparatedByString:@","]];
+//    [bodyString appendFormat:@", \"category\":0"];
+//    
+//    [bodyString appendString:@"}"];
     
     return [self createItemWithURL:urlString body:bodyString statusCode:code];
 }
 
--(NSDictionary*)updateProjectWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)updateProjectWithId:(NSString*)identifier project:(NSDictionary*)project statusCode:(NSInteger*)code
 {
     NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_PROJECT_URL, identifier, authToken];
     
-    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
-    
-    if([name length] > 0)
-        [bodyString appendFormat:@"{\"name\":\"%@\"}", name];
-    
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:project
+                                                       options:0
+                                                         error:&error];
+    if (!jsonData) {
+        NSLog(@"Got an error: %@", error);
+        return nil;
+    }
+    NSString* bodyString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];    
+
     return [self updateItemWithURL:urlString body:bodyString statusCode:code];
 }
 

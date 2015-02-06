@@ -1000,15 +1000,15 @@
 #pragma mark -
 #pragma mark Projects
 
--(NSDictionary*)createProjectWithNameSync:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)createProjectSync:(NSDictionary*)project statusCode:(NSInteger*)code
 {
-    return [commsManager createProjectWithName:name statusCode:code];
+    return [commsManager createProject:project statusCode:code];
 }
 
--(NSOperation*)createProjectWithName:(NSString*)name
+-(NSOperation*)createProject:(NSDictionary*)project
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
-    params[@"name"] = name;
+    params[@"project"] = project;
     
     return [self launchOperationWithSelector:@selector(createProjectAction:) params:params];
 }
@@ -1016,16 +1016,16 @@
 -(void)createProjectAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
-    NSString* name = params[@"name"];
+    NSDictionary* project = params[@"project"];
     
-    NSDictionary* project = [commsManager createProjectWithName:name statusCode:&statusCode];
+    NSDictionary* result = [commsManager createProject:project statusCode:&statusCode];
     
-    [delegate projectCreated:project statusCode:statusCode];
+    [delegate projectCreated:result statusCode:statusCode];
 }
 
--(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier project:(NSDictionary*)project statusCode:(NSInteger*)code
 {
-    return [commsManager updateProjectWithId:identifier name:name statusCode:code];
+    return [commsManager updateProjectWithId:identifier project:project statusCode:code];
 }
 
 -(NSOperation*)updateProjectWithId:(NSString*)identifier name:(NSString*)name
@@ -1041,11 +1041,11 @@
 {
     NSInteger statusCode = 0;
     NSString* identifier = params[@"identifier"];
-    NSString* name = params[@"name"];
+    NSDictionary* project = params[@"project"];
     
-    NSDictionary* project = [commsManager updateProjectWithId:identifier name:name statusCode:&statusCode];
+    NSDictionary* result = [commsManager updateProjectWithId:identifier project:project statusCode:&statusCode];
     
-    [delegate projectUpdated:project statusCode:statusCode];
+    [delegate projectUpdated:result statusCode:statusCode];
 }
 
 -(NSInteger)deleteProjectWithIdSync:(NSString*)identifier

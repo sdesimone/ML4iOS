@@ -349,7 +349,7 @@
  * @param code The HTTP status code returned
  * @return The model created if success, else nil
  */
--(NSDictionary*)createProjectWithName:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)createProject:(NSDictionary*)project statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given project.
@@ -358,7 +358,7 @@
  * @param code The HTTP status code returned
  * @return The model updated if success, else nil
  */
--(NSDictionary*)updateProjectWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)updateProjectWithId:(NSString*)identifier project:(NSDictionary*)project statusCode:(NSInteger*)code;
 
 /**
  * Deletes a given project.
