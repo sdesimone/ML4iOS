@@ -53,7 +53,7 @@
 
 /** This property is used when creating a resource to apply specific settings.
  */
-@property (nonatomic, copy) NSString* createOptionsString;
+@property (nonatomic, copy) NSDictionary* options;
 
 /**
  * BigML.io Development Mode

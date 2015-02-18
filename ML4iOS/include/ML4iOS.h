@@ -63,7 +63,7 @@
 
 /** This property is used when creating a resource to apply specific settings.
  */
-@property (nonatomic, copy) NSString* createOptionsString;
+@property (nonatomic, copy) NSDictionary* options;
 
 /**
  * Property used to set the delegate for asynchronous responses

@@ -215,7 +215,7 @@
         url = [NSString stringWithFormat:@"%@%@", url, _queryString];
     
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    
+
     NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     *code = [response statusCode];
 
@@ -296,13 +296,16 @@
         [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",fullUuid] dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
-    if ([_createOptionsString length] > 0) {
-        [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [postbody appendData:[@"Content-Disposition: form-data; name=\"source_parser\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",_createOptionsString] dataUsingEncoding:NSUTF8StringEncoding]];
-        _createOptionsString = nil;
+    for (NSString* collectionName in [_options allKeys]) {
+        NSString* optionValue = _options[collectionName];
+        if ([optionValue length] > 0) {
+            [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n", collectionName] dataUsingEncoding:NSUTF8StringEncoding]];
+            [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",optionValue] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
     }
-
+    _options = nil;
+    
     [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n", name] dataUsingEncoding:NSUTF8StringEncoding]];
     [postbody appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
