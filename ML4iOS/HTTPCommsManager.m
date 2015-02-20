@@ -314,7 +314,7 @@
         if ([optionValue length] > 0) {
             [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
             [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n", collectionName] dataUsingEncoding:NSUTF8StringEncoding]];
-            [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",_options] dataUsingEncoding:NSUTF8StringEncoding]];
+            [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",optionValue] dataUsingEncoding:NSUTF8StringEncoding]];
         }
     }
     _options = nil;
