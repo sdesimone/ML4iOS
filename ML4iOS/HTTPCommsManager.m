@@ -232,6 +232,19 @@
     return items;
 }
 
+- (NSString*)optionsToString {
+    
+    NSString* result = @"";
+    for (NSString* options in [_options allValues]) {
+        if ([options length] > 0) {
+            NSString* trimmedOptions = [options substringWithRange:NSMakeRange(1, [options length] - 2)];
+            result = [NSString stringWithFormat:@"%@, %@", result, trimmedOptions];
+        }
+    }
+    _options = nil;
+    return result;
+}
+
 //*******************************************************************************
 //**************************  INITIALIZERS  *************************************
 //*******************************************************************************
@@ -301,7 +314,7 @@
         if ([optionValue length] > 0) {
             [postbody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
             [postbody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n", collectionName] dataUsingEncoding:NSUTF8StringEncoding]];
-            [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",optionValue] dataUsingEncoding:NSUTF8StringEncoding]];
+            [postbody appendData:[[NSString stringWithFormat:@"\r\n%@",_options] dataUsingEncoding:NSUTF8StringEncoding]];
         }
     }
     _options = nil;
@@ -383,7 +396,9 @@
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"source\":\"source/%@\"", sourceId];
-    
+
+    [bodyString appendString:[self optionsToString]];
+
     if([name length] > 0)
         [bodyString appendFormat:@", \"name\":\"%@\"}", name];
     else
@@ -448,6 +463,8 @@
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"dataset\":\"dataset/%@\"", sourceId];
     
+    [bodyString appendString:[self optionsToString]];
+
     if([name length] > 0)
         [bodyString appendFormat:@", \"name\":\"%@\"}", name];
     else
