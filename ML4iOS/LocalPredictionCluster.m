@@ -3,7 +3,7 @@
 //  BigMLX
 //
 //  Created by sergio on 23/09/14.
-//  Copyright (c) 2014 sergio. All rights reserved.
+//  Copyright (c) 2014 BigML, Inc. All rights reserved.
 //
 
 #import "LocalPredictionCluster.h"
@@ -43,7 +43,8 @@ to generate centroid predictions locally.
     NSDictionary* fields = jsonCluster[@"clusters"][@"fields"];
     NSMutableDictionary* inputData = [NSMutableDictionary dictionaryWithCapacity:[fields allKeys].count];
     for (NSString* key in [fields allKeys]) {
-        [inputData setObject:args[fields[key][@"name"]] forKey:key];
+        if (args[fields[key][@"name"]])
+            [inputData setObject:args[fields[key][@"name"]] forKey:key];
     }
     
     return [[[self alloc] initWithCluster:jsonCluster] computeNearest:inputData];

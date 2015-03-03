@@ -167,7 +167,9 @@
     
     if(*code == HTTP_ACCEPTED && responseData != nil)
         item = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&error];
-    
+    else
+        item = [self errorDictionaryWithBody:body response:responseData];
+
     return item;
 }
 
