@@ -215,6 +215,7 @@
     
     if ([_queryString length] > 0)
         url = [NSString stringWithFormat:@"%@%@", url, _queryString];
+//    url = [NSString stringWithFormat:@"%@%@", url, [_queryString stringByReplacingOccurrencesOfString:@":" withString:@"%3A"]];
     
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 
@@ -264,7 +265,11 @@
             apiKey = [[NSString alloc]initWithString:key];
             developmentMode = devMode;
             
-            NSUserDefaults* ud = [[NSUserDefaults alloc] initWithSuiteName:@"io.bigml.x"];
+            NSUserDefaults* ud = nil;
+            if ([NSUserDefaults respondsToSelector:@selector(initWithSuiteName:)])
+                ud = [[NSUserDefaults alloc] initWithSuiteName:@"io.bigml.x"];
+            else
+                ud = [NSUserDefaults new];
             NSString* baseUrl = [ud valueForKey:@"base_url"];
             NSString* baseDevUrl = [ud valueForKey:@"base_dev_url"];
             
@@ -398,7 +403,6 @@
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"source\":\"source/%@\"", sourceId];
-
     [bodyString appendString:[self optionsToString]];
 
     if([name length] > 0)
@@ -464,7 +468,6 @@
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"dataset\":\"dataset/%@\"", sourceId];
-    
     [bodyString appendString:[self optionsToString]];
 
     if([name length] > 0)
@@ -536,6 +539,7 @@
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"dataset\":\"dataset/%@\"", sourceId];
+    [bodyString appendString:[self optionsToString]];
     
     if([name length] > 0)
         [bodyString appendFormat:@", \"name\":\"%@\"}", name];
