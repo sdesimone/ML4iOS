@@ -108,6 +108,12 @@
 #pragma mark -
 #pragma mark Generic Methods
 
+- (NSString*)userAgent {
+    
+    return [NSString stringWithFormat:@"BigMLX-%@",
+            [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+}
+
 - (NSDictionary*)errorDictionaryWithBody:(NSString*)body response:(NSData*)responseData {
     
     id jsonResponse = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
@@ -130,6 +136,7 @@
     NSHTTPURLResponse *response = nil;
     
     NSMutableURLRequest* request= [[NSMutableURLRequest alloc] init];
+    [request setValue:[self userAgent] forHTTPHeaderField:@"User-Agent"];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-type"];
@@ -156,6 +163,7 @@
     NSHTTPURLResponse *response = nil;
     
     NSMutableURLRequest* request= [[NSMutableURLRequest alloc] init];
+    [request setValue:[self userAgent] forHTTPHeaderField:@"User-Agent"];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"PUT"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-type"];
@@ -179,6 +187,7 @@
     NSHTTPURLResponse *response = nil;
     
     NSMutableURLRequest* request= [[NSMutableURLRequest alloc] init];
+    [request setValue:[self userAgent] forHTTPHeaderField:@"User-Agent"];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"DELETE"];
     
@@ -296,6 +305,7 @@
     [urlString appendFormat:@"%@%@", BIGML_IO_DATASOURCE_URL, authToken];
     
     NSMutableURLRequest* request= [[NSMutableURLRequest alloc] init];
+    [request setValue:[self userAgent] forHTTPHeaderField:@"User-Agent"];
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
     
