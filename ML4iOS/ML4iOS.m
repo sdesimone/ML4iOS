@@ -1149,7 +1149,7 @@
 
 -(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName
 {
-    return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:NO];
+    return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
 }
 
 //*******************************************************************************
