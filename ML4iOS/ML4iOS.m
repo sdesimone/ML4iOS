@@ -23,6 +23,7 @@
 #import "HTTPCommsManager.h"
 #import "Constants.h"
 #import "LocalPredictiveModel.h"
+#import "LocalPredictionCluster.h"
 
 /**
  * Interface that contains private methods
@@ -1147,9 +1148,20 @@
 #pragma mark -
 #pragma mark Local Predictions
 
--(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName
+-(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
+                                             arguments:(NSString*)args
+                                            argsByName:(BOOL)byName
 {
     return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
+}
+
+-(NSDictionary*)createLocalCentroidsWithJSONModelSync:(NSDictionary*)jsonCluster
+                                            arguments:(NSDictionary*)args
+                                           argsByName:(BOOL)byName
+{
+    return [LocalPredictionCluster predictWithJSONCluster:jsonCluster
+                                                arguments:args
+                                               argsByName:byName];
 }
 
 //*******************************************************************************

@@ -644,8 +644,20 @@
  * @param byName The arguments passed in args parameter are passed by name
  * @return The result of the prediction
  */
--(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName;
+-(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
+                                             arguments:(NSString*)args
+                                            argsByName:(BOOL)byName;
 
+/**
+ * Creates local centroids using the cluster and args passed as parameters
+ * @param jsonCluster The cluster to use to create the prediction
+ * @param args The arguments to create the prediction
+ * @param byName The arguments passed in args parameter are passed by name
+ * @return The result of the prediction
+ */
+-(NSDictionary*)createLocalCentroidsWithJSONModelSync:(NSDictionary*)jsonCluster
+                                            arguments:(NSDictionary*)args
+                                           argsByName:(BOOL)byName;
 
 //*******************************************************************************
 //*************************** Ensembles  **************************************
