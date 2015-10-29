@@ -60,12 +60,12 @@
 #pragma mark -
 #pragma mark Datasets Async Callbacks
 
--(void)createDataSetAction:(NSDictionary*)params;
--(void)updateDataSetAction:(NSDictionary*)params;
--(void)deleteDataSetAction:(NSDictionary*)params;
--(void)getAllDataSetsAction:(NSDictionary*)params;
--(void)getDataSetAction:(NSDictionary*)params;
--(void)checkDataSetIsReadyAction:(NSDictionary*)params;
+-(void)createDatasetAction:(NSDictionary*)params;
+-(void)updateDatasetAction:(NSDictionary*)params;
+-(void)deleteDatasetAction:(NSDictionary*)params;
+-(void)getAllDatasetsAction:(NSDictionary*)params;
+-(void)getDatasetAction:(NSDictionary*)params;
+-(void)checkDatasetIsReadyAction:(NSDictionary*)params;
 
 #pragma mark -
 #pragma mark Models Async Callbacks
@@ -346,21 +346,21 @@
 #pragma mark -
 #pragma mark Datasets
 
--(NSDictionary*)createDataSetWithDataSourceIdSync:(NSString*)sourceId name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)createDatasetWithDataSourceIdSync:(NSString*)sourceId name:(NSString*)name statusCode:(NSInteger*)code
 {
     return [commsManager createDataSetWithDataSourceId:sourceId name:name statusCode:code];
 }
 
--(NSOperation*)createDataSetWithDataSourceId:(NSString*)sourceId name:(NSString*)name
+-(NSOperation*)createDatasetWithDataSourceId:(NSString*)sourceId name:(NSString*)name
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
     params[@"sourceId"] = sourceId;
     params[@"name"] = name;
     
-    return [self launchOperationWithSelector:@selector(createDataSetAction:) params:params];
+    return [self launchOperationWithSelector:@selector(createDatasetAction:) params:params];
 }
 
--(void)createDataSetAction:(NSDictionary*)params
+-(void)createDatasetAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* sourceId = params[@"sourceId"];
@@ -368,24 +368,24 @@
     
     NSDictionary* dataSet = [commsManager createDataSetWithDataSourceId:sourceId name:name statusCode:&statusCode];
     
-    [delegate dataSetCreated:dataSet statusCode:statusCode];
+    [delegate datasetCreated:dataSet statusCode:statusCode];
 }
 
--(NSDictionary*)updateDataSetNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)updateDatasetNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
 {
     return [commsManager updateDataSetNameWithId:identifier name:name statusCode:code];
 }
 
--(NSOperation*)updateDataSetNameWithId:(NSString*)identifier name:(NSString*)name
+-(NSOperation*)updateDatasetNameWithId:(NSString*)identifier name:(NSString*)name
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
     params[@"identifier"] = identifier;
     params[@"name"] = name;
     
-    return [self launchOperationWithSelector:@selector(updateDataSetAction:) params:params];
+    return [self launchOperationWithSelector:@selector(updateDatasetAction:) params:params];
 }
 
--(void)updateDataSetAction:(NSDictionary*)params
+-(void)updateDatasetAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* identifier = params[@"identifier"];
@@ -393,45 +393,45 @@
     
     NSDictionary* dataSet = [commsManager updateDataSetNameWithId:identifier name:name statusCode:&statusCode];
     
-    [delegate dataSetUpdated:dataSet statusCode:statusCode];
+    [delegate datasetUpdated:dataSet statusCode:statusCode];
 }
 
--(NSInteger)deleteDataSetWithIdSync:(NSString*)identifier
+-(NSInteger)deleteDatasetWithIdSync:(NSString*)identifier
 {
     return [commsManager deleteDataSetWithId:identifier];
 }
 
--(NSOperation*)deleteDataSetWithId:(NSString*)identifier
+-(NSOperation*)deleteDatasetWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(deleteDataSetAction:) params:params];
+    return [self launchOperationWithSelector:@selector(deleteDatasetAction:) params:params];
 }
 
--(void)deleteDataSetAction:(NSDictionary*)params
+-(void)deleteDatasetAction:(NSDictionary*)params
 {
     NSInteger statusCode = [commsManager deleteDataSetWithId:params[@"identifier"]];
     
-    [delegate dataSetDeletedWithStatusCode:statusCode];
+    [delegate datasetDeletedWithStatusCode:statusCode];
 }
 
--(NSDictionary*)getAllDataSetsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+-(NSDictionary*)getAllDatasetsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
 {
     return [commsManager getAllDataSetsWithName:name offset:offset limit:limit statusCode:code];
 }
 
--(NSOperation*)getAllDataSetsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+-(NSOperation*)getAllDatasetsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"name"] = name;
     params[@"offset"] = @(offset);
     params[@"limit"] = @(limit);
     
-    return [self launchOperationWithSelector:@selector(getAllDataSetsAction:) params:params];
+    return [self launchOperationWithSelector:@selector(getAllDatasetsAction:) params:params];
 }
 
--(void)getAllDataSetsAction:(NSDictionary*)params
+-(void)getAllDatasetsAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSString* name = params[@"name"];
@@ -440,31 +440,31 @@
     
     NSDictionary* dataSources = [commsManager getAllDataSetsWithName:name offset:offset limit:limit statusCode:&statusCode];
     
-    [delegate dataSetsRetrieved:dataSources statusCode:statusCode];
+    [delegate datasetsRetrieved:dataSources statusCode:statusCode];
 }
 
--(NSDictionary*)getDataSetWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
+-(NSDictionary*)getDatasetWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
 {
     return [commsManager getDataSetWithId:identifier statusCode:code];
 }
 
--(NSOperation*)getDataSetWithId:(NSString*)identifier
+-(NSOperation*)getDatasetWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(getDataSetAction:) params:params];
+    return [self launchOperationWithSelector:@selector(getDatasetAction:) params:params];
 }
 
--(void)getDataSetAction:(NSDictionary*)params
+-(void)getDatasetAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
     NSDictionary* dataSet = [commsManager getDataSetWithId:params[@"identifier"] statusCode:&statusCode];
     
-    [delegate dataSetRetrieved:dataSet statusCode:statusCode];
+    [delegate datasetRetrieved:dataSet statusCode:statusCode];
 }
 
--(BOOL)checkDataSetIsReadyWithIdSync:(NSString*)identifier
+-(BOOL)checkDatasetIsReadyWithIdSync:(NSString*)identifier
 {
     BOOL ready = NO;
     
@@ -477,15 +477,15 @@
     return ready;
 }
 
--(NSOperation*)checkDataSetIsReadyWithId:(NSString*)identifier
+-(NSOperation*)checkDatasetIsReadyWithId:(NSString*)identifier
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
     params[@"identifier"] = identifier;
     
-    return [self launchOperationWithSelector:@selector(checkDataSetIsReadyAction:) params:params];
+    return [self launchOperationWithSelector:@selector(checkDatasetIsReadyAction:) params:params];
 }
 
--(void)checkDataSetIsReadyAction:(NSDictionary*)params
+-(void)checkDatasetIsReadyAction:(NSDictionary*)params
 {
     BOOL ready = NO;
     
@@ -495,7 +495,7 @@
     if(dataSet != nil && statusCode == HTTP_OK)
         ready = [dataSet[@"status"][@"code"]intValue] == FINISHED;
     
-    [delegate dataSetIsReady:ready];
+    [delegate datasetIsReady:ready];
 }
 
 //*******************************************************************************
@@ -816,6 +816,166 @@
         ready = [cluster[@"status"][@"code"]intValue] == FINISHED;
     
     [delegate clusterIsReady:ready];
+}
+
+//*******************************************************************************
+//*************************** ENSEMBLES  *******************************************
+//************* https://bigml.com/developers/ensembles *****************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Ensembles
+
+-(NSDictionary*)createEnsembleWithDataSetIdSync:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager createEnsembleWithDataSetId:dataSetId name:name statusCode:code];
+}
+
+-(NSOperation*)createEnsembleWithDataSetId:(NSString*)dataSetId name:(NSString*)name
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
+    params[@"dataSetId"] = dataSetId;
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(createEnsembleAction:) params:params];
+}
+
+-(void)createEnsembleAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* dataSetId = params[@"dataSetId"];
+    NSString* name = params[@"name"];
+    
+    NSDictionary* ensemble = [commsManager createEnsembleWithDataSetId:dataSetId name:name statusCode:&statusCode];
+    
+    [delegate ensembleCreated:ensemble statusCode:statusCode];
+}
+
+-(NSDictionary*)updateEnsembleNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager updateEnsembleNameWithId:identifier name:name statusCode:code];
+}
+
+-(NSOperation*)updateEnsembleNameWithId:(NSString*)identifier name:(NSString*)name
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
+    params[@"identifier"] = identifier;
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(updateEnsembleAction:) params:params];
+}
+
+-(void)updateEnsembleAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* identifier = params[@"identifier"];
+    NSString* name = params[@"name"];
+    
+    NSDictionary* ensemble = [commsManager updateEnsembleNameWithId:identifier name:name statusCode:&statusCode];
+    
+    [delegate ensembleUpdated:ensemble statusCode:statusCode];
+}
+
+-(NSInteger)deleteEnsembleWithIdSync:(NSString*)identifier
+{
+    return [commsManager deleteEnsembleWithId:identifier];
+}
+
+-(NSOperation*)deleteEnsembleWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(deleteEnsembleAction:) params:params];
+}
+
+-(void)deleteEnsembleAction:(NSDictionary*)params
+{
+    NSInteger statusCode = [commsManager deleteEnsembleWithId:params[@"identifier"]];
+    
+    [delegate ensembleDeletedWithStatusCode:statusCode];
+}
+
+-(NSDictionary*)getAllEnsemblesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+{
+    return [commsManager getAllEnsemblesWithName:name offset:offset limit:limit statusCode:code];
+}
+
+-(NSOperation*)getAllEnsemblesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"name"] = name;
+    params[@"offset"] = @(offset);
+    params[@"limit"] = @(limit);
+    
+    return [self launchOperationWithSelector:@selector(getAllEnsemblesAction:) params:params];
+}
+
+-(void)getAllEnsemblesAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* name = params[@"name"];
+    NSInteger offset = [params[@"offset"]integerValue];
+    NSInteger limit = [params[@"limit"]integerValue];
+    
+    NSDictionary* ensembles = [commsManager getAllEnsemblesWithName:name offset:offset limit:limit statusCode:&statusCode];
+    
+    [delegate ensemblesRetrieved:ensembles statusCode:statusCode];
+}
+
+-(NSDictionary*)getEnsembleWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
+{
+    return [commsManager getEnsembleWithId:identifier statusCode:code];
+}
+
+-(NSOperation*)getEnsembleWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(getEnsembleAction:) params:params];
+}
+
+-(void)getEnsembleAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSDictionary* ensemble = [commsManager getEnsembleWithId:params[@"identifier"] statusCode:&statusCode];
+    
+    [delegate ensembleRetrieved:ensemble statusCode:statusCode];
+}
+
+-(BOOL)checkEnsembleIsReadyWithIdSync:(NSString*)identifier
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* ensemble = [commsManager getEnsembleWithId:identifier statusCode:&statusCode];
+    
+    if(ensemble != nil && statusCode == HTTP_OK)
+        ready = [ensemble[@"status"][@"code"]intValue] == FINISHED;
+    
+    return ready;
+}
+
+-(NSOperation*)checkEnsembleIsReadyWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(checkEnsembleIsReadyAction:) params:params];
+}
+
+-(void)checkEnsembleIsReadyAction:(NSDictionary*)params
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* ensemble = [commsManager getEnsembleWithId:params[@"identifier"] statusCode:&statusCode];
+    
+    if(ensemble != nil && statusCode == HTTP_OK)
+        ready = [ensemble[@"status"][@"code"]intValue] == FINISHED;
+    
+    [delegate ensembleIsReady:ready];
 }
 
 //*******************************************************************************

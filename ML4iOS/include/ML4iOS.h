@@ -216,7 +216,7 @@
  * @param code The HTTP status code returned
  * @return The dataset created if success, else nil
  */
--(NSDictionary*)createDataSetWithDataSourceIdSync:(NSString*)sourceId name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)createDatasetWithDataSourceIdSync:(NSString*)sourceId name:(NSString*)name statusCode:(NSInteger*)code;
 
 /**
  * Creates a dataset from a given data source. The response is provided in the method dataSetCreated of the delegate.
@@ -224,7 +224,7 @@
  * @param name This optional parameter provides the name of the dataset to be created
  * @return The async NSOperation created
  */
--(NSOperation*)createDataSetWithDataSourceId:(NSString*)sourceId name:(NSString*)name;
+-(NSOperation*)createDatasetWithDataSourceId:(NSString*)sourceId name:(NSString*)name;
 
 /**
  * Updates the name of a given dataset. 
@@ -233,7 +233,7 @@
  * @param code The HTTP status code returned
  * @return The dataset updated if success, else nil
  */
--(NSDictionary*)updateDataSetNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)updateDatasetNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given dataset. The response is provided in the method dataSetUpdated of the delegate.
@@ -241,21 +241,21 @@
  * @param name The new name of the dataset
  * @return The async NSOperation created
  */
--(NSOperation*)updateDataSetNameWithId:(NSString*)identifier name:(NSString*)name;
+-(NSOperation*)updateDatasetNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
  * Deletes a given dataset. 
  * @param identifier The identifier of the dataset to delete 
  * @return The HTTP status code returned
  */
--(NSInteger)deleteDataSetWithIdSync:(NSString*)identifier;
+-(NSInteger)deleteDatasetWithIdSync:(NSString*)identifier;
 
 /**
  * Deletes a given dataset. The response is provided in the method dataSetDeletedWithStatusCode of the delegate.
  * @param identifier The identifier of the dataset to delete
  * @return The async NSOperation created
  */
--(NSOperation*)deleteDataSetWithId:(NSString*)identifier;
+-(NSOperation*)deleteDatasetWithId:(NSString*)identifier;
 
 /**
  * Get a list of datasets filtered by name.
@@ -266,7 +266,7 @@
  * @param code The HTTP status code returned
  * @return The list of datasets found if success, else nil
  */
--(NSDictionary*)getAllDataSetsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+-(NSDictionary*)getAllDatasetsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
 
 /**
  * Get a list of datasets filtered by name. The response is provided in the method dataSetsRetrieved of the delegate.
@@ -276,7 +276,7 @@
  * @param limit The maximum number of results
  * @return The async NSOperation created
  */
--(NSOperation*)getAllDataSetsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+-(NSOperation*)getAllDatasetsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
 
 /**
  * Get a dataset.
@@ -284,28 +284,28 @@
  * @param code The HTTP status code returned
  * @return The dataset if success, else nil
  */
--(NSDictionary*)getDataSetWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+-(NSDictionary*)getDatasetWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
 
 /**
  * Get a dataset. The response is provided in the method dataSetRetrieved of the delegate.
  * @param identifier The identifier of the dataset to get 
  * @return The async NSOperation created
  */
--(NSOperation*)getDataSetWithId:(NSString*)identifier;
+-(NSOperation*)getDatasetWithId:(NSString*)identifier;
 
 /**
  * Check if the status of the dataset is FINISHED.
  * @param identifier The identifier of the dataset to check the status 
  * @return true if the status of the dataset is FINISHED, else false
  */
--(BOOL)checkDataSetIsReadyWithIdSync:(NSString*)identifier;
+-(BOOL)checkDatasetIsReadyWithIdSync:(NSString*)identifier;
 
 /**
  * Check if the status of the dataset is FINISHED. The response is provided in the method dataSetIsReady of the delegate.
  * @param identifier The identifier of the dataset to check the status
  * @return The async NSOperation created
  */
--(NSOperation*)checkDataSetIsReadyWithId:(NSString*)identifier;
+-(NSOperation*)checkDatasetIsReadyWithId:(NSString*)identifier;
 
 //*******************************************************************************
 //*************************** MODELS  *******************************************
@@ -422,68 +422,68 @@
 #pragma mark Clusters
 
 /**
- * Creates a model from a given dataset.
+ * Creates a cluster from a given dataset.
  * @param dataSetId The identifier of the dataset
- * @param name This optional parameter provides the name of the model to be created
+ * @param name This optional parameter provides the name of the cluster to be created
  * @param code The HTTP status code returned
- * @return The model created if success, else nil
+ * @return The cluster created if success, else nil
  */
 -(NSDictionary*)createClusterWithDataSetIdSync:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code;
 
 /**
- * Creates a model from a given dataset. The response is provided in the method modelCreated of the delegate.
+ * Creates a cluster from a given dataset. The response is provided in the method clusterCreated of the delegate.
  * @param dataSetId The identifier of the dataset
- * @param name This optional parameter provides the name of the model to be created
+ * @param name This optional parameter provides the name of the cluster to be created
  * @return The async NSOperation created
  */
 -(NSOperation*)createClusterWithDataSetId:(NSString*)dataSetId name:(NSString*)name;
 
 /**
- * Updates the name of a given model.
- * @param identifier The identifier of the model to update
- * @param name The new name of the model
+ * Updates the name of a given cluster.
+ * @param identifier The identifier of the cluster to update
+ * @param name The new name of the cluster
  * @param code The HTTP status code returned
- * @return The model updated if success, else nil
+ * @return The cluster updated if success, else nil
  */
 -(NSDictionary*)updateClusterNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
 
 /**
- * Updates the name of a given model. The response is provided in the method modelUpdated of the delegate.
- * @param identifier The identifier of the model to update
- * @param name The new name of the model
+ * Updates the name of a given cluster. The response is provided in the method clusterUpdated of the delegate.
+ * @param identifier The identifier of the cluster to update
+ * @param name The new name of the cluster
  * @return The async NSOperation created
  */
 -(NSOperation*)updateClusterNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
- * Deletes a given model.
- * @param identifier The identifier of the model to delete
+ * Deletes a given cluster.
+ * @param identifier The identifier of the cluster to delete
  * @return The HTTP status code returned
  */
 -(NSInteger)deleteClusterWithIdSync:(NSString*)identifier;
 
 /**
- * Deletes a given model. The response is provided in the method modelDeletedWithStatusCode of the delegate.
+ * Deletes a given cluster. The response is provided in the method clusterDeletedWithStatusCode of the delegate.
  * @param identifier The identifier of the dataset to delete
  * @return The async NSOperation created
  */
 -(NSOperation*)deleteClusterWithId:(NSString*)identifier;
 
 /**
- * Get a list of models filtered by name.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
- * retrieved all models without any filtering
+ * Get a list of clusters filtered by name.
+ * @param name This optional parameter provides the name of the clusters to be retrieved. If it is nil then will be
+ * retrieved all clusters without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
  * @param code The HTTP status code returned
- * @return The list of models found if success, else nil
+ * @return The list of clusters found if success, else nil
  */
 -(NSDictionary*)getAllClustersWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
 
 /**
- * Get a list of models filtered by name. The response is provided in the method modelsRetrieved of the delegate.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
- * retrieved all models without any filtering
+ * Get a list of clusters filtered by name. The response is provided in the method clustersRetrieved of the delegate.
+ * @param name This optional parameter provides the name of the clusters to be retrieved. If it is nil then will be
+ * retrieved all clusters without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
  * @return The async NSOperation created
@@ -491,30 +491,30 @@
 -(NSOperation*)getAllClustersWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
 
 /**
- * Get a model.
- * @param identifier The identifier of the model to get
+ * Get a cluster.
+ * @param identifier The identifier of the cluster to get
  * @param code The HTTP status code returned
- * @return The model if success, else nil
+ * @return The cluster if success, else nil
  */
 -(NSDictionary*)getClusterWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
 
 /**
- * Get a model. The response is provided in the method modelRetrieved of the delegate.
- * @param identifier The identifier of the model to get
+ * Get a cluster. The response is provided in the method clusterRetrieved of the delegate.
+ * @param identifier The identifier of the cluster to get
  * @return The async NSOperation created
  */
 -(NSOperation*)getClusterWithId:(NSString*)identifier;
 
 /**
- * Check if the status of the model is FINISHED.
- * @param identifier The identifier of the model to check the status
- * @return true if the status of the model is FINISHED, else false
+ * Check if the status of the cluster is FINISHED.
+ * @param identifier The identifier of the cluster to check the status
+ * @return true if the status of the cluster is FINISHED, else false
  */
 -(BOOL)checkClusterIsReadyWithIdSync:(NSString*)identifier;
 
 /**
- * Check if the status of the model is FINISHED. The response is provided in the method modelIsReady of the delegate.
- * @param identifier The identifier of the model to check the status
+ * Check if the status of the cluster is FINISHED. The response is provided in the method clusterIsReady of the delegate.
+ * @param identifier The identifier of the cluster to check the status
  * @return The async NSOperation created
  */
 -(NSOperation*)checkClusterIsReadyWithId:(NSString*)identifier;
@@ -648,6 +648,112 @@
 
 
 //*******************************************************************************
+//*************************** Ensembles  **************************************
+//************* https://bigml.com/developers/ensembles ************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Ensembles
+
+/**
+ * Creates a ensemble from a given dataset.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the ensemble to be created
+ * @param code The HTTP status code returned
+ * @return The ensemble created if success, else nil
+ */
+-(NSDictionary*)createEnsembleWithDataSetIdSync:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Creates a ensemble from a given dataset. The response is provided in the method ensembleCreated of the delegate.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the ensemble to be created
+ * @return The async NSOperation created
+ */
+-(NSOperation*)createEnsembleWithDataSetId:(NSString*)dataSetId name:(NSString*)name;
+
+/**
+ * Updates the name of a given ensemble.
+ * @param identifier The identifier of the ensemble to update
+ * @param name The new name of the ensemble
+ * @param code The HTTP status code returned
+ * @return The ensemble updated if success, else nil
+ */
+-(NSDictionary*)updateEnsembleNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Updates the name of a given ensemble. The response is provided in the method ensembleUpdated of the delegate.
+ * @param identifier The identifier of the ensemble to update
+ * @param name The new name of the ensemble
+ * @return The async NSOperation created
+ */
+-(NSOperation*)updateEnsembleNameWithId:(NSString*)identifier name:(NSString*)name;
+
+/**
+ * Deletes a given ensemble.
+ * @param identifier The identifier of the ensemble to delete
+ * @return The HTTP status code returned
+ */
+-(NSInteger)deleteEnsembleWithIdSync:(NSString*)identifier;
+
+/**
+ * Deletes a given ensemble. The response is provided in the method ensembleDeletedWithStatusCode of the delegate.
+ * @param identifier The identifier of the dataset to delete
+ * @return The async NSOperation created
+ */
+-(NSOperation*)deleteEnsembleWithId:(NSString*)identifier;
+
+/**
+ * Get a list of ensembles filtered by name.
+ * @param name This optional parameter provides the name of the ensembles to be retrieved. If it is nil then will be
+ * retrieved all ensembles without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @param code The HTTP status code returned
+ * @return The list of ensembles found if success, else nil
+ */
+-(NSDictionary*)getAllEnsemblesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+
+/**
+ * Get a list of ensembles filtered by name. The response is provided in the method ensemblesRetrieved of the delegate.
+ * @param name This optional parameter provides the name of the ensembles to be retrieved. If it is nil then will be
+ * retrieved all ensembles without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getAllEnsemblesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+
+/**
+ * Get a ensemble.
+ * @param identifier The identifier of the ensemble to get
+ * @param code The HTTP status code returned
+ * @return The ensemble if success, else nil
+ */
+-(NSDictionary*)getEnsembleWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+
+/**
+ * Get a ensemble. The response is provided in the method ensembleRetrieved of the delegate.
+ * @param identifier The identifier of the ensemble to get
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getEnsembleWithId:(NSString*)identifier;
+
+/**
+ * Check if the status of the ensemble is FINISHED.
+ * @param identifier The identifier of the ensemble to check the status
+ * @return true if the status of the ensemble is FINISHED, else false
+ */
+-(BOOL)checkEnsembleIsReadyWithIdSync:(NSString*)identifier;
+
+/**
+ * Check if the status of the ensemble is FINISHED. The response is provided in the method ensembleIsReady of the delegate.
+ * @param identifier The identifier of the ensemble to check the status
+ * @return The async NSOperation created
+ */
+-(NSOperation*)checkEnsembleIsReadyWithId:(NSString*)identifier;
+
+//*******************************************************************************
 //*************************** PROJECTS  **************************************
 //************* https://bigml.com/developers/projects ************************
 //*******************************************************************************
@@ -656,18 +762,18 @@
 #pragma mark Projects
 
 /**
- * Creates a project from a given model.
- * @param modelId The identifier of the model
+ * Creates a project from a given project.
+ * @param projectId The identifier of the project
  * @param name This optional parameter provides the name of the project to be created
  * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
  * It initializes the values of the given fields before creating the project.
  * @param code The HTTP status code returned
- * @return The model created if success, else nil
+ * @return The project created if success, else nil
  */
 -(NSDictionary*)createProjectSync:(NSDictionary*)project statusCode:(NSInteger*)code;
 
 /**
- * Creates a project from a given model. The response is provided in the method projectCreated of the delegate.
+ * Creates a project from a given project. The response is provided in the method projectCreated of the delegate.
  * @param dataSetId The identifier of the dataset
  * @param name This optional parameter provides the name of the project to be created
  * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
@@ -681,7 +787,7 @@
  * @param identifier The identifier of the project to update
  * @param name The new name of the project
  * @param code The HTTP status code returned
- * @return The model updated if success, else nil
+ * @return The project updated if success, else nil
  */
 -(NSDictionary*)updateProjectWithIdSync:(NSString*)identifier project:(NSDictionary*)project statusCode:(NSInteger*)code;
 
@@ -720,7 +826,7 @@
 
 /**
  * Get a list of projects filtered by name. The response is provided in the method projectsRetrieved of the delegate.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
+ * @param name This optional parameter provides the name of the projects to be retrieved. If it is nil then will be
  * retrieved all projects without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -737,7 +843,7 @@
 -(NSDictionary*)getProjectWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
 
 /**
- * Get a model. The response is provided in the method projectRetrieved of the delegate.
+ * Get a project. The response is provided in the method projectRetrieved of the delegate.
  * @param identifier The identifier of the project to get
  * @return The async NSOperation created
  */

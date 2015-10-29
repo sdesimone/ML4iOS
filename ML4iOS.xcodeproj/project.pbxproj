@@ -14,8 +14,6 @@
 		492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */; };
 		492CC72419D2B240001829F5 /* testCluster.json in Resources */ = {isa = PBXBuildFile; fileRef = 492CC72319D2B240001829F5 /* testCluster.json */; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
-		4962DC6919DD974700058FF6 /* spam.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6719DD974700058FF6 /* spam.tsv */; };
-		4962DC6A19DD974700058FF6 /* TemplateIcon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6819DD974700058FF6 /* TemplateIcon2x.png */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
 		49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */ = {isa = PBXBuildFile; fileRef = 49C6CD7C19E6E6B200891301 /* spam.cluster */; };
@@ -57,8 +55,6 @@
 		492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSClusterPredictionTests.m; sourceTree = "<group>"; };
 		492CC72319D2B240001829F5 /* testCluster.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCluster.json; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
-		4962DC6719DD974700058FF6 /* spam.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.tsv; sourceTree = "<group>"; };
-		4962DC6819DD974700058FF6 /* TemplateIcon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TemplateIcon2x.png; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
 		49C6CD7C19E6E6B200891301 /* spam.cluster */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.cluster; sourceTree = "<group>"; };
@@ -191,8 +187,6 @@
 			children = (
 				492CC72319D2B240001829F5 /* testCluster.json */,
 				DCD306BC1723602400CC9364 /* iris.csv */,
-				4962DC6719DD974700058FF6 /* spam.tsv */,
-				4962DC6819DD974700058FF6 /* TemplateIcon2x.png */,
 				4962DC6B19DDA5DE00058FF6 /* spam.model */,
 				4962DC6D19DDA73B00058FF6 /* iris.model */,
 				49C6CD7C19E6E6B200891301 /* spam.cluster */,
@@ -312,10 +306,8 @@
 				492CC72419D2B240001829F5 /* testCluster.json in Resources */,
 				DCD306BD1723602400CC9364 /* iris.csv in Resources */,
 				49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */,
-				4962DC6919DD974700058FF6 /* spam.tsv in Resources */,
 				49C6CD8519E7F07100891301 /* spam-text.cluster in Resources */,
 				4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */,
-				4962DC6A19DD974700058FF6 /* TemplateIcon2x.png in Resources */,
 				4962DC6E19DDA73B00058FF6 /* iris.model in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

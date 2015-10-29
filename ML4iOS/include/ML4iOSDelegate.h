@@ -88,40 +88,40 @@
  * @param dataSet The dataset created if success, else nil
  * @param code The HTTP status code
  */
--(void)dataSetCreated:(NSDictionary*)dataSet statusCode:(NSInteger)code;
+-(void)datasetCreated:(NSDictionary*)dataSet statusCode:(NSInteger)code;
 
 /**
  * Async response to updateDataSetNameWithId
  * @param dataSet The dataset updated if success, else nil
  * @param code The HTTP status code
  */
--(void)dataSetUpdated:(NSDictionary*)dataSet statusCode:(NSInteger)code;
+-(void)datasetUpdated:(NSDictionary*)dataSet statusCode:(NSInteger)code;
 
 /**
  * Async response to deleteDataSetWithId
  * @param code The HTTP status code
  */
--(void)dataSetDeletedWithStatusCode:(NSInteger)code;
+-(void)datasetDeletedWithStatusCode:(NSInteger)code;
 
 /**
  * Async response to getAllDataSetsWithName
  * @param dataSets The datasets retrieved
  * @param code The HTTP status code
  */
--(void)dataSetsRetrieved:(NSDictionary*)dataSets statusCode:(NSInteger)code;
+-(void)datasetsRetrieved:(NSDictionary*)dataSets statusCode:(NSInteger)code;
 
 /**
  * Async response to getDataSetWithId
  * @param dataSet The dataset retrieved
  * @param code The HTTP status code
  */
--(void)dataSetRetrieved:(NSDictionary*)dataSet statusCode:(NSInteger)code;
+-(void)datasetRetrieved:(NSDictionary*)dataSet statusCode:(NSInteger)code;
 
 /**
  * Async response to checkDataSetIsReadyWithId
  * @param ready true if dataset status is FINISHED, else false
  */
--(void)dataSetIsReady:(BOOL)ready;
+-(void)datasetIsReady:(BOOL)ready;
 
 //*******************************************************************************
 //*************************** MODELS  *******************************************
@@ -218,6 +218,54 @@
  * @param ready true if cluster status is FINISHED, else false
  */
 -(void)clusterIsReady:(BOOL)ready;
+
+//*******************************************************************************
+//*************************** CLUSTERS *******************************************
+//************* https://bigml.com/developers/Ensembles *****************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Ensembles
+
+/**
+ * Async response to createEnsembleWithDataSetId
+ * @param Ensemble The Ensemble created if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)ensembleCreated:(NSDictionary*)ensemble statusCode:(NSInteger)code;
+
+/**
+ * Async response to updateEnsembleNameWithId
+ * @param ensemble The ensemble updated if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)ensembleUpdated:(NSDictionary*)ensemble statusCode:(NSInteger)code;
+
+/**
+ * Async response to deleteEnsembleWithId
+ * @param code The HTTP status code
+ */
+-(void)ensembleDeletedWithStatusCode:(NSInteger)code;
+
+/**
+ * Async response to getAllEnsemblesWithName
+ * @param ensembles The ensembles retrieved
+ * @param code The HTTP status code
+ */
+-(void)ensemblesRetrieved:(NSDictionary*)ensembles statusCode:(NSInteger)code;
+
+/**
+ * Async response to getEnsembleWithId
+ * @param ensemble The ensemble retrieved
+ * @param code The HTTP status code
+ */
+-(void)ensembleRetrieved:(NSDictionary*)ensemble statusCode:(NSInteger)code;
+
+/**
+ * Async response to checkEnsembleIsReadyWithId
+ * @param ready true if ensemble status is FINISHED, else false
+ */
+-(void)ensembleIsReady:(BOOL)ready;
 
 //*******************************************************************************
 //*************************** PREDICTIONS  **************************************

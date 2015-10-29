@@ -29,6 +29,7 @@
 #define BIGML_IO_DATASET_URL [NSString stringWithFormat:@"%@/dataset", apiBaseURL]
 #define BIGML_IO_MODEL_URL [NSString stringWithFormat:@"%@/model", apiBaseURL]
 #define BIGML_IO_CLUSTER_URL [NSString stringWithFormat:@"%@/cluster", apiBaseURL]
+#define BIGML_IO_ENSEMBLE_URL [NSString stringWithFormat:@"%@/ensemble", apiBaseURL]
 #define BIGML_IO_PREDICTION_URL [NSString stringWithFormat:@"%@/prediction", apiBaseURL]
 #define BIGML_IO_PROJECT_URL [NSString stringWithFormat:@"%@/project", apiBaseURL]
 
@@ -293,7 +294,6 @@
     
     return self;
 }
-
 
 //*******************************************************************************
 //**************************  DATA SOURCES  *************************************
@@ -597,6 +597,71 @@
 -(NSDictionary*)getClusterWithId:(NSString*)identifier statusCode:(NSInteger*)code
 {
     NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_CLUSTER_URL, identifier, authToken];
+    
+    return [self getItemWithURL:urlString statusCode:code];
+}
+
+//*******************************************************************************
+//**************************  ENSEMBLES  *******************************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Ensembles
+
+-(NSDictionary*)createEnsembleWithDataSetId:(NSString*)sourceId name:(NSString*)name statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@%@", BIGML_IO_ENSEMBLE_URL, authToken];
+    
+    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
+    [bodyString appendFormat:@"{\"dataset\":\"dataset/%@\"", sourceId];
+    [bodyString appendString:[self optionsToString]];
+    
+    if([name length] > 0)
+        [bodyString appendFormat:@", \"name\":\"%@\"}", name];
+    else
+        [bodyString appendString:@"}"];
+    
+    return [self createItemWithURL:urlString body:bodyString statusCode:code];
+    
+}
+
+-(NSDictionary*)updateEnsembleNameWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_ENSEMBLE_URL, identifier, authToken];
+    
+    NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
+    [bodyString appendFormat:@"{\"name\":\"%@\"}", name];
+    
+    return [self updateItemWithURL:urlString body:bodyString statusCode:code];
+}
+
+-(NSInteger)deleteEnsembleWithId:(NSString*)identifier
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_ENSEMBLE_URL, identifier, authToken];
+    
+    return [self deleteItemWithURL:urlString];
+}
+
+-(NSDictionary*)getAllEnsemblesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+{
+    NSMutableString* urlString = [NSMutableString stringWithCapacity:30];
+    [urlString appendFormat:@"%@%@", BIGML_IO_ENSEMBLE_URL, authToken];
+    
+    if([name length] > 0)
+        [urlString appendFormat:@"name=%@;", name];
+    
+    if(offset > 0)
+        [urlString appendFormat:@"offset=%d;", (int)offset];
+    
+    if(limit > 0)
+        [urlString appendFormat:@"limit=%d;", (int)limit];
+    
+    return [self listItemsWithURL:urlString statusCode:code];
+}
+
+-(NSDictionary*)getEnsembleWithId:(NSString*)identifier statusCode:(NSInteger*)code
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@/%@%@", BIGML_IO_ENSEMBLE_URL, identifier, authToken];
     
     return [self getItemWithURL:urlString statusCode:code];
 }
