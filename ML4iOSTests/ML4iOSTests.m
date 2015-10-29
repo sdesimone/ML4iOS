@@ -22,91 +22,129 @@
 #import "ML4iOSTests.h"
 #import "ML4iOS.h"
 #import "Constants.h"
+#import "objc/message.h"
 
 @implementation ML4iOSTests {
     
     NSString* sourceId;
+    NSString* datasetId;
 }
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
     
-    // Set-up code here.
     //apiLibrary = [[ML4iOS alloc]initWithUsername:@"YOUR_BIGML_USERNAME" key:@"YOUR_BIGML_API_KEY" developmentMode:NO];
     [apiLibrary setDelegate:self];
     
-    //CREATES A DATA SOURCE FROM A .CSV
-    NSString *path = [[NSBundle bundleForClass:[ML4iOSTests class]] pathForResource:@"iris" ofType:@"csv"];
+    sourceId = [self createAndWaitSourceFromCSV:[[NSBundle bundleForClass:[ML4iOSTests class]] pathForResource:@"iris" ofType:@"csv"]];
+    XCTAssert(sourceId, @"Could not create source");
+
+    datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
+    XCTAssert(datasetId, @"Could not create dataset");
+}
+
+- (void)tearDown {
+    
+    [apiLibrary cancelAllAsynchronousOperations];
+    [apiLibrary deleteSourceWithIdSync:sourceId];
+    [apiLibrary deleteDatasetWithIdSync:datasetId];
+    
+    [super tearDown];
+}
+
+- (NSString*)typeFromFullUuid:(NSString*)fullUuid {
+    
+    return [fullUuid componentsSeparatedByString:@"/"].firstObject;
+}
+
+- (NSInteger)resourceStatus:(NSDictionary*)resource {
+    
+    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"get%@WithIdSync:statusCode:",
+                                         [[self typeFromFullUuid:resource[@"resource"]] capitalizedString]]);
+    NSInteger statusCode = 0;
+    NSString* identifier = [ML4iOS getResourceIdentifierFromJSONObject:resource];
+    NSDictionary* dataSource = objc_msgSend(apiLibrary, selector, identifier, &statusCode);
+    
+    return [dataSource[@"status"][@"code"] intValue];
+}
+
+- (NSString*)waitResource:(NSDictionary*)resource finalExpectedStatus:(NSInteger)expectedStatus sleep:(float)duration {
+    
+    NSInteger status = 0;
+    while ((status = [self resourceStatus:resource]) != expectedStatus) {
+        XCTAssert(status > 0, @"Failed creating resource!");
+        sleep(duration);
+    }
+    return [ML4iOS getResourceIdentifierFromJSONObject:resource];
+}
+
+- (NSString*)createAndWaitSourceFromCSV:(NSString*)path {
+    
     NSInteger httpStatusCode = 0;
     NSDictionary* dataSource = [apiLibrary createSourceWithNameSync:@"iris.csv" project:nil filePath:path statusCode:&httpStatusCode];
     
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating data source from iris.csv");
-    
-    if(dataSource != nil && httpStatusCode == HTTP_CREATED)
-    {
-        //EXTRACT DATA SOURCE ID AND CREATE DATASET FROM THAT DATA SOURCE
-        sourceId = [ML4iOS getResourceIdentifierFromJSONObject:dataSource];
+    if (dataSource != nil && httpStatusCode == HTTP_CREATED) {
         
-        //WAIT UNTIL DATA SOURCE IS READY
-        while (![apiLibrary checkSourceIsReadyWithIdSync:sourceId]) {
-            sleep(1);
-        }
-        
-        NSLog(@"Data Source iris_source Created and Ready");
+        return [self waitResource:dataSource finalExpectedStatus:5 sleep:1];
     }
-}
-
-- (void)tearDown
-{
-    // Tear-down code here.
-    [apiLibrary cancelAllAsynchronousOperations];
-    
-    [apiLibrary deleteSourceWithIdSync:sourceId];
-    
-    [super tearDown];
+    return nil;
 }
 
 - (NSString*)createAndWaitDatasetFromSourceId:(NSString*)srcId {
     
     NSInteger httpStatusCode = 0;
-    NSDictionary* dataSet = [apiLibrary createDataSetWithDataSourceIdSync:srcId name:@"iris_dataset" statusCode:&httpStatusCode];
+    NSDictionary* dataSet = [apiLibrary createDatasetWithDataSourceIdSync:srcId
+                                                                     name:@"iris_dataset"
+                                                               statusCode:&httpStatusCode];
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating dataset from iris_source");
     
-    if(dataSet != nil && httpStatusCode == HTTP_CREATED)
-    {
-        //EXTRACT DATASET ID AND CREATE MODEL FROM THAT DATASET
-        NSString* dataSetId = [ML4iOS getResourceIdentifierFromJSONObject:dataSet];
-        
-        //WAIT UNTIL DATA SOURCE IS READY
-        while (![apiLibrary checkDataSetIsReadyWithIdSync:dataSetId]) {
-            sleep(3);
-        }
-        
-        NSLog(@"DataSet iris_dataset Created and Ready");
-        return dataSetId;
+    if(dataSet != nil && httpStatusCode == HTTP_CREATED) {
+
+        return [self waitResource:dataSet finalExpectedStatus:5 sleep:1];
     }
 }
 
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId {
     
     NSInteger httpStatusCode = 0;
-    NSDictionary* model = [apiLibrary createModelWithDataSetIdSync:dataSetId name:@"iris_model" statusCode:&httpStatusCode];
+    NSDictionary* model = [apiLibrary createModelWithDataSetIdSync:dataSetId
+                                                              name:@"iris_model"
+                                                        statusCode:&httpStatusCode];
+    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating model from iris_dataset");
+    
+    if(model != nil && httpStatusCode == HTTP_CREATED) {
+        
+        return [self waitResource:model finalExpectedStatus:5 sleep:3];
+    }
+}
+
+- (NSString*)createAndWaitClusterFromDatasetId:(NSString*)dataSetId {
+    
+    NSInteger httpStatusCode = 0;
+    NSDictionary* cluster = [apiLibrary createClusterWithDataSetIdSync:dataSetId
+                                                                name:@"iris_model"
+                                                          statusCode:&httpStatusCode];
+    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating cluster from iris_dataset");
+    
+    if(cluster != nil && httpStatusCode == HTTP_CREATED) {
+
+        return [self waitResource:cluster finalExpectedStatus:5 sleep:3];
+    }
+}
+
+- (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId {
+    
+    NSInteger httpStatusCode = 0;
+    NSDictionary* ensemble = [apiLibrary createEnsembleWithDataSetIdSync:dataSetId
+                                                                 name:@"iris_model"
+                                                           statusCode:&httpStatusCode];
     
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating model from iris_dataset");
     
-    if(model != nil && httpStatusCode == HTTP_CREATED)
-    {
-        //EXTRACT MODEL ID AND CREATE PREDICTION FROM THAT MODEL
-        NSString* modelId = [ML4iOS getResourceIdentifierFromJSONObject:model];
+    if (ensemble != nil && httpStatusCode == HTTP_CREATED) {
         
-        //WAIT UNTIL MODEL IS READY
-        while (![apiLibrary checkModelIsReadyWithIdSync:modelId]) {
-            sleep(3);
-        }
-        
-        NSLog(@"Model iris_model Created and Ready");
-        return modelId;
+        return [self waitResource:ensemble finalExpectedStatus:5 sleep:3];
     }
 }
 
@@ -122,76 +160,125 @@
     
     XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating prediction from iris_model");
     NSString* predictionId = nil;
-    if(prediction != nil)
-    {
-        //EXTRACT MODEL ID AND CREATE PREDICTION FROM THAT MODEL
-        predictionId = [ML4iOS getResourceIdentifierFromJSONObject:prediction];
-        
-        //WAIT UNTIL PREDICTION IS READY
-        while (![apiLibrary checkPredictionIsReadyWithIdSync:predictionId]) {
-            sleep(1);
-        }
-        
-        NSLog(@"Prediction iris_prediction Created and Ready");
+    if (prediction != nil) {
+
+        return [self waitResource:prediction finalExpectedStatus:5 sleep:1];
     }
     return predictionId;
 }
 
-- (void)localPredictionForModelId:(NSString*)modelId {
+- (NSDictionary*)localPredictionForModelId:(NSString*)modelId data:(NSString*)inputData byName:(BOOL)byName {
     
     NSInteger httpStatusCode = 0;
-    NSString* inputDataForPrediction = @"{\"000001\": 2, \"000002\": 1, \"000003\": 1}";
-
+    
     if ([modelId length] > 0) {
         
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
-        
-        NSLog(@"Iris Model for Local Prediction Retrieved with id = %@", [ML4iOS getResourceIdentifierFromJSONObject:irisModel]);
-        
-        NSDictionary* prediction = [apiLibrary createLocalPredictionWithJSONModelSync:irisModel arguments:inputDataForPrediction argsByName:NO];
+        NSDictionary* prediction = [apiLibrary createLocalPredictionWithJSONModelSync:irisModel
+                                                                            arguments:inputData
+                                                                           argsByName:byName];
         
         XCTAssertNotNil([prediction objectForKey:@"value"], @"Local Prediction value can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
         
-        NSLog(@"Local Prediction Value = %@", [prediction objectForKey:@"value"]);
-        NSLog(@"Local Prediction Confidence = %@", [prediction objectForKey:@"confidence"]);
+        return prediction;
     }
+    return nil;
 }
 
-- (void)testDataset {
+- (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
+                                        data:(NSDictionary*)inputData
+                                      byName:(BOOL)byName {
     
-    NSString* datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
-    [apiLibrary deleteDataSetWithIdSync:datasetId];
+    NSInteger httpStatusCode = 0;
+    
+    if ([clusterId length] > 0) {
+        
+        NSDictionary* irisModel = [apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
+        NSDictionary* prediction = [apiLibrary createLocalCentroidsWithJSONModelSync:irisModel
+                                                                           arguments:inputData
+                                                                          argsByName:byName];
+        
+        XCTAssertNotNil([prediction objectForKey:@"centroidId"], @"Local Prediction centroidId can't be nil");
+        XCTAssertNotNil([prediction objectForKey:@"centroidName"], @"Local Prediction centroidName can't be nil");
+        
+        return prediction;
+    }
+    return nil;
 }
 
 - (void)testModel {
     
-    NSString* datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
     NSString* modelId = [self createAndWaitModelFromDatasetId:datasetId];
-    [apiLibrary deleteDataSetWithIdSync:modelId];
-    [apiLibrary deleteDataSetWithIdSync:datasetId];
+    XCTAssert(modelId);
+    [apiLibrary deleteModelWithIdSync:modelId];
+}
+
+- (void)testCluster {
+    
+    NSString* clusterId = [self createAndWaitClusterFromDatasetId:datasetId];
+    XCTAssert(clusterId);
+    [apiLibrary deleteClusterWithIdSync:clusterId];
+}
+
+- (void)testEnsemble {
+    
+    NSString* identifier = [self createAndWaitEnsembleFromDatasetId:datasetId];
+    XCTAssert(identifier);
+    [apiLibrary deleteEnsembleWithIdSync:identifier];
 }
 
 - (void)testPrediction {
     
-    NSString* datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
     NSString* modelId = [self createAndWaitModelFromDatasetId:datasetId];
+    XCTAssert(modelId);
+    
     NSString* predictionId = [self createAndWaitPredictionFromModelId:modelId];
-    [apiLibrary deleteDataSetWithIdSync:datasetId];
-    [apiLibrary deleteDataSetWithIdSync:modelId];
-    [apiLibrary deleteDataSetWithIdSync:predictionId];
+    [apiLibrary deleteModelWithIdSync:modelId];
+    XCTAssert(predictionId);
+    
+    [apiLibrary deletePredictionWithIdSync:predictionId];
 }
 
 - (void)testLocalPrediction {
     
-    NSString* datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
     NSString* modelId = [self createAndWaitModelFromDatasetId:datasetId];
-    [apiLibrary deleteDataSetWithIdSync:datasetId];
-    
-    [self localPredictionForModelId:modelId];
-    [apiLibrary deleteDataSetWithIdSync:modelId];
+    NSDictionary* prediction = [self localPredictionForModelId:modelId
+                                                          data:@"{\"000001\": 2, \"000002\": 1, \"000003\": 1}"
+                                                        byName:NO];
+    [apiLibrary deleteModelWithIdSync:modelId];
+    XCTAssert(prediction);
 }
 
+- (void)testLocalPredictionByName {
+    
+    NSString* modelId = [self createAndWaitModelFromDatasetId:datasetId];
+    NSDictionary* prediction = [self localPredictionForModelId:modelId
+                                                          data:@"{\"sepal length\": 2, \"sepal width\": 1, \"petal length\": 1}"
+                                                        byName:YES];
+    [apiLibrary deleteModelWithIdSync:modelId];
+    XCTAssert(prediction);
+}
+
+- (void)testLocalClusterPredictionByName {
+    
+    NSString* clusterId = [self createAndWaitClusterFromDatasetId:datasetId];
+    NSDictionary* prediction = [self localPredictionForClusterId:clusterId
+                                                            data:@{@"sepal length": @2, @"sepal width": @1, @"petal length": @1}
+                                                          byName:YES];
+    [apiLibrary deleteClusterWithIdSync:clusterId];
+    XCTAssert(prediction);
+}
+
+- (void)testLocalClusterPrediction {
+    
+    NSString* clusterId = [self createAndWaitClusterFromDatasetId:datasetId];
+    NSDictionary* prediction = [self localPredictionForClusterId:clusterId
+                                                            data:@{@"000001": @2, @"000002": @1, @"000003": @1}
+                                                          byName:NO];
+    [apiLibrary deleteClusterWithIdSync:clusterId];
+    XCTAssert(prediction);
+}
 
 #pragma mark -
 #pragma mark ML4iOSDelegate
@@ -226,32 +313,32 @@
     
 }
 
--(void)dataSetCreated:(NSDictionary*)dataSet statusCode:(NSInteger)code
+-(void)datasetCreated:(NSDictionary*)dataSet statusCode:(NSInteger)code
 {
     
 }
 
--(void)dataSetUpdated:(NSDictionary*)dataSet statusCode:(NSInteger)code
+-(void)datasetUpdated:(NSDictionary*)dataSet statusCode:(NSInteger)code
 {
     
 }
 
--(void)dataSetDeletedWithStatusCode:(NSInteger)code
+-(void)datasetDeletedWithStatusCode:(NSInteger)code
 {
     
 }
 
--(void)dataSetsRetrieved:(NSDictionary*)dataSets statusCode:(NSInteger)code
+-(void)datasetsRetrieved:(NSDictionary*)dataSets statusCode:(NSInteger)code
 {
     
 }
 
--(void)dataSetRetrieved:(NSDictionary*)dataSet statusCode:(NSInteger)code
+-(void)datasetRetrieved:(NSDictionary*)dataSet statusCode:(NSInteger)code
 {
     
 }
 
--(void)dataSetIsReady:(BOOL)ready
+-(void)datasetIsReady:(BOOL)ready
 {
     
 }
