@@ -38,7 +38,7 @@
  
  **/
 
-@interface LocalPredictionCluster : NSObject
+@interface LocalPredictiveCluster : NSObject
 
 + (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
                               arguments:(NSDictionary*)args

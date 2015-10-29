@@ -23,7 +23,7 @@
 #import "HTTPCommsManager.h"
 #import "Constants.h"
 #import "LocalPredictiveModel.h"
-#import "LocalPredictionCluster.h"
+#import "LocalPredictiveCluster.h"
 
 /**
  * Interface that contains private methods
@@ -1159,7 +1159,7 @@
                                             arguments:(NSDictionary*)args
                                            argsByName:(BOOL)byName
 {
-    return [LocalPredictionCluster predictWithJSONCluster:jsonCluster
+    return [LocalPredictiveCluster predictWithJSONCluster:jsonCluster
                                                 arguments:args
                                                argsByName:byName];
 }

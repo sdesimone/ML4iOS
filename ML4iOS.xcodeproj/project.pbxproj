@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		492CC71D19D2B021001829F5 /* LocalPredictionCentroid.h in Headers */ = {isa = PBXBuildFile; fileRef = 492CC71919D2B021001829F5 /* LocalPredictionCentroid.h */; };
 		492CC71E19D2B021001829F5 /* LocalPredictionCentroid.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC71A19D2B021001829F5 /* LocalPredictionCentroid.m */; };
-		492CC71F19D2B021001829F5 /* LocalPredictionCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 492CC71B19D2B021001829F5 /* LocalPredictionCluster.h */; };
-		492CC72019D2B021001829F5 /* LocalPredictionCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC71C19D2B021001829F5 /* LocalPredictionCluster.m */; };
+		492CC71F19D2B021001829F5 /* LocalPredictiveCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 492CC71B19D2B021001829F5 /* LocalPredictiveCluster.h */; };
+		492CC72019D2B021001829F5 /* LocalPredictiveCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */; };
 		492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */; };
 		492CC72419D2B240001829F5 /* testCluster.json in Resources */ = {isa = PBXBuildFile; fileRef = 492CC72319D2B240001829F5 /* testCluster.json */; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
@@ -50,8 +50,8 @@
 /* Begin PBXFileReference section */
 		492CC71919D2B021001829F5 /* LocalPredictionCentroid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictionCentroid.h; sourceTree = "<group>"; };
 		492CC71A19D2B021001829F5 /* LocalPredictionCentroid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictionCentroid.m; sourceTree = "<group>"; };
-		492CC71B19D2B021001829F5 /* LocalPredictionCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictionCluster.h; sourceTree = "<group>"; };
-		492CC71C19D2B021001829F5 /* LocalPredictionCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictionCluster.m; sourceTree = "<group>"; };
+		492CC71B19D2B021001829F5 /* LocalPredictiveCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictiveCluster.h; sourceTree = "<group>"; };
+		492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictiveCluster.m; sourceTree = "<group>"; };
 		492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSClusterPredictionTests.m; sourceTree = "<group>"; };
 		492CC72319D2B240001829F5 /* testCluster.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCluster.json; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				DC3AE9731570D293008D2F79 /* include */,
-				DCA20AE41723E94B0019E738 /* localpredictions */,
+				DCA20AE41723E94B0019E738 /* Local */,
 				DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */,
 				DC3AE97B1570D331008D2F79 /* HTTPCommsManager.m */,
 				DC3AE9511570D0B0008D2F79 /* ML4iOS.m */,
@@ -195,13 +195,13 @@
 			path = data;
 			sourceTree = "<group>";
 		};
-		DCA20AE41723E94B0019E738 /* localpredictions */ = {
+		DCA20AE41723E94B0019E738 /* Local */ = {
 			isa = PBXGroup;
 			children = (
 				492CC71919D2B021001829F5 /* LocalPredictionCentroid.h */,
 				492CC71A19D2B021001829F5 /* LocalPredictionCentroid.m */,
-				492CC71B19D2B021001829F5 /* LocalPredictionCluster.h */,
-				492CC71C19D2B021001829F5 /* LocalPredictionCluster.m */,
+				492CC71B19D2B021001829F5 /* LocalPredictiveCluster.h */,
+				492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */,
 				DCD306BE1723715100CC9364 /* LocalPredictiveModel.h */,
 				DCD306BF1723715100CC9364 /* LocalPredictiveModel.m */,
 				DCD306C2172380A700CC9364 /* LocalPredictionTree.h */,
@@ -209,7 +209,7 @@
 				DCA20AE01723E93E0019E738 /* Predicate.h */,
 				DCA20AE11723E93E0019E738 /* Predicate.m */,
 			);
-			name = localpredictions;
+			name = Local;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,7 +227,7 @@
 				DCD306C4172380A700CC9364 /* LocalPredictionTree.h in Headers */,
 				DCA20AE21723E93E0019E738 /* Predicate.h in Headers */,
 				49559423192A6693006F4D9E /* Constants.h in Headers */,
-				492CC71F19D2B021001829F5 /* LocalPredictionCluster.h in Headers */,
+				492CC71F19D2B021001829F5 /* LocalPredictiveCluster.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC3AE9521570D0B0008D2F79 /* ML4iOS.m in Sources */,
-				492CC72019D2B021001829F5 /* LocalPredictionCluster.m in Sources */,
+				492CC72019D2B021001829F5 /* LocalPredictiveCluster.m in Sources */,
 				DC3AE97D1570D331008D2F79 /* HTTPCommsManager.m in Sources */,
 				492CC71E19D2B021001829F5 /* LocalPredictionCentroid.m in Sources */,
 				DCD306C11723715100CC9364 /* LocalPredictiveModel.m in Sources */,

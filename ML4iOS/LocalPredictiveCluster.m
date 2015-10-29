@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-#import "LocalPredictionCluster.h"
+#import "LocalPredictiveCluster.h"
 #import "LocalPredictionCentroid.h"
 
 #define TM_TOKENS @"tokens_only"
 #define TM_FULL_TERM @"full_terms_only"
 
-@interface LocalPredictionCluster ()
+@interface LocalPredictiveCluster ()
 
 @property (nonatomic, strong) NSDictionary* fields;
 @property (nonatomic, strong) NSMutableDictionary* termForms;
@@ -40,7 +40,7 @@ Uses a BigML remote cluster model to build a local version that can be used
 to generate centroid predictions locally.
 
 **/
-@implementation LocalPredictionCluster
+@implementation LocalPredictiveCluster
 
 + (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
                               arguments:(NSDictionary*)args
