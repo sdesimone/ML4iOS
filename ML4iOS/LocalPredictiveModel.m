@@ -55,7 +55,9 @@
     for(NSString* key in [inputDataByFieldId keyEnumerator])
     {
         NSDictionary* fieldName = fields[key][@"name"];
-        inputDataByName[fieldName] = inputDataByFieldId[key];
+        NSAssert(fieldName, @"Error in createInputDataByNameFromInputDataByFieldId: passing incorrect input name for prediction");
+        if (fieldName)
+            inputDataByName[fieldName] = inputDataByFieldId[key];
     }
     
     return inputDataByName;
