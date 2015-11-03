@@ -13,9 +13,20 @@
 		492CC72019D2B021001829F5 /* LocalPredictiveCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */; };
 		492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */; };
 		492CC72419D2B240001829F5 /* testCluster.json in Resources */ = {isa = PBXBuildFile; fileRef = 492CC72319D2B240001829F5 /* testCluster.json */; };
+		494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */ = {isa = PBXBuildFile; fileRef = 494CAECB1BE90BA70028D95B /* iris.ensemble */; settings = {ASSET_TAGS = (); }; };
+		494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */; settings = {ASSET_TAGS = (); }; };
+		494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED11BE90EAA0028D95B /* ML4iOSTester.m */; settings = {ASSET_TAGS = (); }; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
+		4979639C1BE27D2100154E4E /* LocalPredictiveEnsemble.h in Headers */ = {isa = PBXBuildFile; fileRef = 4979639A1BE27D2100154E4E /* LocalPredictiveEnsemble.h */; };
+		4979639D1BE27D2100154E4E /* LocalPredictiveEnsemble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4979639B1BE27D2100154E4E /* LocalPredictiveEnsemble.m */; };
+		497963A01BE3759D00154E4E /* MultiModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4979639E1BE3759D00154E4E /* MultiModel.h */; };
+		497963A11BE3759D00154E4E /* MultiModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4979639F1BE3759D00154E4E /* MultiModel.m */; };
+		497963A41BE375DC00154E4E /* MultiVote.h in Headers */ = {isa = PBXBuildFile; fileRef = 497963A21BE375DC00154E4E /* MultiVote.h */; };
+		497963A51BE375DC00154E4E /* MultiVote.m in Sources */ = {isa = PBXBuildFile; fileRef = 497963A31BE375DC00154E4E /* MultiVote.m */; };
+		497963A81BE389A700154E4E /* ML4iOSLocalPredictions.h in Headers */ = {isa = PBXBuildFile; fileRef = 497963A61BE389A700154E4E /* ML4iOSLocalPredictions.h */; };
+		497963A91BE389A700154E4E /* ML4iOSLocalPredictions.m in Sources */ = {isa = PBXBuildFile; fileRef = 497963A71BE389A700154E4E /* ML4iOSLocalPredictions.m */; };
 		49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */ = {isa = PBXBuildFile; fileRef = 49C6CD7C19E6E6B200891301 /* spam.cluster */; };
 		49C6CD8519E7F07100891301 /* spam-text.cluster in Resources */ = {isa = PBXBuildFile; fileRef = 49C6CD8419E7F07100891301 /* spam-text.cluster */; };
 		DC3AE94C1570D0AF008D2F79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC3AE94B1570D0AF008D2F79 /* Foundation.framework */; };
@@ -54,9 +65,21 @@
 		492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictiveCluster.m; sourceTree = "<group>"; };
 		492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSClusterPredictionTests.m; sourceTree = "<group>"; };
 		492CC72319D2B240001829F5 /* testCluster.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCluster.json; sourceTree = "<group>"; };
+		494CAECB1BE90BA70028D95B /* iris.ensemble */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.ensemble; sourceTree = "<group>"; };
+		494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSEnsemblePredictionTests.m; sourceTree = "<group>"; };
+		494CAED01BE90EAA0028D95B /* ML4iOSTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSTester.h; sourceTree = "<group>"; };
+		494CAED11BE90EAA0028D95B /* ML4iOSTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSTester.m; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
+		4979639A1BE27D2100154E4E /* LocalPredictiveEnsemble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictiveEnsemble.h; sourceTree = "<group>"; };
+		4979639B1BE27D2100154E4E /* LocalPredictiveEnsemble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictiveEnsemble.m; sourceTree = "<group>"; };
+		4979639E1BE3759D00154E4E /* MultiModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiModel.h; sourceTree = "<group>"; };
+		4979639F1BE3759D00154E4E /* MultiModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiModel.m; sourceTree = "<group>"; };
+		497963A21BE375DC00154E4E /* MultiVote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiVote.h; sourceTree = "<group>"; };
+		497963A31BE375DC00154E4E /* MultiVote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiVote.m; sourceTree = "<group>"; };
+		497963A61BE389A700154E4E /* ML4iOSLocalPredictions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSLocalPredictions.h; sourceTree = "<group>"; };
+		497963A71BE389A700154E4E /* ML4iOSLocalPredictions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSLocalPredictions.m; sourceTree = "<group>"; };
 		49C6CD7C19E6E6B200891301 /* spam.cluster */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.cluster; sourceTree = "<group>"; };
 		49C6CD8419E7F07100891301 /* spam-text.cluster */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "spam-text.cluster"; sourceTree = "<group>"; };
 		DC3AE9481570D0AF008D2F79 /* libML4iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libML4iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +161,8 @@
 				DCA20AE41723E94B0019E738 /* Local */,
 				DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */,
 				DC3AE97B1570D331008D2F79 /* HTTPCommsManager.m */,
+				497963A61BE389A700154E4E /* ML4iOSLocalPredictions.h */,
+				497963A71BE389A700154E4E /* ML4iOSLocalPredictions.m */,
 				DC3AE9511570D0B0008D2F79 /* ML4iOS.m */,
 				DC3AE94E1570D0B0008D2F79 /* Supporting Files */,
 			);
@@ -158,8 +183,11 @@
 				DC3AE99C1570DD90008D2F79 /* data */,
 				DC3AE9671570D0B0008D2F79 /* ML4iOSTests.h */,
 				DC3AE9681570D0B0008D2F79 /* ML4iOSTests.m */,
-				DC3AE9621570D0B0008D2F79 /* Supporting Files */,
 				492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */,
+				494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */,
+				DC3AE9621570D0B0008D2F79 /* Supporting Files */,
+				494CAED01BE90EAA0028D95B /* ML4iOSTester.h */,
+				494CAED11BE90EAA0028D95B /* ML4iOSTester.m */,
 			);
 			path = ML4iOSTests;
 			sourceTree = "<group>";
@@ -191,6 +219,7 @@
 				4962DC6D19DDA73B00058FF6 /* iris.model */,
 				49C6CD7C19E6E6B200891301 /* spam.cluster */,
 				49C6CD8419E7F07100891301 /* spam-text.cluster */,
+				494CAECB1BE90BA70028D95B /* iris.ensemble */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -208,6 +237,12 @@
 				DCD306C3172380A700CC9364 /* LocalPredictionTree.m */,
 				DCA20AE01723E93E0019E738 /* Predicate.h */,
 				DCA20AE11723E93E0019E738 /* Predicate.m */,
+				4979639A1BE27D2100154E4E /* LocalPredictiveEnsemble.h */,
+				4979639B1BE27D2100154E4E /* LocalPredictiveEnsemble.m */,
+				4979639E1BE3759D00154E4E /* MultiModel.h */,
+				4979639F1BE3759D00154E4E /* MultiModel.m */,
+				497963A21BE375DC00154E4E /* MultiVote.h */,
+				497963A31BE375DC00154E4E /* MultiVote.m */,
 			);
 			name = Local;
 			sourceTree = "<group>";
@@ -219,6 +254,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				497963A81BE389A700154E4E /* ML4iOSLocalPredictions.h in Headers */,
+				497963A01BE3759D00154E4E /* MultiModel.h in Headers */,
 				DC3AE9771570D293008D2F79 /* ML4iOS.h in Headers */,
 				DC3AE9781570D293008D2F79 /* ML4iOSDelegate.h in Headers */,
 				DC3AE97C1570D331008D2F79 /* HTTPCommsManager.h in Headers */,
@@ -227,6 +264,8 @@
 				DCD306C4172380A700CC9364 /* LocalPredictionTree.h in Headers */,
 				DCA20AE21723E93E0019E738 /* Predicate.h in Headers */,
 				49559423192A6693006F4D9E /* Constants.h in Headers */,
+				4979639C1BE27D2100154E4E /* LocalPredictiveEnsemble.h in Headers */,
+				497963A41BE375DC00154E4E /* MultiVote.h in Headers */,
 				492CC71F19D2B021001829F5 /* LocalPredictiveCluster.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,7 +316,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = DC3AE9421570D0AF008D2F79 /* Build configuration list for PBXProject "ML4iOS" */;
@@ -305,6 +344,7 @@
 			files = (
 				492CC72419D2B240001829F5 /* testCluster.json in Resources */,
 				DCD306BD1723602400CC9364 /* iris.csv in Resources */,
+				494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */,
 				49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */,
 				49C6CD8519E7F07100891301 /* spam-text.cluster in Resources */,
 				4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */,
@@ -335,8 +375,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				497963A11BE3759D00154E4E /* MultiModel.m in Sources */,
 				DC3AE9521570D0B0008D2F79 /* ML4iOS.m in Sources */,
+				4979639D1BE27D2100154E4E /* LocalPredictiveEnsemble.m in Sources */,
+				497963A51BE375DC00154E4E /* MultiVote.m in Sources */,
 				492CC72019D2B021001829F5 /* LocalPredictiveCluster.m in Sources */,
+				497963A91BE389A700154E4E /* ML4iOSLocalPredictions.m in Sources */,
 				DC3AE97D1570D331008D2F79 /* HTTPCommsManager.m in Sources */,
 				492CC71E19D2B021001829F5 /* LocalPredictionCentroid.m in Sources */,
 				DCD306C11723715100CC9364 /* LocalPredictiveModel.m in Sources */,
@@ -349,6 +393,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */,
+				494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */,
 				DC3AE9691570D0B0008D2F79 /* ML4iOSTests.m in Sources */,
 				492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */,
 			);
@@ -374,10 +420,14 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -406,9 +456,12 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -456,6 +509,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -464,6 +518,7 @@
 				GCC_PREFIX_HEADER = "ML4iOS/ML4iOS-Prefix.pch";
 				INFOPLIST_FILE = "ML4iOSTests/ML4iOSTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fgarcialainez.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -472,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -480,6 +536,7 @@
 				GCC_PREFIX_HEADER = "ML4iOS/ML4iOS-Prefix.pch";
 				INFOPLIST_FILE = "ML4iOSTests/ML4iOSTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fgarcialainez.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

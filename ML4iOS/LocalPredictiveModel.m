@@ -22,23 +22,18 @@
 #import "LocalPredictionTree.h"
 
 @implementation LocalPredictiveModel
-    
-+(NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName
-{
+
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel argumentDictionary:(NSDictionary*)inputData argsByName:(BOOL)byName {
+
     NSDictionary* prediction = nil;
-    
-    if(jsonModel != nil && args != nil)
-    {
+    if (jsonModel != nil && inputData != nil && inputData.count > 0) {
+
         NSString* objectiveField = jsonModel[@"objective_field"];
-    
         NSDictionary* fields = jsonModel[@"model"][@"fields"];
         NSDictionary* root = jsonModel[@"model"][@"root"];
-    
-        NSError *error = nil;
-        NSDictionary* inputData = [NSJSONSerialization JSONObjectWithData:[args dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
         
         if(!byName)
-            inputData = [LocalPredictiveModel createInputDataByNameFromInputDataByFieldId:inputData fields:fields];
+        inputData = [LocalPredictiveModel createInputDataByNameFromInputDataByFieldId:inputData fields:fields];
         
         //Explore the predictive model tree recursively
         LocalPredictionTree* tree = [[LocalPredictionTree alloc]initWithRoot:root fields:fields objectiveField:objectiveField];
@@ -48,12 +43,23 @@
     return prediction;
 }
 
-+(NSDictionary*)createInputDataByNameFromInputDataByFieldId:(NSDictionary*)inputDataByFieldId fields:(NSDictionary*)fields
-{
-    NSMutableDictionary* inputDataByName = [NSMutableDictionary dictionaryWithCapacity:5];
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName {
     
-    for(NSString* key in [inputDataByFieldId keyEnumerator])
-    {
+    NSDictionary* prediction = nil;
+    if(jsonModel != nil && args != nil) {
+        
+        NSError *error = nil;
+        NSDictionary* inputData = [NSJSONSerialization JSONObjectWithData:[args dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
+        
+        return [self predictWithJSONModel:jsonModel argumentDictionary:inputData argsByName:byName];
+    }
+    return prediction;
+}
+
++ (NSDictionary*)createInputDataByNameFromInputDataByFieldId:(NSDictionary*)inputDataByFieldId fields:(NSDictionary*)fields {
+    
+    NSMutableDictionary* inputDataByName = [NSMutableDictionary dictionaryWithCapacity:5];
+    for(NSString* key in [inputDataByFieldId keyEnumerator]) {
         NSDictionary* fieldName = fields[key][@"name"];
         NSAssert(fieldName, @"Error in createInputDataByNameFromInputDataByFieldId: passing incorrect input name for prediction");
         if (fieldName)

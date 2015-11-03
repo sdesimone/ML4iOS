@@ -1142,29 +1142,6 @@
 }
 
 //*******************************************************************************
-//*************************** LOCAL PREDICTIONS  ********************************
-//*******************************************************************************
-
-#pragma mark -
-#pragma mark Local Predictions
-
--(NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
-                                             arguments:(NSString*)args
-                                            argsByName:(BOOL)byName
-{
-    return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
-}
-
--(NSDictionary*)createLocalCentroidsWithJSONModelSync:(NSDictionary*)jsonCluster
-                                            arguments:(NSDictionary*)args
-                                           argsByName:(BOOL)byName
-{
-    return [LocalPredictiveCluster predictWithJSONCluster:jsonCluster
-                                                arguments:args
-                                               argsByName:byName];
-}
-
-//*******************************************************************************
 //*************************** PROJECTS  **************************************
 //************* https://bigml.com/developers/projects ************************
 //*******************************************************************************

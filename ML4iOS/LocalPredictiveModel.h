@@ -24,9 +24,6 @@
  * Utility class to handle local predictions
  */
 @interface LocalPredictiveModel : NSObject
-{
-    
-}
 
 /**
  * Creates a local prediction using the model and args passed as parameters
@@ -35,7 +32,21 @@
  * @param byName The arguments passed in args parameter are passed by name
  * @return The result of the prediction
  */
-+(NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel arguments:(NSString*)args argsByName:(BOOL)byName;
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
+                            arguments:(NSString*)args
+                           argsByName:(BOOL)byName;
+
+/**
+ * Creates a local prediction using the model and args passed as parameters
+ * @param jsonModel The model to use to create the prediction
+ * @param argumentDictionary An NSDictionary containing the arguments to create the prediction
+ * @param byName The arguments passed in args parameter are passed by name
+ * @return The result of the prediction
+ */
+
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
+                   argumentDictionary:(NSDictionary*)args
+                           argsByName:(BOOL)byName;
 
 /**
  * Generates a hash of input data by name instead of by fieldId
@@ -43,6 +54,7 @@
  * @param fields The fields of the model
  * @return The input data keyed by field name
  */
-+(NSDictionary*)createInputDataByNameFromInputDataByFieldId:(NSDictionary*)inputDataByFieldId fields:(NSDictionary*)fields;
++ (NSDictionary*)createInputDataByNameFromInputDataByFieldId:(NSDictionary*)inputDataByFieldId
+                                                      fields:(NSDictionary*)fields;
 
 @end

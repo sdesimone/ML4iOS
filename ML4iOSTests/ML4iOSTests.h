@@ -20,13 +20,7 @@
  */
 
 #import <XCTest/XCTest.h>
-#import "ML4iOSDelegate.h"
 
-@class ML4iOS;
-
-@interface ML4iOSTests : XCTestCase <ML4iOSDelegate>
-{
-    ML4iOS* apiLibrary;
-}
+@interface ML4iOSTests : XCTestCase
 
 @end
