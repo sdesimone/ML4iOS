@@ -12,7 +12,7 @@
 
 @implementation MultiModel {
     
-    NSDictionary* _allFields;
+    NSMutableDictionary* _allFields;
     NSArray* _models;
 }
 
@@ -24,14 +24,14 @@
     return self;
 }
 
-+ (MultiModel*)multiModelWithModels:(NSArray*)ids {
-    return nil;
++ (MultiModel*)multiModelWithModels:(NSArray*)models {
+    return [[self alloc] initWithModels:models];
 }
 
 - (NSDictionary*)allFields {
     
     if (!_allFields) {
-        _allFields = [NSDictionary new];
+        _allFields = [NSMutableDictionary new];
         
     }
     return _allFields;

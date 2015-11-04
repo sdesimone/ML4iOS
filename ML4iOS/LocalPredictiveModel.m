@@ -61,7 +61,8 @@
     NSMutableDictionary* inputDataByName = [NSMutableDictionary dictionaryWithCapacity:5];
     for(NSString* key in [inputDataByFieldId keyEnumerator]) {
         NSDictionary* fieldName = fields[key][@"name"];
-        NSAssert(fieldName, @"Error in createInputDataByNameFromInputDataByFieldId: passing incorrect input name for prediction");
+//-- ensembles may generate models with varying number of fields
+//        NSAssert(fieldName, @"Error in createInputDataByNameFromInputDataByFieldId: passing incorrect input name for prediction");
         if (fieldName)
             inputDataByName[fieldName] = inputDataByFieldId[key];
     }

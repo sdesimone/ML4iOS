@@ -12,6 +12,7 @@
 
 typedef enum ML4iOSPredictionMethod {
     
+    ML4iOSPredictionMethodPlurality,
     ML4iOSPredictionMethodConfidence,
     ML4iOSPredictionMethodThreshold,
     ML4iOSPredictionMethodProbability

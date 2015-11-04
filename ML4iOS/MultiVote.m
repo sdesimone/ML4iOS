@@ -37,6 +37,16 @@ static NSString* const kNullCategory = @"kNullCategory";
 /**
  * MultiVote: combiner class for ensembles voting predictions.
  *
+ */
+- (instancetype)init {
+    
+    return [self initWithPredictions:nil];
+}
+
+
+/**
+ * MultiVote: combiner class for ensembles voting predictions.
+ *
  * @param predictions: Array of model's predictions
  */
 - (instancetype)initWithPredictions:(NSArray*)predictions {
@@ -54,8 +64,8 @@ static NSString* const kNullCategory = @"kNullCategory";
         }
         if (!ordered) {
             int count = 0;
-            for (NSDictionary* prediction in _predictions) {
-                [prediction setValue:@(count++) forKey:@"order"];
+            for (NSMutableDictionary* prediction in _predictions) {
+                [prediction setObject:@(count++) forKey:@"order"];
             }
         }
     }
@@ -100,8 +110,8 @@ static NSString* const kNullCategory = @"kNullCategory";
     if (votes && votes.predictions.count > 0) {
         
         NSInteger order = [self nextOrder];
-        for (NSDictionary* prediction in votes.predictions) {
-            [prediction setValue:@(order + 1) forKey:@"order"];
+        for (NSMutableDictionary* prediction in votes.predictions) {
+            [prediction setObject:@(order + 1) forKey:@"order"];
             [_predictions addObject:prediction];
         }
     }
@@ -141,7 +151,7 @@ static NSString* const kNullCategory = @"kNullCategory";
 - (BOOL)isRegression {
     
     for (NSDictionary* prediction in _predictions) {
-        if ([prediction[@"prediction"] isKindOfClass:[NSNumber class]])
+        if (![prediction[@"prediction"] isKindOfClass:[NSNumber class]])
              return NO;
     }
     return YES;
@@ -155,9 +165,9 @@ static NSString* const kNullCategory = @"kNullCategory";
  */
 - (NSDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution {
     
-    NSDictionary* newDistribution = [NSDictionary new];
+    NSMutableDictionary* newDistribution = [NSMutableDictionary new];
     for (NSArray* distValue in distribution) {
-        [newDistribution setValue:distValue[0] forKey:distValue[1]];
+        [newDistribution setObject:distValue[0] forKey:distValue[1]];
     }
     return newDistribution;
 }
@@ -184,12 +194,12 @@ static NSString* const kNullCategory = @"kNullCategory";
  * @param dist2
  * @return
  */
-- (NSDictionary*)mergeDistribution:(NSDictionary*)dist1 andDistribution:(NSDictionary*)dist2 {
+- (NSMutableDictionary*)mergeDistribution:(NSMutableDictionary*)dist1 andDistribution:(NSDictionary*)dist2 {
     for (id key in dist2.allKeys) {
         if (!dist1[key]) {
-            [dist1 setValue:@(0) forKey:key];
+            [dist1 setObject:@(0) forKey:key];
         }
-        [dist1 setValue:@([dist1[key] intValue] + [dist2[key] intValue])
+        [dist1 setObject:@([dist1[key] intValue] + [dist2[key] intValue])
                  forKey:key];
     }
     return dist1;
@@ -243,24 +253,24 @@ static NSString* const kNullCategory = @"kNullCategory";
 /**
  * Returns a distribution formed by grouping the distributions of each predicted node.
  */
-- (NSDictionary*)mergeDistributionInPrediction:(NSDictionary*)prediction {
+- (NSDictionary*)mergeDistributionInPrediction:(NSMutableDictionary*)prediction {
     
-    NSDictionary* joinedDist = [NSDictionary new];
+    NSDictionary* joinedDist = nil;
     NSString* distributionUnit = @"counts";
-    for (NSDictionary* prediction in _predictions) {
+    for (NSMutableDictionary* p in _predictions) {
         
-        NSDictionary* predictionDist = prediction[@"distribution"];
-        if ([predictionDist isKindOfClass:[NSArray class]]) {
-            predictionDist = [self dictionaryFromDistributionArray:(id)predictionDist];
+        NSDictionary* distribution = p[@"distribution"];
+        if ([distribution isKindOfClass:[NSArray class]]) {
+            distribution = [self dictionaryFromDistributionArray:(id)distribution];
         }
-        joinedDist = [self mergeDistribution:joinedDist andDistribution:predictionDist];
+        joinedDist = [self mergeDistribution:[NSMutableDictionary new] andDistribution:distribution];
         if ([distributionUnit isEqualToString:@"counts"] && joinedDist.count > BINS_LIMIT) {
             distributionUnit = @"bins";
         }
         joinedDist = [self mergeBinsDictionary:joinedDist limit:BINS_LIMIT];
     }
-    [prediction setValue:[self arrayFromDistributionDictionary:joinedDist] forKey:@"distribution"];
-    [prediction setValue:distributionUnit forKey:@"distributionUnit"];
+    [prediction setObject:[self arrayFromDistributionDictionary:joinedDist] forKey:@"distribution"];
+    [prediction setObject:distributionUnit forKey:@"distributionUnit"];
     
     return prediction;
 }
@@ -273,13 +283,13 @@ static NSString* const kNullCategory = @"kNullCategory";
 - (double)normalizeErrorRange:(double)errorRange topRange:(double)topRange rangeMin:(double)min {
     
     double normalizeFactor = _predictions.count;
-    for (NSDictionary* prediction in _predictions) {
+    for (NSMutableDictionary* prediction in _predictions) {
         if (errorRange > 0.0) {
             double delta = min - [prediction[@"confidence"] doubleValue];
-            [prediction setValue:@(exp(delta / errorRange * topRange)) forKey:@"errorWeight"];
+            [prediction setObject:@(exp(delta / errorRange * topRange)) forKey:@"errorWeight"];
             normalizeFactor += [prediction[@"errorWeight"] doubleValue];
         } else {
-            [prediction setValue:@(1.0) forKey:@"errorWeight"];
+            [prediction setObject:@(1.0) forKey:@"errorWeight"];
         }
     }
     return normalizeFactor;
@@ -338,10 +348,10 @@ static NSString* const kNullCategory = @"kNullCategory";
     double max = -NAN;
     double normalizationFactor = [self normalizedError:topRange];
 
-    NSDictionary* newPrediction = [NSDictionary new];
+    NSMutableDictionary* newPrediction = [NSMutableDictionary new];
     if (normalizationFactor == 0.0) {
-        [newPrediction setValue:@(NAN) forKey:@"prediction"];
-        [newPrediction setValue:@(0) forKey:@"confidence"];
+        [newPrediction setObject:@(NAN) forKey:@"prediction"];
+        [newPrediction setObject:@(0) forKey:@"confidence"];
     }
     for (NSDictionary* prediction in _predictions) {
         
@@ -363,21 +373,21 @@ static NSString* const kNullCategory = @"kNullCategory";
             combinedError += [prediction[@"confidence"] doubleValue] * [prediction[@"errorWeight"] doubleValue];
         }
     }
-    [newPrediction setValue:@(result/normalizationFactor) forKey:@"prediction"];
+    [newPrediction setObject:@(result/normalizationFactor) forKey:@"prediction"];
     if (addConfidence) {
-        [newPrediction setValue:@(combinedError/normalizationFactor) forKey:@"confidence"];
+        [newPrediction setObject:@(combinedError/normalizationFactor) forKey:@"confidence"];
     }
     if (addCount) {
-        [newPrediction setValue:@(instances) forKey:@"count"];
+        [newPrediction setObject:@(instances) forKey:@"count"];
     }
     if (addMedian) {
-        [newPrediction setValue:@(medianResult/normalizationFactor) forKey:@"median"];
+        [newPrediction setObject:@(medianResult/normalizationFactor) forKey:@"median"];
     }
     if (addMin) {
-        [newPrediction setValue:@(min) forKey:@"min"];
+        [newPrediction setObject:@(min) forKey:@"min"];
     }
     if (addMax) {
-        [newPrediction setValue:@(max) forKey:@"max"];
+        [newPrediction setObject:@(max) forKey:@"max"];
     }
     
     return [self mergeDistributionInPrediction:newPrediction];
@@ -435,25 +445,25 @@ static NSString* const kNullCategory = @"kNullCategory";
         medianResult = NAN;
     }
 
-    NSDictionary* output = @{ @"prediction" : @(result)};
+    NSMutableDictionary* output = [@{ @"prediction" : @(result)} mutableCopy];
     if (addConfidence || addDistribution || addCount || addMedian || addMin || addMax) {
         if (addConfidence) {
-            [output setValue:@(confidenceValue) forKey:@"confidence"];
+            [output setObject:@(confidenceValue) forKey:@"confidence"];
         }
         if (addDistribution) {
             [self mergeDistributionInPrediction:output];
         }
         if (addCount) {
-            [output setValue:@(instances) forKey:@"count"];
+            [output setObject:@(instances) forKey:@"count"];
         }
         if (addMedian) {
-            [output setValue:@(medianResult) forKey:@"median"];
+            [output setObject:@(medianResult) forKey:@"median"];
         }
         if (addMin) {
-            [output setValue:@(dMin) forKey:@"min"];
+            [output setObject:@(dMin) forKey:@"min"];
         }
         if (addMax) {
-            [output setValue:@(dMax) forKey:@"max"];
+            [output setObject:@(dMax) forKey:@"max"];
         }
     }
     return output;
@@ -527,9 +537,9 @@ static NSString* const kNullCategory = @"kNullCategory";
         finalConfidence = 0.0;
     }
     
-    NSDictionary* result = [NSDictionary new];
-    [result setValue:combinedPrediction forKey:@"prediction"];
-    [result setValue:@(finalConfidence) forKey:@"confidence"];
+    NSMutableDictionary* result = [NSMutableDictionary new];
+    [result setObject:combinedPrediction forKey:@"prediction"];
+    [result setObject:@(finalConfidence) forKey:@"confidence"];
     
     return result;
 }
@@ -543,7 +553,7 @@ static NSString* const kNullCategory = @"kNullCategory";
 - (NSArray*)combineDistribution:(NSString*)weightLabel {
     
     NSInteger total = 0;
-    NSDictionary* distribution = [NSDictionary new];
+    NSMutableDictionary* distribution = [NSMutableDictionary new];
     
     if (weightLabel.length == 0) {
         weightLabel = [MultiVote weightLabels][ML4iOSPredictionMethodProbability];
@@ -553,9 +563,9 @@ static NSString* const kNullCategory = @"kNullCategory";
         
         NSString* predictionName = prediction[@"prediction"];
         if (!distribution[predictionName]) {
-            [distribution setValue:@(0.0) forKey:predictionName];
+            [distribution setObject:@(0.0) forKey:predictionName];
         }
-        [distribution setValue:@([distribution[predictionName] doubleValue] + [prediction[weightLabel] doubleValue])
+        [distribution setObject:@([distribution[predictionName] doubleValue] + [prediction[weightLabel] doubleValue])
                         forKey:predictionName];
         total += [prediction[@"count"] intValue];
     }
@@ -614,7 +624,7 @@ static NSString* const kNullCategory = @"kNullCategory";
     
     double weight = 1.0;
     id category;
-    NSDictionary* mode = [NSDictionary new];
+    NSMutableDictionary* mode = [NSMutableDictionary new];
     NSMutableArray* tuples = [NSMutableArray new];
     
     for (NSDictionary* prediction in _predictions) {
@@ -628,15 +638,15 @@ static NSString* const kNullCategory = @"kNullCategory";
         }
         category = prediction[@"prediction"];
         
-        NSDictionary* categoryHash = [NSDictionary new];
+        NSMutableDictionary* categoryHash = [NSMutableDictionary new];
         if (mode[category]) {
-            [categoryHash setValue:@([mode[category][@"count"] doubleValue] + weight) forKey:@"count"];
-            [categoryHash setValue:mode[category][@"order"] forKey:@"order"];
+            [categoryHash setObject:@([mode[category][@"count"] doubleValue] + weight) forKey:@"count"];
+            [categoryHash setObject:mode[category][@"order"] forKey:@"order"];
         } else {
-            [categoryHash setValue:@(weight) forKey:@"count"];
-            [categoryHash setValue:prediction[@"order"] forKey:@"order"];
+            [categoryHash setObject:@(weight) forKey:@"count"];
+            [categoryHash setObject:prediction[@"order"] forKey:@"order"];
         }
-        [mode setValue:categoryHash forKey:category];
+        [mode setObject:categoryHash forKey:category];
     }
     for (id key in mode.allKeys) {
         if (mode[key]) {
@@ -644,18 +654,17 @@ static NSString* const kNullCategory = @"kNullCategory";
             [tuples addObject:tuple];
         }
     }
-    tuples = [tuples sortedArrayUsingComparator:^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
+    NSArray* tuple = [tuples sortedArrayUsingComparator:^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
         double w1 = [obj1[@"count"] doubleValue];
         double w2 = [obj2[@"count"] doubleValue];
         int order1 = [obj1[@"order"] intValue];
         int order2 = [obj2[@"order"] intValue];
         return w1 > w2 ? -1 : (w1 < w2 ? 1 : order1 < order2 ? -1 : 1);
-    }];
-    NSArray* tuple = tuples.firstObject;
+    }].firstObject;
     id predictionName = tuple.firstObject;
     
-    NSDictionary* result = [NSDictionary new];
-    [result setValue:predictionName forKey:@"prediction"];
+    NSMutableDictionary* result = [NSMutableDictionary new];
+    [result setObject:predictionName forKey:@"prediction"];
     
     if (confidence) {
         if ([_predictions.firstObject valueForKey:@"confidence"]) {
@@ -666,7 +675,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         NSInteger count = [distributionInfo[1] intValue];
         NSDictionary* distribution = distributionInfo[0];
         double combinedConfidence = [self wsConfidence:predictionName distribution:distribution count:count];
-        [result setValue:@(combinedConfidence) forKey:@"confidence"];
+        [result setObject:@(combinedConfidence) forKey:@"confidence"];
     }
     return result;
 }
@@ -699,8 +708,8 @@ static NSString* const kNullCategory = @"kNullCategory";
     
     if ([self isRegression]) {
         
-        for (NSDictionary* prediction in _predictions) {
-            [prediction setValue:prediction[@"confidence"]?:@(0) forKey:@"confidence"];
+        for (NSMutableDictionary* prediction in _predictions) {
+            [prediction setObject:prediction[@"confidence"]?:@(0) forKey:@"confidence"];
         }
         if (method == ML4iOSPredictionMethodConfidence) {
             return [self weightedErrorWithConfidence:confidence
@@ -754,20 +763,20 @@ static NSString* const kNullCategory = @"kNullCategory";
  * @param predictionInfo the prediction to be appended
  * @return the this instance
  */
-- (void)append:(NSDictionary*)predictionInfo {
+- (void)append:(NSMutableDictionary*)predictionInfo {
     
     NSAssert(predictionInfo.allKeys.count > 0 && predictionInfo[@"prediction"],
              @"Failed to append prediction");
  
     NSInteger order = [self nextOrder];
-    [predictionInfo setValue:@(order) forKey:@"order"];
+    [predictionInfo setObject:@(order) forKey:@"order"];
     [_predictions addObject:predictionInfo];
 }
 
 - (void)addMedian {
     
-    for (NSDictionary* prediction in _predictions) {
-        [prediction setValue:prediction[@"median"] forKey:@"prediction"];
+    for (NSMutableDictionary* prediction in _predictions) {
+        [prediction setObject:prediction[@"median"] forKey:@"prediction"];
     }
 }
 

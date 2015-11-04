@@ -22,7 +22,7 @@
 //                    distributions:(NSArray*)distributions;
 
 - (instancetype)initWithModels:(NSArray*)models
-                     threshold:(NSUInteger)threshold
+                     maxModels:(NSUInteger)maxModels
                  distributions:(NSArray*)distributions;
 
 - (NSDictionary*)predictWithJSONDictionary:(NSDictionary*)inputData
@@ -42,6 +42,7 @@
                                   args:(NSDictionary*)inputData
                                 byName:(BOOL)byName
                                 method:(ML4iOSPredictionMethod)method
+                             maxModels:(NSUInteger)maxModels
                             confidence:(BOOL)confidence;
 
 @end

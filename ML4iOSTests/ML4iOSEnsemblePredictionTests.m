@@ -40,14 +40,15 @@
     
     NSDictionary* prediction = [ML4iOSLocalPredictions
                                 createLocalPredictionWithJSONEnsembleSync:ensemble
-                                arguments:@{@"Message":@"Hello, how are you doing?"}
-                                argsByName:NO
-                                method:0
+                                arguments:@{@"sepal length": @(6.02),
+                                            @"sepal width": @(3.15),
+                                            @"petal width": @(1.51),
+                                            @"petal length": @(4.07)}
+                                argsByName:YES
+                                method:ML4iOSPredictionMethodConfidence
                                 ml4ios:[ML4iOSTester new]];
     
-    NSLog(@"CAT PREDICTIONfor 'Hello, how are you doing': %@", prediction);
-    
-    XCTAssert(prediction, @"Pass");
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");
 }
 
 @end

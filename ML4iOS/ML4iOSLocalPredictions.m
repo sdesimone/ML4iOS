@@ -30,16 +30,17 @@
     NSMutableArray* models = [NSMutableArray new];
     for (NSString* modelId in jsonEnsemble[@"models"]) {
         int code = 0;
-        [models addObject:[ml4ios getModelWithIdSync:modelId
+        [models addObject:[ml4ios getModelWithIdSync:[modelId componentsSeparatedByString:@"/"].lastObject
                                           statusCode:&code]];
-        if (code != 200 || code != 201)
+        if (code != 200)
             return nil;
     }
     return [LocalPredictiveEnsemble predictWithJSONModels:models
-                                                       args:args
-                                                     byName:byName
-                                                     method:method
-                                                 confidence:YES];
+                                                     args:args
+                                                   byName:byName
+                                                   method:method
+                                                maxModels:0
+                                               confidence:YES];
 }
 
 + (NSDictionary*)createLocalCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster

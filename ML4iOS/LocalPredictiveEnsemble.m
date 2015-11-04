@@ -20,21 +20,26 @@
 }
 
 - (instancetype)initWithModels:(NSArray*)models
-                     threshold:(NSUInteger)threshold
+                     maxModels:(NSUInteger)maxModels
                  distributions:(NSArray*)distributions {
     
     NSAssert([models isKindOfClass:[NSArray class]] &&
-             [models count] > 0 &&
-             threshold > 0,
+             [models count] > 0,
              @"initWithModels:threshold:distributions: contract unfulfilled");
 
     if (self = [super init]) {
         
-        _multiModels = [self multiModelsFromModels:models threshold:threshold];
+        _multiModels = [self multiModelsFromModels:models maxModels:maxModels];
         _isReadyToPredict = YES;
-        _distributions = nil;
+        _distributions = distributions;
     }
     return self;
+}
+
+- (instancetype)initWithModels:(NSArray*)models
+                     maxModels:(NSUInteger)maxModels {
+    
+    return [self initWithModels:models maxModels:maxModels distributions:nil];
 }
 
 //- (instancetype)initWithModelsIds:(NSArray*)modelIds
@@ -121,9 +126,10 @@
                                     args:(NSDictionary*)inputData
                                   byName:(BOOL)byName
                                   method:(ML4iOSPredictionMethod)method
+                                maxModels:(NSUInteger)maxModels
                               confidence:(BOOL)confidence {
 
-    return [[[self alloc] initWithModels:models]
+    return [[[self alloc] initWithModels:models maxModels:maxModels]
             predictWithJSONDictionary:inputData
             byName:byName
             method:method
@@ -138,23 +144,18 @@
             options:nil];
 }
 
-
-- (NSArray*)modelsFromIds:(NSArray*)modelIds {
-    return nil;
-}
-
-- (NSArray*)multiModelsFromModels:(NSArray*)models threshold:(NSUInteger)threshold {
+- (NSArray*)multiModelsFromModels:(NSArray*)models maxModels:(NSUInteger)maxModels {
     
-    threshold = threshold ?: -1;
-    NSUInteger multiModelSize = MIN(threshold, models.count);
+    maxModels = maxModels ?: models.count;
+    NSUInteger multiModelSize = MIN(maxModels, models.count);
     
     NSMutableArray* multiModels = [NSMutableArray new];
     for (NSInteger i = 0; i < models.count; i += multiModelSize) {
         [multiModels addObject:
          [MultiModel multiModelWithModels:
           [models subarrayWithRange:(NSRange){
-             i * threshold,
-             MIN(multiModelSize, models.count - i*multiModelSize - 1)
+             i * maxModels,
+             MIN(multiModelSize, models.count - i*multiModelSize)
          }]]];
     }
     return multiModels;

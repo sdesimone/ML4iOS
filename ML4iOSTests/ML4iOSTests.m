@@ -63,7 +63,7 @@
                                                                             arguments:inputData
                                                                            argsByName:byName];
         
-        XCTAssertNotNil([prediction objectForKey:@"value"], @"Local Prediction value can't be nil");
+        XCTAssertNotNil([prediction objectForKey:@"prediction"], @"Local Prediction value can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
         
         return prediction;
@@ -138,8 +138,8 @@
 - (void)testLocalPredictionByName {
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
-    NSDictionary* prediction = [self localPredictionForModelId:modelId
-                                                          data:@"{\"sepal length\": 2, \"sepal width\": 1, \"petal length\": 1}"
+    NSDictionary* prediction = [self localPredictionForModelId:@"563a1c7a3cd25747430023ce"
+                                                          data:@"{\"sepal width\": 3.15, \"petal length\": 4.07, \"petal width\": 1.51}"
                                                         byName:YES];
     [apiLibrary deleteModelWithIdSync:modelId];
     XCTAssert(prediction);

@@ -53,7 +53,7 @@
             [self.predicate setOpType:fields[field][@"optype"]];
             [self.predicate setPredicateOperator:predicateDict[@"operator"]];
             [self.predicate setField:field];
-            [self.predicate setValue:predicateDict[@"value"]];
+            [self.predicate setValue:predicateDict[@"prediction"]];
         }
         
         //Generate children array
@@ -153,7 +153,7 @@
     NSMutableDictionary* prediction = [[NSMutableDictionary alloc]initWithCapacity:2];
     
     if(output != nil)
-        [prediction setValue:output forKey:@"value"];
+        [prediction setValue:output forKey:@"prediction"];
     
     if(confidence != nil)
         [prediction setValue:confidence forKey:@"confidence"];
