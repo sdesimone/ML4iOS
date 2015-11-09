@@ -50,7 +50,7 @@
     NSDictionary* model = jsonModel[@"object"] ?: jsonModel;
 
     //-- base model
-    NSDictionary* status = _model[@"status"];
+    NSDictionary* status = model[@"status"];
     NSAssert([status[@"code"] intValue] == 5, @"The model is not ready");
     if ([status[@"code"] intValue] == 5) {
         
@@ -190,7 +190,7 @@
                            argsByName:(BOOL)byName {
 
     NSDictionary* prediction = nil;
-    if (jsonModel != nil && inputData != nil && inputData.count > 0) {
+    if (jsonModel != nil && inputData != nil && inputData.allKeys.count > 0) {
         
         PredictiveModel* predictiveModel = [[PredictiveModel alloc] initWithJSONModel:jsonModel];
         prediction = [predictiveModel predictWithArguments:inputData byName:byName].firstObject;

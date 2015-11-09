@@ -62,7 +62,7 @@
 }
 
 - (id)normalizedValue:(id)value {
-    return ([_missingTokens indexOfObject:value] == NSNotFound) ? nil : value;
+    return ([_missingTokens indexOfObject:value] != NSNotFound) ? nil : value;
 }
 
 - (NSDictionary*)filteredInputData:(NSDictionary*)inputData byName:(BOOL)byName {

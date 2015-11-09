@@ -139,7 +139,7 @@
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     NSDictionary* prediction = [self localPredictionForModelId:@"563a1c7a3cd25747430023ce"
-                                                          data:@"{\"sepal width\": 3.15, \"petal length\": 4.07, \"petal width\": 1.51}"
+                                                          data:@{@"sepal width": @3.15, @"petal length": @4.07, @"petal width": @1.51}
                                                         byName:YES];
     [apiLibrary deleteModelWithIdSync:modelId];
     XCTAssert(prediction);
