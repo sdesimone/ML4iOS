@@ -8,7 +8,7 @@
 
 #import "MultiModel.h"
 #import "MultiVote.h"
-#import "LocalPredictiveModel.h"
+#import "PredictiveModel.h"
 
 @implementation MultiModel {
     
@@ -44,8 +44,8 @@
     
     MultiVote* votes = [MultiVote new];
     for (NSDictionary* model in _models) {
-        [votes append:[LocalPredictiveModel predictWithJSONModel:model
-                                              argumentDictionary:inputData
+        [votes append:[PredictiveModel predictWithJSONModel:model
+                                                       arguments:inputData
                                                       argsByName:byName]];
     }
     return votes;

@@ -22,7 +22,7 @@
 #import "ML4iOS.h"
 #import "HTTPCommsManager.h"
 #import "Constants.h"
-#import "LocalPredictiveModel.h"
+#import "PredictiveModel.h"
 #import "LocalPredictiveCluster.h"
 
 /**

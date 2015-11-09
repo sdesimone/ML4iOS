@@ -7,7 +7,7 @@
 //
 
 #import "ML4iOSLocalPredictions.h"
-#import "LocalPredictiveModel.h"
+#import "PredictiveModel.h"
 #import "LocalPredictiveCluster.h"
 #import "LocalPredictiveEnsemble.h"
 #import "ML4iOS.h"
@@ -15,10 +15,10 @@
 @implementation ML4iOSLocalPredictions
 
 + (NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
-                                              arguments:(NSString*)args
+                                              arguments:(NSDictionary*)args
                                              argsByName:(BOOL)byName {
     
-    return [LocalPredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
+    return [PredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
 }
 
 + (NSDictionary*)createLocalPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble

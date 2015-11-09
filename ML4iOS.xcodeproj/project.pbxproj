@@ -16,6 +16,15 @@
 		494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */ = {isa = PBXBuildFile; fileRef = 494CAECB1BE90BA70028D95B /* iris.ensemble */; settings = {ASSET_TAGS = (); }; };
 		494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */; settings = {ASSET_TAGS = (); }; };
 		494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED11BE90EAA0028D95B /* ML4iOSTester.m */; settings = {ASSET_TAGS = (); }; };
+		494CAED41BEB67BB0028D95B /* PredicatesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED31BEB67BB0028D95B /* PredicatesTests.m */; settings = {ASSET_TAGS = (); }; };
+		494CAED71BECBE010028D95B /* TreePrediction.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAED51BECBE010028D95B /* TreePrediction.h */; settings = {ASSET_TAGS = (); }; };
+		494CAED81BECBE010028D95B /* TreePrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED61BECBE010028D95B /* TreePrediction.m */; settings = {ASSET_TAGS = (); }; };
+		494CAEDB1BECC7F50028D95B /* ML4iOSUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAED91BECC7F50028D95B /* ML4iOSUtils.h */; settings = {ASSET_TAGS = (); }; };
+		494CAEDC1BECC7F50028D95B /* ML4iOSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */; settings = {ASSET_TAGS = (); }; };
+		494CAEE41BED13AA0028D95B /* chisqr.c in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE01BED13AA0028D95B /* chisqr.c */; settings = {ASSET_TAGS = (); }; };
+		494CAEE51BED13AA0028D95B /* gamma.c in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE21BED13AA0028D95B /* gamma.c */; settings = {ASSET_TAGS = (); }; };
+		494CAEE81BF0CDE20028D95B /* FieldResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAEE61BF0CDE20028D95B /* FieldResource.h */; settings = {ASSET_TAGS = (); }; };
+		494CAEE91BF0CDE20028D95B /* FieldResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE71BF0CDE20028D95B /* FieldResource.m */; settings = {ASSET_TAGS = (); }; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
@@ -39,13 +48,13 @@
 		DC3AE9781570D293008D2F79 /* ML4iOSDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DC3AE9751570D293008D2F79 /* ML4iOSDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC3AE97C1570D331008D2F79 /* HTTPCommsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */; };
 		DC3AE97D1570D331008D2F79 /* HTTPCommsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DC3AE97B1570D331008D2F79 /* HTTPCommsManager.m */; };
-		DCA20AE21723E93E0019E738 /* Predicate.h in Headers */ = {isa = PBXBuildFile; fileRef = DCA20AE01723E93E0019E738 /* Predicate.h */; };
-		DCA20AE31723E93E0019E738 /* Predicate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCA20AE11723E93E0019E738 /* Predicate.m */; };
+		DCA20AE21723E93E0019E738 /* Predicates.h in Headers */ = {isa = PBXBuildFile; fileRef = DCA20AE01723E93E0019E738 /* Predicates.h */; };
+		DCA20AE31723E93E0019E738 /* Predicates.m in Sources */ = {isa = PBXBuildFile; fileRef = DCA20AE11723E93E0019E738 /* Predicates.m */; };
 		DCD306BD1723602400CC9364 /* iris.csv in Resources */ = {isa = PBXBuildFile; fileRef = DCD306BC1723602400CC9364 /* iris.csv */; };
-		DCD306C01723715100CC9364 /* LocalPredictiveModel.h in Headers */ = {isa = PBXBuildFile; fileRef = DCD306BE1723715100CC9364 /* LocalPredictiveModel.h */; };
-		DCD306C11723715100CC9364 /* LocalPredictiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD306BF1723715100CC9364 /* LocalPredictiveModel.m */; };
-		DCD306C4172380A700CC9364 /* LocalPredictionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = DCD306C2172380A700CC9364 /* LocalPredictionTree.h */; };
-		DCD306C5172380A700CC9364 /* LocalPredictionTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD306C3172380A700CC9364 /* LocalPredictionTree.m */; };
+		DCD306C01723715100CC9364 /* PredictiveModel.h in Headers */ = {isa = PBXBuildFile; fileRef = DCD306BE1723715100CC9364 /* PredictiveModel.h */; };
+		DCD306C11723715100CC9364 /* PredictiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD306BF1723715100CC9364 /* PredictiveModel.m */; };
+		DCD306C4172380A700CC9364 /* PredictionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = DCD306C2172380A700CC9364 /* PredictionTree.h */; };
+		DCD306C5172380A700CC9364 /* PredictionTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD306C3172380A700CC9364 /* PredictionTree.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +78,17 @@
 		494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSEnsemblePredictionTests.m; sourceTree = "<group>"; };
 		494CAED01BE90EAA0028D95B /* ML4iOSTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSTester.h; sourceTree = "<group>"; };
 		494CAED11BE90EAA0028D95B /* ML4iOSTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSTester.m; sourceTree = "<group>"; };
+		494CAED31BEB67BB0028D95B /* PredicatesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredicatesTests.m; sourceTree = "<group>"; };
+		494CAED51BECBE010028D95B /* TreePrediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreePrediction.h; sourceTree = "<group>"; };
+		494CAED61BECBE010028D95B /* TreePrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreePrediction.m; sourceTree = "<group>"; };
+		494CAED91BECC7F50028D95B /* ML4iOSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSUtils.h; sourceTree = "<group>"; };
+		494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSUtils.m; sourceTree = "<group>"; };
+		494CAEE01BED13AA0028D95B /* chisqr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chisqr.c; sourceTree = "<group>"; };
+		494CAEE11BED13AA0028D95B /* chisqr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chisqr.h; sourceTree = "<group>"; };
+		494CAEE21BED13AA0028D95B /* gamma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gamma.c; sourceTree = "<group>"; };
+		494CAEE31BED13AA0028D95B /* gamma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gamma.h; sourceTree = "<group>"; };
+		494CAEE61BF0CDE20028D95B /* FieldResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FieldResource.h; sourceTree = "<group>"; };
+		494CAEE71BF0CDE20028D95B /* FieldResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FieldResource.m; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
@@ -95,13 +115,13 @@
 		DC3AE9751570D293008D2F79 /* ML4iOSDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSDelegate.h; sourceTree = "<group>"; };
 		DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPCommsManager.h; sourceTree = "<group>"; };
 		DC3AE97B1570D331008D2F79 /* HTTPCommsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPCommsManager.m; sourceTree = "<group>"; };
-		DCA20AE01723E93E0019E738 /* Predicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Predicate.h; sourceTree = "<group>"; };
-		DCA20AE11723E93E0019E738 /* Predicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Predicate.m; sourceTree = "<group>"; };
+		DCA20AE01723E93E0019E738 /* Predicates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Predicates.h; sourceTree = "<group>"; };
+		DCA20AE11723E93E0019E738 /* Predicates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Predicates.m; sourceTree = "<group>"; };
 		DCD306BC1723602400CC9364 /* iris.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.csv; sourceTree = "<group>"; };
-		DCD306BE1723715100CC9364 /* LocalPredictiveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictiveModel.h; sourceTree = "<group>"; };
-		DCD306BF1723715100CC9364 /* LocalPredictiveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictiveModel.m; sourceTree = "<group>"; };
-		DCD306C2172380A700CC9364 /* LocalPredictionTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPredictionTree.h; sourceTree = "<group>"; };
-		DCD306C3172380A700CC9364 /* LocalPredictionTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPredictionTree.m; sourceTree = "<group>"; };
+		DCD306BE1723715100CC9364 /* PredictiveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveModel.h; sourceTree = "<group>"; };
+		DCD306BF1723715100CC9364 /* PredictiveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictiveModel.m; sourceTree = "<group>"; };
+		DCD306C2172380A700CC9364 /* PredictionTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictionTree.h; sourceTree = "<group>"; };
+		DCD306C3172380A700CC9364 /* PredictionTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictionTree.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +146,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		494CAEDF1BED13AA0028D95B /* chisqr_v2 */ = {
+			isa = PBXGroup;
+			children = (
+				494CAEE01BED13AA0028D95B /* chisqr.c */,
+				494CAEE11BED13AA0028D95B /* chisqr.h */,
+				494CAEE21BED13AA0028D95B /* gamma.c */,
+				494CAEE31BED13AA0028D95B /* gamma.h */,
+			);
+			path = chisqr_v2;
+			sourceTree = "<group>";
+		};
 		DC3AE93D1570D0AF008D2F79 = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +188,7 @@
 		DC3AE94D1570D0B0008D2F79 /* ML4iOS */ = {
 			isa = PBXGroup;
 			children = (
+				494CAEDF1BED13AA0028D95B /* chisqr_v2 */,
 				DC3AE9731570D293008D2F79 /* include */,
 				DCA20AE41723E94B0019E738 /* Local */,
 				DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */,
@@ -188,6 +220,7 @@
 				DC3AE9621570D0B0008D2F79 /* Supporting Files */,
 				494CAED01BE90EAA0028D95B /* ML4iOSTester.h */,
 				494CAED11BE90EAA0028D95B /* ML4iOSTester.m */,
+				494CAED31BEB67BB0028D95B /* PredicatesTests.m */,
 			);
 			path = ML4iOSTests;
 			sourceTree = "<group>";
@@ -231,18 +264,24 @@
 				492CC71A19D2B021001829F5 /* LocalPredictionCentroid.m */,
 				492CC71B19D2B021001829F5 /* LocalPredictiveCluster.h */,
 				492CC71C19D2B021001829F5 /* LocalPredictiveCluster.m */,
-				DCD306BE1723715100CC9364 /* LocalPredictiveModel.h */,
-				DCD306BF1723715100CC9364 /* LocalPredictiveModel.m */,
-				DCD306C2172380A700CC9364 /* LocalPredictionTree.h */,
-				DCD306C3172380A700CC9364 /* LocalPredictionTree.m */,
-				DCA20AE01723E93E0019E738 /* Predicate.h */,
-				DCA20AE11723E93E0019E738 /* Predicate.m */,
+				DCD306BE1723715100CC9364 /* PredictiveModel.h */,
+				DCD306BF1723715100CC9364 /* PredictiveModel.m */,
+				DCD306C2172380A700CC9364 /* PredictionTree.h */,
+				DCD306C3172380A700CC9364 /* PredictionTree.m */,
+				DCA20AE01723E93E0019E738 /* Predicates.h */,
+				DCA20AE11723E93E0019E738 /* Predicates.m */,
 				4979639A1BE27D2100154E4E /* LocalPredictiveEnsemble.h */,
 				4979639B1BE27D2100154E4E /* LocalPredictiveEnsemble.m */,
 				4979639E1BE3759D00154E4E /* MultiModel.h */,
 				4979639F1BE3759D00154E4E /* MultiModel.m */,
 				497963A21BE375DC00154E4E /* MultiVote.h */,
 				497963A31BE375DC00154E4E /* MultiVote.m */,
+				494CAED51BECBE010028D95B /* TreePrediction.h */,
+				494CAED61BECBE010028D95B /* TreePrediction.m */,
+				494CAED91BECC7F50028D95B /* ML4iOSUtils.h */,
+				494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */,
+				494CAEE61BF0CDE20028D95B /* FieldResource.h */,
+				494CAEE71BF0CDE20028D95B /* FieldResource.m */,
 			);
 			name = Local;
 			sourceTree = "<group>";
@@ -255,18 +294,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				497963A81BE389A700154E4E /* ML4iOSLocalPredictions.h in Headers */,
+				494CAEE81BF0CDE20028D95B /* FieldResource.h in Headers */,
 				497963A01BE3759D00154E4E /* MultiModel.h in Headers */,
 				DC3AE9771570D293008D2F79 /* ML4iOS.h in Headers */,
 				DC3AE9781570D293008D2F79 /* ML4iOSDelegate.h in Headers */,
 				DC3AE97C1570D331008D2F79 /* HTTPCommsManager.h in Headers */,
 				492CC71D19D2B021001829F5 /* LocalPredictionCentroid.h in Headers */,
-				DCD306C01723715100CC9364 /* LocalPredictiveModel.h in Headers */,
-				DCD306C4172380A700CC9364 /* LocalPredictionTree.h in Headers */,
-				DCA20AE21723E93E0019E738 /* Predicate.h in Headers */,
+				DCD306C01723715100CC9364 /* PredictiveModel.h in Headers */,
+				DCD306C4172380A700CC9364 /* PredictionTree.h in Headers */,
+				DCA20AE21723E93E0019E738 /* Predicates.h in Headers */,
 				49559423192A6693006F4D9E /* Constants.h in Headers */,
 				4979639C1BE27D2100154E4E /* LocalPredictiveEnsemble.h in Headers */,
+				494CAED71BECBE010028D95B /* TreePrediction.h in Headers */,
 				497963A41BE375DC00154E4E /* MultiVote.h in Headers */,
 				492CC71F19D2B021001829F5 /* LocalPredictiveCluster.h in Headers */,
+				494CAEDB1BECC7F50028D95B /* ML4iOSUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,7 +339,6 @@
 				DC3AE9531570D0B0008D2F79 /* Sources */,
 				DC3AE9541570D0B0008D2F79 /* Frameworks */,
 				DC3AE9551570D0B0008D2F79 /* Resources */,
-				DC3AE9561570D0B0008D2F79 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -354,22 +395,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		DC3AE9561570D0B0008D2F79 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		DC3AE9441570D0AF008D2F79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -379,13 +404,16 @@
 				DC3AE9521570D0B0008D2F79 /* ML4iOS.m in Sources */,
 				4979639D1BE27D2100154E4E /* LocalPredictiveEnsemble.m in Sources */,
 				497963A51BE375DC00154E4E /* MultiVote.m in Sources */,
+				494CAED81BECBE010028D95B /* TreePrediction.m in Sources */,
 				492CC72019D2B021001829F5 /* LocalPredictiveCluster.m in Sources */,
+				494CAEDC1BECC7F50028D95B /* ML4iOSUtils.m in Sources */,
 				497963A91BE389A700154E4E /* ML4iOSLocalPredictions.m in Sources */,
 				DC3AE97D1570D331008D2F79 /* HTTPCommsManager.m in Sources */,
 				492CC71E19D2B021001829F5 /* LocalPredictionCentroid.m in Sources */,
-				DCD306C11723715100CC9364 /* LocalPredictiveModel.m in Sources */,
-				DCD306C5172380A700CC9364 /* LocalPredictionTree.m in Sources */,
-				DCA20AE31723E93E0019E738 /* Predicate.m in Sources */,
+				DCD306C11723715100CC9364 /* PredictiveModel.m in Sources */,
+				DCD306C5172380A700CC9364 /* PredictionTree.m in Sources */,
+				494CAEE91BF0CDE20028D95B /* FieldResource.m in Sources */,
+				DCA20AE31723E93E0019E738 /* Predicates.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,9 +422,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */,
+				494CAEE41BED13AA0028D95B /* chisqr.c in Sources */,
 				494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */,
 				DC3AE9691570D0B0008D2F79 /* ML4iOSTests.m in Sources */,
 				492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */,
+				494CAED41BEB67BB0028D95B /* PredicatesTests.m in Sources */,
+				494CAEE51BED13AA0028D95B /* gamma.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

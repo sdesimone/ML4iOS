@@ -3,8 +3,8 @@
  * Predicate.h
  * ML4iOS
  *
- * Created by Felix Garcia Lainez on April 21, 2013
- * Copyright 2013 Felix Garcia Lainez
+ * Created by Sergio De Simone on November, 5 2015
+ * Copyright 2015 BigML, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,36 @@
  */
 #import <Foundation/Foundation.h>
 
+typedef enum PredicateLanguage {
+    
+    PredicateLanguagePseudoCode,
+    
+} PredicateLanguage;
+
+@interface RegExHelper : NSObject
+
++ (NSString*)firstRegexMatch:(NSString*)regex in:(NSString*)string;
++ (BOOL)isRegex:(NSString*)regex matching:(NSString*)string;
+
+@end
+
+
 /**
  * A predicate to be evaluated in a tree's node.
  */
 @interface Predicate : NSObject
-{
-    NSString* opType;
-    NSString* predicateOperator;
-    NSString* field;
-    NSString* value;
-}
 
-@property (nonatomic, strong) NSString* opType;
-@property (nonatomic, strong) NSString* predicateOperator;
+@property (nonatomic, strong) NSString* op;
+//@property (nonatomic, strong) NSString* predicateOperator;
 @property (nonatomic, strong) NSString* field;
 @property (nonatomic, strong) NSString* value;
+@property (nonatomic) BOOL missing;
 
+- (BOOL)apply:(NSDictionary*)input fields:(NSDictionary*)fields;
+- (NSString*)ruleWithFields:(NSDictionary*)fields label:(NSString*)label;
+
+@end
+
+
+@interface Predicates : NSObject
 @end

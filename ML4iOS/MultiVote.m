@@ -7,9 +7,9 @@
 //
 
 #import "MultiVote.h"
+#import "ML4iOSUtils.h"
 
 #define BINS_LIMIT 32
-#define zDistributionDefault 1.96
 
 static NSString* const kNullCategory = @"kNullCategory";
 
@@ -158,99 +158,6 @@ static NSString* const kNullCategory = @"kNullCategory";
 }
 
 /**
- * We convert the Array to a dictionary for ease of manipulation
- *
- * @param distribution current distribution as an NSArray
- * @return the distribution as an NSDictionary
- */
-- (NSDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution {
-    
-    NSMutableDictionary* newDistribution = [NSMutableDictionary new];
-    for (NSArray* distValue in distribution) {
-        [newDistribution setObject:distValue[0] forKey:distValue[1]];
-    }
-    return newDistribution;
-}
-
-/**
- * Convert a dictionary to an array. Dual of dictionaryFromDistributionArray:
- *
- * @param distribution current distribution as an NSDictionary
- * @return the distribution as an NSArray
- */
-- (NSArray*)arrayFromDistributionDictionary:(NSDictionary*)distribution {
-    
-    NSMutableArray* newDistribution = [NSMutableArray new];
-    for (id key in [distribution.allKeys sortedArrayUsingSelector:@selector(compare:)]) {
-        [newDistribution addObject:@[key, distribution[key]]];
-    }
-    return newDistribution;
-}
-
-/**
- * Adds up a new distribution structure to a map formatted distribution
- *
- * @param dist1
- * @param dist2
- * @return
- */
-- (NSMutableDictionary*)mergeDistribution:(NSMutableDictionary*)dist1 andDistribution:(NSDictionary*)dist2 {
-    for (id key in dist2.allKeys) {
-        if (!dist1[key]) {
-            [dist1 setObject:@(0) forKey:key];
-        }
-        [dist1 setObject:@([dist1[key] intValue] + [dist2[key] intValue])
-                 forKey:key];
-    }
-    return dist1;
-}
-
-- (NSArray*)mergeBins:(NSArray*)distribution limit:(NSInteger)limit {
-    
-    NSInteger length = distribution.count;
-    if (limit < 1 || length <= limit || length < 2) {
-        return  distribution;
-    }
-    NSInteger indexToMerge = 2;
-    double shortest = HUGE_VAL;
-    for (NSUInteger index = 1; index < length; ++index) {
-        double distance = [[distribution[index] firstObject] doubleValue] -
-        [[distribution[index -1] firstObject] doubleValue];
-        
-        if (distance < shortest) {
-            shortest = distance;
-            indexToMerge = index;
-        }
-    }
-    
-    NSMutableArray* newDistribution = [NSMutableArray arrayWithArray:
-                                     [distribution subarrayWithRange:(NSRange){0, indexToMerge-1}]];
-    NSArray* left = distribution[indexToMerge - 1];
-    NSArray* right = distribution[indexToMerge];
-    NSArray* newBin = @[@0,
-                        @(([left[0] doubleValue] * [left[1] doubleValue] +
-                        [right[0] doubleValue] * [right[1] doubleValue]) /
-                        ([left[1] doubleValue] * [right[1] doubleValue])),
-                        @1,
-                        @([left[1] longValue] * [right[1] longValue])];
-    [newDistribution addObject:newBin];
-    
-    if (indexToMerge < length -1) {
-        [newDistribution addObjectsFromArray:
-         [distribution subarrayWithRange:(NSRange){indexToMerge+1, distribution.count - indexToMerge}]];
-    }
-    
-    return [self mergeBins:newDistribution limit:limit];
-}
-
-- (NSDictionary*)mergeBinsDictionary:(NSDictionary*)distribution limit:(NSInteger)limit {
-    
-    NSArray* distributionArray = [self mergeBins:[self arrayFromDistributionDictionary:distribution]
-                                           limit:limit];
-    return [self dictionaryFromDistributionArray:distributionArray];
-}
-
-/**
  * Returns a distribution formed by grouping the distributions of each predicted node.
  */
 - (NSDictionary*)mergeDistributionInPrediction:(NSMutableDictionary*)prediction {
@@ -261,15 +168,15 @@ static NSString* const kNullCategory = @"kNullCategory";
         
         NSDictionary* distribution = p[@"distribution"];
         if ([distribution isKindOfClass:[NSArray class]]) {
-            distribution = [self dictionaryFromDistributionArray:(id)distribution];
+            distribution = [ML4iOSUtils dictionaryFromDistributionArray:(id)distribution];
         }
-        joinedDist = [self mergeDistribution:[NSMutableDictionary new] andDistribution:distribution];
+        joinedDist = [ML4iOSUtils mergeDistribution:[NSMutableDictionary new] andDistribution:distribution];
         if ([distributionUnit isEqualToString:@"counts"] && joinedDist.count > BINS_LIMIT) {
             distributionUnit = @"bins";
         }
-        joinedDist = [self mergeBinsDictionary:joinedDist limit:BINS_LIMIT];
+        joinedDist = [ML4iOSUtils mergeBinsDictionary:joinedDist limit:BINS_LIMIT];
     }
-    [prediction setObject:[self arrayFromDistributionDictionary:joinedDist] forKey:@"distribution"];
+    [prediction setObject:[ML4iOSUtils arrayFromDistributionDictionary:joinedDist] forKey:@"distribution"];
     [prediction setObject:distributionUnit forKey:@"distributionUnit"];
     
     return prediction;
@@ -573,53 +480,6 @@ static NSString* const kNullCategory = @"kNullCategory";
     
 }
 
-/**
- * Wilson score interval computation of the distribution for the prediction
- *
- * @param prediction {object} prediction Value of the prediction for which confidence
- *        is computed
- * @param distribution {array} distribution Distribution-like structure of predictions
- *        and the associated weights (only for categoricals). (e.g.
- *        {'Iris-setosa': 10, 'Iris-versicolor': 5})
- * @param n {integer} n Total number of instances in the distribution. If
- *        absent, the number is computed as the sum of weights in the
- *        provided distribution
- * @param z {float} z Percentile of the standard normal distribution
- */
-- (double)wsConfidence:(id)prediction distribution:(NSDictionary*)distribution count:(NSInteger)n z:(double)z {
-    
-    double z2 = 0.0;
-    long n2 = 0.0;
-    double wsSqrt = 0.0;
-    double p = [distribution[prediction] doubleValue];
-    
-    z2 = z * z;
-    n2 = n * n;
-    wsSqrt = sqrt((p * (1 - p) / n) + (z2 / (4 * n2)));
-    return (p + (z2 / (2 * n)) - (z * wsSqrt));
-}
-
-- (double)wsConfidence:(id)prediction distribution:(NSDictionary*)distribution count:(NSInteger)n {
-    return [self wsConfidence:prediction distribution:distribution count:n z:zDistributionDefault];
-}
-
-- (double)wsConfidence:(id)prediction distribution:(NSDictionary*)distribution {
-    
-    double p = [distribution[prediction] doubleValue];
-    NSAssert(p >= 0, @"Distribution weight must be a positive value");
-
-    double norm = 0.0;
-    for (NSString* key in distribution.allKeys) {
-        norm += [distribution[key] doubleValue];
-    }
-    NSAssert(norm != 0.0, @"Invalid distribution norm");
-    if (norm != 1.0) {
-        p = p / norm;
-    }
-
-    return [self wsConfidence:prediction distribution:distribution count:floor(norm) z:zDistributionDefault];
-}
-
 - (NSDictionary*)combineCategorical:(NSString*)weightLabel confidence:(BOOL)confidence {
     
     double weight = 1.0;
@@ -674,7 +534,9 @@ static NSString* const kNullCategory = @"kNullCategory";
         NSArray* distributionInfo = [self combineDistribution:weightLabel];
         NSInteger count = [distributionInfo[1] intValue];
         NSDictionary* distribution = distributionInfo[0];
-        double combinedConfidence = [self wsConfidence:predictionName distribution:distribution count:count];
+        double combinedConfidence = [ML4iOSUtils wsConfidence:predictionName
+                                                 distribution:distribution
+                                                        count:count];
         [result setObject:@(combinedConfidence) forKey:@"confidence"];
     }
     return result;
