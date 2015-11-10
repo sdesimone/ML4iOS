@@ -40,10 +40,14 @@ typedef enum PredicateLanguage {
 @interface Predicate : NSObject
 
 @property (nonatomic, strong) NSString* op;
-//@property (nonatomic, strong) NSString* predicateOperator;
 @property (nonatomic, strong) NSString* field;
 @property (nonatomic, strong) NSString* value;
 @property (nonatomic) BOOL missing;
+
+- (instancetype)initWithOperator:(NSString*)op
+                           field:(NSString*)field
+                           value:(id)value
+                            term:(NSString*)term;
 
 - (BOOL)apply:(NSDictionary*)input fields:(NSDictionary*)fields;
 - (NSString*)ruleWithFields:(NSDictionary*)fields label:(NSString*)label;

@@ -23,7 +23,6 @@
 @property (nonatomic, strong) NSMutableArray* fieldIds;
 
 @property (nonatomic, strong) NSArray* missingTokens;
-@property (nonatomic, strong) NSDictionary* fields;
 @property (nonatomic, strong) NSDictionary* invertedFields;
 @property (nonatomic, strong) NSString* locale;
 
@@ -67,13 +66,12 @@
 
 - (NSDictionary*)filteredInputData:(NSDictionary*)inputData byName:(BOOL)byName {
     
-    NSMutableDictionary* filteredInputData = [inputData mutableCopy];
+    NSMutableDictionary* filteredInputData =
+    [NSMutableDictionary dictionaryWithCapacity:inputData.allKeys.count];
     for (NSString* __strong fieldId in inputData.allKeys) {
 
         id value = [self normalizedValue:inputData[fieldId]];
-        if (!value) {
-            [filteredInputData removeObjectForKey:fieldId];
-        } else {
+        if (value) {
             if (byName)
                 fieldId = _fieldIdByName[fieldId];
             [filteredInputData setObject:value forKey:fieldId];
@@ -120,7 +118,7 @@
                 name = [NSString stringWithFormat:@"%@%@", name, fieldId];
             }
         }
-        [self addFieldId:_objectiveFieldId name:name];
+        [self addFieldId:fieldId name:name];
         [fields[fieldId] setObject:name forKey:@"name"];
     }
 }

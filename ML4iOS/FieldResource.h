@@ -10,6 +10,7 @@
 
 @interface FieldResource : NSObject
 
+@property (nonatomic, strong) NSDictionary* fields;
 @property (nonatomic, readonly) NSDictionary* fieldIdByName;
 @property (nonatomic, readonly) NSDictionary* fieldNameById;
 

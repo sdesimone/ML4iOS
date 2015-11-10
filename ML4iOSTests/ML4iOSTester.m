@@ -53,7 +53,7 @@
 - (NSString*)createAndWaitSourceFromCSV:(NSString*)path {
     
     NSInteger httpStatusCode = 0;
-    NSDictionary* dataSource = [self createSourceWithNameSync:@"iris.csv" project:nil filePath:path statusCode:&httpStatusCode];
+    NSDictionary* dataSource = [self createSourceWithNameSync:path project:nil filePath:path statusCode:&httpStatusCode];
     
 //    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating data source from iris.csv");
     if (dataSource != nil && httpStatusCode == HTTP_CREATED) {
@@ -75,6 +75,7 @@
         
         return [self waitResource:dataSet finalExpectedStatus:5 sleep:1];
     }
+    return nil;
 }
 
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId {
@@ -89,6 +90,7 @@
         
         return [self waitResource:model finalExpectedStatus:5 sleep:3];
     }
+    return nil;
 }
 
 - (NSString*)createAndWaitClusterFromDatasetId:(NSString*)dataSetId {
@@ -103,14 +105,15 @@
         
         return [self waitResource:cluster finalExpectedStatus:5 sleep:3];
     }
+    return nil;
 }
 
 - (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId {
     
     NSInteger httpStatusCode = 0;
     NSDictionary* ensemble = [self createEnsembleWithDataSetIdSync:dataSetId
-                                                                    name:@"iris_model"
-                                                              statusCode:&httpStatusCode];
+                                                              name:@"iris_model"
+                                                        statusCode:&httpStatusCode];
     
 //    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating model from iris_dataset");
     
@@ -118,17 +121,17 @@
         
         return [self waitResource:ensemble finalExpectedStatus:5 sleep:3];
     }
+    return nil;
 }
 
-- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId {
-    
-    NSString* inputDataForPrediction = @"{\"000001\": 2, \"000002\": 1, \"000003\": 1}";
+- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId
+                                      inputData:(NSDictionary*)inputData {
     
     NSInteger httpStatusCode = 0;
     NSDictionary* prediction = [self createPredictionWithModelIdSync:modelId
-                                                                      name:@"iris_prediction"
-                                                                 inputData:inputDataForPrediction
-                                                                statusCode:&httpStatusCode];
+                                                                name:@"iris_prediction"
+                                                           arguments:inputData
+                                                          statusCode:&httpStatusCode];
     
 //    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating prediction from iris_model");
     NSString* predictionId = nil;

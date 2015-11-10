@@ -39,7 +39,6 @@ NSString* plural(NSString* string, int multiplicity) {
                               options:0
                               error:&error];
     NSAssert(!error, @"Error in regex: %@", [error localizedDescription]);
-    
     if (!error) {
         NSRange range = [r rangeOfFirstMatchInString:string
                                              options:0
@@ -76,10 +75,10 @@ NSString* plural(NSString* string, int multiplicity) {
 }
 
 - (instancetype)initWithOperator:(NSString*)op
-                           field:(NSString*)field
-                           value:(id)value
-                            term:(NSString*)term {
-    
+                         field:(NSString*)field
+                         value:(id)value
+                          term:(NSString*)term {
+
     if (self = [super init]) {
         _op = op;
         _field = field;
@@ -96,17 +95,21 @@ NSString* plural(NSString* string, int multiplicity) {
 
 - (BOOL)isFullTermWithFields:(NSDictionary*)fields {
     
-    NSAssert([fields[self.field] isKindOfClass:[NSDictionary class]], @"Bad fields");
-    NSAssert([fields[self.field][@"term_analysis"] isKindOfClass:[NSDictionary class]],
-             @"Bad term_analysis");
-    NSAssert([fields[self.field][@"term_analysis"][@"token_mode"] isKindOfClass:[NSString class]],
-             @"Bad token_mode");
+    if (fields[self.field][@"term_analysis"]) {
+    
+        NSAssert([fields[self.field] isKindOfClass:[NSDictionary class]], @"Bad fields");
+        NSAssert(!fields[self.field][@"term_analysis"] ||
+                 [fields[self.field][@"term_analysis"] isKindOfClass:[NSDictionary class]],
+                 @"Bad term_analysis");
+        NSAssert([fields[self.field][@"term_analysis"][@"token_mode"] isKindOfClass:[NSString class]],
+                 @"Bad token_mode");
 
-    if ([fields[self.field][@"term_analysis"][@"token_mode"] isEqualToString:TM_FULL_TERMS]) {
-        return YES;
-    }
-    if ([fields[self.field][@"term_analysis"][@"token_mode"] isEqualToString:TM_ALL]) {
-        return [RegExHelper isRegex:FULL_TERM_PATTERN matching:_term];
+        if ([fields[self.field][@"term_analysis"][@"token_mode"] isEqualToString:TM_FULL_TERMS]) {
+            return YES;
+        }
+        if ([fields[self.field][@"term_analysis"][@"token_mode"] isEqualToString:TM_ALL]) {
+            return [RegExHelper isRegex:FULL_TERM_PATTERN matching:_term];
+        }
     }
     return NO;
 }
@@ -270,7 +273,7 @@ NSString* plural(NSString* string, int multiplicity) {
                     [p[@"field"] isKindOfClass:[NSString class]] &&
                     p[@"value"]) {
                     
-                    predicate = [[Predicate alloc] initWithOperator:p[@"op"]
+                    predicate = [[Predicate alloc] initWithOperator:p[@"operator"]
                                                               field:p[@"field"]
                                                               value:p[@"value"]
                                                                term:p[@"term"]];

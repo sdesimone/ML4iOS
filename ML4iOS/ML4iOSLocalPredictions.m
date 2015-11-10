@@ -14,18 +14,18 @@
 
 @implementation ML4iOSLocalPredictions
 
-+ (NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
-                                              arguments:(NSDictionary*)args
-                                             argsByName:(BOOL)byName {
++ (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
+                                        arguments:(NSDictionary*)args
+                                       argsByName:(BOOL)byName {
     
     return [PredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
 }
 
-+ (NSDictionary*)createLocalPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
-                                                 arguments:(NSDictionary*)args
-                                                argsByName:(BOOL)byName
-                                                    method:(ML4iOSPredictionMethod)method
-                                                    ml4ios:(ML4iOS*)ml4ios {
++ (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
+                                           arguments:(NSDictionary*)args
+                                          argsByName:(BOOL)byName
+                                              method:(ML4iOSPredictionMethod)method
+                                              ml4ios:(ML4iOS*)ml4ios {
     
     NSMutableArray* models = [NSMutableArray new];
     for (NSString* modelId in jsonEnsemble[@"models"]) {
@@ -43,9 +43,9 @@
                                                confidence:YES];
 }
 
-+ (NSDictionary*)createLocalCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
-                                               arguments:(NSDictionary*)args
-                                              argsByName:(BOOL)byName {
++ (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
+                                         arguments:(NSDictionary*)args
+                                        argsByName:(BOOL)byName {
     
     return [LocalPredictiveCluster predictWithJSONCluster:jsonCluster
                                                 arguments:args

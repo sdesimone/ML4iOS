@@ -536,7 +536,15 @@
  * @param code The HTTP status code returned
  * @return The model created if success, else nil
  */
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData statusCode:(NSInteger*)code;
+-(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
+                                           name:(NSString*)name
+                                      inputData:(NSString*)inputData
+                                     statusCode:(NSInteger*)code;
+
+-(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
+                                           name:(NSString*)name
+                                      arguments:(NSDictionary*)arguments
+                                     statusCode:(NSInteger*)code;
 
 /**
  * Creates a prediction from a given model. The response is provided in the method predictionCreated of the delegate.
@@ -546,7 +554,13 @@
  * It initializes the values of the given fields before creating the prediction.
  * @return The async NSOperation created
  */
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData;
+-(NSOperation*)createPredictionWithModelId:(NSString*)modelId
+                                      name:(NSString*)name
+                                 inputData:(NSString*)inputData;
+
+-(NSOperation*)createPredictionWithModelId:(NSString*)modelId
+                                      name:(NSString*)name
+                                 arguments:(NSDictionary*)arguments;
 
 /**
  * Updates the name of a given prediction. 

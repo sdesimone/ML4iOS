@@ -21,8 +21,6 @@
 		494CAED81BECBE010028D95B /* TreePrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED61BECBE010028D95B /* TreePrediction.m */; settings = {ASSET_TAGS = (); }; };
 		494CAEDB1BECC7F50028D95B /* ML4iOSUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAED91BECC7F50028D95B /* ML4iOSUtils.h */; settings = {ASSET_TAGS = (); }; };
 		494CAEDC1BECC7F50028D95B /* ML4iOSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */; settings = {ASSET_TAGS = (); }; };
-		494CAEE41BED13AA0028D95B /* chisqr.c in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE01BED13AA0028D95B /* chisqr.c */; settings = {ASSET_TAGS = (); }; };
-		494CAEE51BED13AA0028D95B /* gamma.c in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE21BED13AA0028D95B /* gamma.c */; settings = {ASSET_TAGS = (); }; };
 		494CAEE81BF0CDE20028D95B /* FieldResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAEE61BF0CDE20028D95B /* FieldResource.h */; settings = {ASSET_TAGS = (); }; };
 		494CAEE91BF0CDE20028D95B /* FieldResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE71BF0CDE20028D95B /* FieldResource.m */; settings = {ASSET_TAGS = (); }; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
@@ -83,10 +81,6 @@
 		494CAED61BECBE010028D95B /* TreePrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreePrediction.m; sourceTree = "<group>"; };
 		494CAED91BECC7F50028D95B /* ML4iOSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSUtils.h; sourceTree = "<group>"; };
 		494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSUtils.m; sourceTree = "<group>"; };
-		494CAEE01BED13AA0028D95B /* chisqr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chisqr.c; sourceTree = "<group>"; };
-		494CAEE11BED13AA0028D95B /* chisqr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chisqr.h; sourceTree = "<group>"; };
-		494CAEE21BED13AA0028D95B /* gamma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gamma.c; sourceTree = "<group>"; };
-		494CAEE31BED13AA0028D95B /* gamma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gamma.h; sourceTree = "<group>"; };
 		494CAEE61BF0CDE20028D95B /* FieldResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FieldResource.h; sourceTree = "<group>"; };
 		494CAEE71BF0CDE20028D95B /* FieldResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FieldResource.m; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -146,17 +140,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		494CAEDF1BED13AA0028D95B /* chisqr_v2 */ = {
-			isa = PBXGroup;
-			children = (
-				494CAEE01BED13AA0028D95B /* chisqr.c */,
-				494CAEE11BED13AA0028D95B /* chisqr.h */,
-				494CAEE21BED13AA0028D95B /* gamma.c */,
-				494CAEE31BED13AA0028D95B /* gamma.h */,
-			);
-			path = chisqr_v2;
-			sourceTree = "<group>";
-		};
 		DC3AE93D1570D0AF008D2F79 = {
 			isa = PBXGroup;
 			children = (
@@ -188,7 +171,6 @@
 		DC3AE94D1570D0B0008D2F79 /* ML4iOS */ = {
 			isa = PBXGroup;
 			children = (
-				494CAEDF1BED13AA0028D95B /* chisqr_v2 */,
 				DC3AE9731570D293008D2F79 /* include */,
 				DCA20AE41723E94B0019E738 /* Local */,
 				DC3AE97A1570D331008D2F79 /* HTTPCommsManager.h */,
@@ -422,12 +404,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */,
-				494CAEE41BED13AA0028D95B /* chisqr.c in Sources */,
 				494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */,
 				DC3AE9691570D0B0008D2F79 /* ML4iOSTests.m in Sources */,
 				492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */,
 				494CAED41BEB67BB0028D95B /* PredicatesTests.m in Sources */,
-				494CAEE51BED13AA0028D95B /* gamma.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

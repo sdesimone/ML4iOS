@@ -52,14 +52,16 @@
     [super tearDown];
 }
 
-- (NSDictionary*)localPredictionForModelId:(NSString*)modelId data:(NSString*)inputData byName:(BOOL)byName {
+- (NSDictionary*)localPredictionForModelId:(NSString*)modelId
+                                      data:(NSDictionary*)inputData
+                                    byName:(BOOL)byName {
     
     NSInteger httpStatusCode = 0;
     
     if ([modelId length] > 0) {
         
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
-        NSDictionary* prediction = [ML4iOSLocalPredictions createLocalPredictionWithJSONModelSync:irisModel
+        NSDictionary* prediction = [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
                                                                             arguments:inputData
                                                                            argsByName:byName];
         
@@ -80,7 +82,7 @@
     if ([clusterId length] > 0) {
         
         NSDictionary* irisModel = [apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
-        NSDictionary* prediction = [ML4iOSLocalPredictions createLocalCentroidsWithJSONClusterSync:irisModel
+        NSDictionary* prediction = [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
                                                                                        arguments:inputData
                                                                                       argsByName:byName];
         
@@ -128,18 +130,32 @@
 - (void)testLocalPrediction {
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
-    NSDictionary* prediction = [self localPredictionForModelId:modelId
-                                                          data:@"{\"000001\": 2, \"000002\": 1, \"000003\": 1}"
-                                                        byName:NO];
+    NSDictionary* prediction1 = [self localPredictionForModelId:modelId
+                                                           data:@{@"000001": @3.15,
+                                                                  @"000002": @4.07,
+                                                                  @"000003": @1.51}
+                                                         byName:NO];
+    
+    NSDictionary* prediction2 = [self localPredictionForModelId:modelId
+                                                           data:@{@"sepal width": @3.15,
+                                                                  @"petal length": @4.07,
+                                                                  @"petal width": @1.51}
+                                                         byName:YES];
+
+    XCTAssert([prediction1[@"prediction"] isEqualToString:prediction2[@"prediction"]] &&
+              [prediction1[@"confidence"] doubleValue] == [prediction2[@"confidence"] doubleValue]);
+    
     [apiLibrary deleteModelWithIdSync:modelId];
-    XCTAssert(prediction);
+    XCTAssert(prediction1 && prediction2);
 }
 
 - (void)testLocalPredictionByName {
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
-    NSDictionary* prediction = [self localPredictionForModelId:@"563a1c7a3cd25747430023ce"
-                                                          data:@{@"sepal width": @3.15, @"petal length": @4.07, @"petal width": @1.51}
+    NSDictionary* prediction = [self localPredictionForModelId:modelId
+                                                          data:@{@"sepal width": @3.15,
+                                                                 @"petal length": @4.07,
+                                                                 @"petal width": @1.51}
                                                         byName:YES];
     [apiLibrary deleteModelWithIdSync:modelId];
     XCTAssert(prediction);
@@ -149,7 +165,9 @@
     
     NSString* clusterId = [apiLibrary createAndWaitClusterFromDatasetId:datasetId];
     NSDictionary* prediction = [self localPredictionForClusterId:clusterId
-                                                            data:@{@"sepal length": @2, @"sepal width": @1, @"petal length": @1}
+                                                            data:@{@"sepal length": @2,
+                                                                   @"sepal width": @1,
+                                                                   @"petal length": @1}
                                                           byName:YES];
     [apiLibrary deleteClusterWithIdSync:clusterId];
     XCTAssert(prediction);

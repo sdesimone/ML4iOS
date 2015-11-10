@@ -28,9 +28,9 @@ typedef enum ML4iOSPredictionMethod {
  * @param byName The arguments passed in args parameter are passed by name
  * @return The result of the prediction
  */
-+ (NSDictionary*)createLocalPredictionWithJSONModelSync:(NSDictionary*)jsonModel
-                                              arguments:(NSString*)args
-                                             argsByName:(BOOL)byName;
++ (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
+                                        arguments:(NSDictionary*)args
+                                       argsByName:(BOOL)byName;
 
 /**
  * Creates local prediction using the ensemble and args passed as parameters
@@ -39,11 +39,11 @@ typedef enum ML4iOSPredictionMethod {
  * @param byName The arguments passed in args parameter are passed by name
  * @return The result of the prediction
  */
-+ (NSDictionary*)createLocalPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
-                                                 arguments:(NSDictionary*)args
-                                                argsByName:(BOOL)byName
-                                                    method:(ML4iOSPredictionMethod)method
-                                                    ml4ios:(ML4iOS*)ml4ios;
++ (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
+                                           arguments:(NSDictionary*)args
+                                          argsByName:(BOOL)byName
+                                              method:(ML4iOSPredictionMethod)method
+                                              ml4ios:(ML4iOS*)ml4ios;
 
 /**
  * Creates local centroids using the cluster and args passed as parameters
@@ -52,8 +52,8 @@ typedef enum ML4iOSPredictionMethod {
  * @param byName The arguments passed in args parameter are passed by name
  * @return The result of the prediction
  */
-+ (NSDictionary*)createLocalCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
-                                               arguments:(NSDictionary*)args
-                                              argsByName:(BOOL)byName;
++ (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
+                                         arguments:(NSDictionary*)args
+                                        argsByName:(BOOL)byName;
 
 @end

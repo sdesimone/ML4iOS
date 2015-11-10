@@ -28,14 +28,13 @@
 
 @implementation PredictiveModel {
 
-    NSDictionary* _fields;
     NSString* _description;
     NSMutableArray* _fieldImportance;
     NSString* _resourceId;
     
     NSDictionary* _root;
     PredictionTree* _tree;
-    NSDictionary* _idsMap;
+    NSMutableDictionary* _idsMap;
     NSDictionary* _terms;
     NSInteger _maxBins;
     
@@ -89,7 +88,7 @@
         if (modelFieldImportance) {
             _fieldImportance = [NSMutableArray new];
             for (NSArray* element in modelFieldImportance) {
-                if (_fields[element.firstObject]) {
+                if (self.fields[element.firstObject]) {
                     [_fieldImportance addObject:element];
                 }
             }
@@ -97,7 +96,7 @@
         
         _idsMap = [NSMutableDictionary new];
         _tree = [[PredictionTree alloc] initWithRoot:_root
-                                              fields:_fields
+                                              fields:self.fields
                                       objectiveField:objectiveField
                                     rootDistribution:jsonModel[@"model"][@"distribution"][@"training"]
                                             parentId:nil
@@ -121,7 +120,7 @@
     NSMutableArray* output = [NSMutableArray new];
 
     arguments = [ML4iOSUtils cast:[self filteredInputData:arguments byName:byName]
-                           fields:_fields];
+                           fields:self.fields];
     
     TreePrediction* prediction = [_tree predict:arguments
                                            path:nil
@@ -137,7 +136,7 @@
                 prediction.prediction = category;
                 prediction.confidence =
                 [ML4iOSUtils wsConfidence:category
-                             distribution:@{ category : distribution }];
+                             distribution:@{ category : distributionElement.lastObject }];
                 prediction.probability = [distributionElement.lastObject doubleValue] / instances;
                 prediction.count = [distributionElement.lastObject longValue];
                 [output addObject:prediction];
@@ -149,7 +148,7 @@
         
         NSArray* children = prediction.children;
         NSString* field = (!children || children.count == 0) ? nil : [(Predicate*)[children.firstObject predicate] field];
-        if (field && _fields[field]) {
+        if (field && self.fields[field]) {
             field = self.fieldNameById[field];
         }
         prediction.next = field;
@@ -189,30 +188,29 @@
                             arguments:(NSDictionary*)inputData
                            argsByName:(BOOL)byName {
 
-    NSDictionary* prediction = nil;
+    TreePrediction* prediction = nil;
     if (jsonModel != nil && inputData != nil && inputData.allKeys.count > 0) {
         
         PredictiveModel* predictiveModel = [[PredictiveModel alloc] initWithJSONModel:jsonModel];
         prediction = [predictiveModel predictWithArguments:inputData byName:byName].firstObject;
     }
-    return prediction;
+    return prediction ? @{ @"prediction" : prediction.prediction, @"confidence" : @(prediction.confidence) } : nil;
 }
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
-                      argumentsString:(NSString*)args
+                            inputData:(NSString*)inputData
                            argsByName:(BOOL)byName {
     
-    NSDictionary* prediction = nil;
-    if(jsonModel != nil && args != nil) {
+    if(jsonModel != nil && inputData != nil) {
         
         NSError *error = nil;
-        NSDictionary* inputData =
-        [NSJSONSerialization JSONObjectWithData:[args dataUsingEncoding:NSUTF8StringEncoding]
+        NSDictionary* arguments =
+        [NSJSONSerialization JSONObjectWithData:[inputData dataUsingEncoding:NSUTF8StringEncoding]
                                         options:NSJSONReadingMutableContainers error:&error];
         
-        return [self predictWithJSONModel:jsonModel arguments:inputData argsByName:byName];
+        return [self predictWithJSONModel:jsonModel arguments:arguments argsByName:byName];
     }
-    return prediction;
+    return nil;
 }
 
 @end

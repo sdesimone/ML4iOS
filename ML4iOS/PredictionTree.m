@@ -46,6 +46,7 @@ typedef PredictionTree TreeHolder;
     NSDictionary* _root;
     NSDictionary* _fields;
     NSArray* _objectiveFields;
+    NSString* _nodeId;
     NSString* _parentId;
     Predicate* _predicate;
     long _count;
@@ -60,7 +61,7 @@ typedef PredictionTree TreeHolder;
                       objectiveFields:(NSArray*)objectiveFields
                     rootDistribution:(NSDictionary*)rootDistribution
                             parentId:(NSString*)parentId
-                              idsMap:(NSDictionary*)idsMap
+                              idsMap:(NSMutableDictionary*)idsMap
                              subtree:(BOOL)subtree
                              maxBins:(NSInteger)maxBins {
 
@@ -76,20 +77,25 @@ typedef PredictionTree TreeHolder;
         
         NSObject* predicateObj = _root[@"predicate"];
         
-        //Generate predicate
         if ([predicateObj respondsToSelector:@selector(boolValue)] &&
             [(NSNumber*)predicateObj boolValue] == YES) {
             _isPredicate = YES;
         } else {
             
             NSDictionary* predicateDict = (NSDictionary*)predicateObj;
-            NSString* field = predicateDict[@"field"];
+//            NSString* field = predicateDict[@"field"];
             
-            self.predicate = [[Predicate alloc] init];
-            [self.predicate setOp:fields[field][@"optype"]];
+            self.predicate = [[Predicate alloc] initWithOperator:predicateDict[@"operator"]
+                                                         field:predicateDict[@"field"]
+                                                         value:predicateDict[@"value"]
+                                                          term:predicateDict[@"term"]];
 //            [self.predicate setPredicateOperator:predicateDict[@"operator"]];
-            [self.predicate setField:field];
-            [self.predicate setValue:predicateDict[@"prediction"]];
+        }
+        
+        if (_root[@"id"]) {
+            _nodeId = _root[@"id"];
+            _parentId = parentId;
+            [idsMap setObject:self forKey:_nodeId];
         }
         
         //-- Generate children array
@@ -98,10 +104,10 @@ typedef PredictionTree TreeHolder;
             
             PredictionTree* childTree =
             [[PredictionTree alloc] initWithRoot:child
-                                               fields:fields
-                                      objectiveFields:objectiveFields
+                                               fields:_fields
+                                      objectiveFields:_objectiveFields
                                      rootDistribution:nil
-                                             parentId:parentId
+                                             parentId:_nodeId
                                                idsMap:idsMap
                                               subtree:subtree
                                               maxBins:maxBins];
@@ -240,7 +246,7 @@ typedef PredictionTree TreeHolder;
     } else if (summary[@"counts"]) {
         _distribution = summary[@"counts"];
         _distributionUnit = @"counts";
-    } else if (summary[@"category"]) {
+    } else if (summary[@"categories"]) {
         _distribution = summary[@"categories"];
         _distributionUnit = @"categories";
     }
@@ -252,7 +258,7 @@ typedef PredictionTree TreeHolder;
                       objectiveField:(NSString*)objectiveField
                     rootDistribution:(NSDictionary*)rootDistribution
                             parentId:(NSString*)parentId
-                              idsMap:(NSDictionary*)idsMap
+                              idsMap:(NSMutableDictionary*)idsMap
                              subtree:(BOOL)subtree
                              maxBins:(NSInteger)maxBins {
     

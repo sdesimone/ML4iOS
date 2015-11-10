@@ -60,7 +60,7 @@ typedef enum MissingStrategy {
                      objectiveField:(NSString*)aObjectiveField
                    rootDistribution:(NSDictionary*)rootDistribution
                            parentId:(NSString*)parentId
-                             idsMap:(NSDictionary*)idsMap
+                             idsMap:(NSMutableDictionary*)idsMap
                             subtree:(BOOL)subtree
                             maxBins:(NSInteger)maxBins;
 

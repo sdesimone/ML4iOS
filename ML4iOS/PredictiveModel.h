@@ -49,16 +49,17 @@
  * By default the input fields must be keyed by field name but you can use
  *  `byName` to input them directly keyed by id.
  *
- * inputData: Input data to be predicted
+ * @param inputData: Input data to be predicted
  *
- * byName: Boolean, True if input_data is keyed by names
+ * @param byName: Boolean, True if input_data is keyed by names
  *
- * missingStrategy: LAST_PREDICTION|PROPORTIONAL missing strategy for
- *                  missing fields
+ * @param missingStrategy: LAST_PREDICTION|PROPORTIONAL missing strategy for
+ *                         missing fields
  *
- * multiple: For categorical fields, it will return the categories
- *           in the distribution of the predicted node as a
- *      list of dicts:
+ * @param multiple: For categorical fields, it will make this method return
+ *                  the categories in the distribution of the predicted node as a
+ *                  list of dicts, e.g.:
+ *
  *          [{'prediction': 'Iris-setosa',
  *              'confidence': 0.9154
  *              'probability': 0.97
@@ -68,9 +69,11 @@
  *              'probability': 0.03,
  *              'count': 3}]
  *
- * all: The value of this argument is an integer specifying
+ *  The value of this argument is an integer specifying
  *  the maximum number of categories to be returned. If 0,
  *  the entire distribution in the node will be returned.
+ *
+ * This method will return an NSArray of TreePrediction objects.
  */
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
                           byName:(BOOL)byName
@@ -82,10 +85,10 @@
  * @param jsonModel The model to use to create the prediction
  * @param args The arguments to create the prediction
  * @param byName The arguments passed in args parameter are passed by name
- * @return The result of the prediction
+ * @return The result of the prediction encoded in an NSDictionary
  */
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
-                      argumentsString:(NSString*)args
+                            inputData:(NSString*)args
                            argsByName:(BOOL)byName;
 
 /**
@@ -93,7 +96,7 @@
  * @param jsonModel The model to use to create the prediction
  * @param argumentDictionary An NSDictionary containing the arguments to create the prediction
  * @param byName The arguments passed in args parameter are passed by name
- * @return The result of the prediction
+ * @return The result of the prediction encoded in an NSDictionary
  */
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel

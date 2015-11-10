@@ -39,7 +39,7 @@
                                                                error:&error];
     
     NSDictionary* prediction = [ML4iOSLocalPredictions
-                                createLocalPredictionWithJSONEnsembleSync:ensemble
+                                localPredictionWithJSONEnsembleSync:ensemble
                                 arguments:@{@"sepal length": @(6.02),
                                             @"sepal width": @(3.15),
                                             @"petal width": @(1.51),

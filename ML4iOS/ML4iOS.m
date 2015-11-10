@@ -971,7 +971,8 @@
     BOOL ready = NO;
     
     NSInteger statusCode = 0;
-    NSDictionary* ensemble = [commsManager getEnsembleWithId:params[@"identifier"] statusCode:&statusCode];
+    NSDictionary* ensemble = [commsManager getEnsembleWithId:params[@"identifier"]
+                                                  statusCode:&statusCode];
     
     if(ensemble != nil && statusCode == HTTP_OK)
         ready = [ensemble[@"status"][@"code"]intValue] == FINISHED;
@@ -987,12 +988,36 @@
 #pragma mark -
 #pragma mark Predictions
 
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData statusCode:(NSInteger*)code
+-(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
+                                           name:(NSString*)name
+                                      inputData:(NSString*)inputData
+                                     statusCode:(NSInteger*)code
 {
-    return [commsManager createPredictionWithModelId:modelId name:name inputData:inputData statusCode:code];
+    return [commsManager createPredictionWithModelId:modelId name:name inputData:inputData
+                                          statusCode:code];
 }
 
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData
+-(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
+                                           name:(NSString*)name
+                                      arguments:(NSDictionary*)arguments
+                                     statusCode:(NSInteger*)code
+{
+    NSError *error = nil;
+    NSString* inputData =
+    [[NSString alloc] initWithData:
+     [NSJSONSerialization dataWithJSONObject:arguments
+                                     options:0
+                                       error:&error]
+                          encoding:NSUTF8StringEncoding];
+    
+    if (!error)
+        return [self createPredictionWithModelIdSync:modelId name:name inputData:inputData statusCode:code];
+    return nil;
+}
+
+-(NSOperation*)createPredictionWithModelId:(NSString*)modelId
+                                      name:(NSString*)name
+                                 inputData:(NSString*)inputData
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"identifier"] = modelId;
@@ -1002,6 +1027,24 @@
     return [self launchOperationWithSelector:@selector(createPredictionAction:) params:params];
 }
 
+-(NSOperation*)createPredictionWithModelId:(NSString*)modelId
+                                      name:(NSString*)name
+                                 arguments:(NSDictionary*)arguments
+{
+
+    NSError *error = nil;
+    NSString* inputData =
+    [[NSString alloc] initWithData:
+     [NSJSONSerialization dataWithJSONObject:arguments
+                                     options:0
+                                       error:&error]
+                          encoding:NSUTF8StringEncoding];
+    
+    if (!error)
+        return [self createPredictionWithModelId:modelId name:name inputData:inputData];
+    return nil;
+}
+
 -(void)createPredictionAction:(NSDictionary*)params
 {
     NSInteger statusCode = 0;
@@ -1009,7 +1052,8 @@
     NSString* name = params[@"name"];
     NSString* inputData = params[@"inputData"];
     
-    NSDictionary* prediction = [commsManager createPredictionWithModelId:identifier name:name inputData:inputData statusCode:&statusCode];
+    NSDictionary* prediction = [commsManager createPredictionWithModelId:identifier name:name
+                                                               inputData:inputData statusCode:&statusCode];
     
     [delegate predictionCreated:prediction statusCode:statusCode];
 }
