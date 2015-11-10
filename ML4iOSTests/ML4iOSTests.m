@@ -119,9 +119,17 @@
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     XCTAssert(modelId);
     
-    NSString* predictionId = [apiLibrary createAndWaitPredictionFromModelId:modelId];
+    NSString* predictionId = [apiLibrary createAndWaitPredictionFromModelId:modelId
+                                                                  inputData:
+                              @{@"000001": @3.15,
+                                @"000002": @4.07,
+                                @"000003": @1.51}
+                              ];
+    NSInteger code = 0;
+    NSDictionary* prediction = [apiLibrary getPredictionWithIdSync:predictionId statusCode:&code];
     [apiLibrary deleteModelWithIdSync:modelId];
-    XCTAssert(predictionId);
+    [apiLibrary deletePredictionWithIdSync:predictionId];
+    XCTAssert(prediction);
     
     [apiLibrary deletePredictionWithIdSync:predictionId];
 }

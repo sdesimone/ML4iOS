@@ -17,6 +17,7 @@
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitClusterFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId;
-- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId;
+- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId
+                                      inputData:(NSDictionary*)inputData;
 
 @end
