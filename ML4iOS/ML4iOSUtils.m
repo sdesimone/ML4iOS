@@ -200,7 +200,12 @@
     long n2 = 0.0;
     double wsSqrt = 0.0;
     double p = [distribution[prediction] doubleValue];
+    NSAssert(p >= 0, @"Distribution weight must be a positive value");
     
+    if (n != 1.0) {
+        p = p / n;
+    }
+
     z2 = z * z;
     n2 = n * n;
     wsSqrt = sqrt((p * (1 - p) / n) + (z2 / (4 * n2)));
@@ -220,19 +225,16 @@
 + (double)wsConfidence:(id)prediction
           distribution:(NSDictionary*)distribution {
     
-    double p = [distribution[prediction] doubleValue];
-    NSAssert(p >= 0, @"Distribution weight must be a positive value");
-    
     double norm = 0.0;
-    for (NSString* key in distribution.allKeys) {
-        norm += [distribution[key] doubleValue];
+    for (NSString* value in distribution.allValues) {
+        norm += [value doubleValue];
     }
     NSAssert(norm != 0.0, @"Invalid distribution norm");
-    if (norm != 1.0) {
-        p = p / norm;
-    }
     
-    return [self wsConfidence:prediction distribution:distribution count:floor(norm) z:zDistributionDefault];
+    return [self wsConfidence:prediction
+                 distribution:distribution
+                        count:floor(norm)
+                            z:zDistributionDefault];
 }
 
 + (NSString*)splitNodes:(NSArray*)nodes {

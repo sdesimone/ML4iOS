@@ -57,7 +57,6 @@
                                     byName:(BOOL)byName {
     
     NSInteger httpStatusCode = 0;
-    
     if ([modelId length] > 0) {
         
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
@@ -147,18 +146,6 @@
     
     [apiLibrary deleteModelWithIdSync:modelId];
     XCTAssert(prediction1 && prediction2);
-}
-
-- (void)testLocalPredictionByName {
-    
-    NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
-    NSDictionary* prediction = [self localPredictionForModelId:modelId
-                                                          data:@{@"sepal width": @3.15,
-                                                                 @"petal length": @4.07,
-                                                                 @"petal width": @1.51}
-                                                        byName:YES];
-    [apiLibrary deleteModelWithIdSync:modelId];
-    XCTAssert(prediction);
 }
 
 - (void)testLocalClusterPredictionByName {
