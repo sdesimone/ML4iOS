@@ -54,7 +54,8 @@ typedef PredictionTree TreeHolder;
     NSDictionary* _rootDistribution;
 }
 
-@synthesize predicate;
+@synthesize predicate = _predicate;
+@synthesize objectiveFields = _objectiveFields;
 
 - (PredictionTree*)initWithRoot:(NSDictionary*)root
                               fields:(NSDictionary*)fields
@@ -83,13 +84,10 @@ typedef PredictionTree TreeHolder;
         } else {
             
             NSDictionary* predicateDict = (NSDictionary*)predicateObj;
-//            NSString* field = predicateDict[@"field"];
-            
             self.predicate = [[Predicate alloc] initWithOperator:predicateDict[@"operator"]
                                                          field:predicateDict[@"field"]
                                                          value:predicateDict[@"value"]
                                                           term:predicateDict[@"term"]];
-//            [self.predicate setPredicateOperator:predicateDict[@"operator"]];
         }
         
         if (_root[@"id"]) {

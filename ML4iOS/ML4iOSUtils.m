@@ -24,7 +24,7 @@
     
     NSMutableDictionary* newDistribution = [NSMutableDictionary new];
     for (NSArray* distValue in distribution) {
-        [newDistribution setObject:distValue[0] forKey:distValue[1]];
+        [newDistribution setObject:distValue[1] forKey:distValue[0]];
     }
     return newDistribution;
 }

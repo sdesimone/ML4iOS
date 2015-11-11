@@ -111,6 +111,10 @@
     return self;
 }
 
+- (double)roundedConfidence:(double)confidence {
+    return floor(confidence * 10000.0) / 10000.0;
+}
+
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
                           byName:(BOOL)byName
                         strategy:(MissingStrategy)strategy
@@ -126,6 +130,7 @@
                                            path:nil
                                        strategy:strategy];
     NSArray* distribution = [prediction distribution];
+    NSDictionary* distributionDictionary = [ML4iOSUtils dictionaryFromDistributionArray:distribution];
     long instances = prediction.count;
     if (multiple != 0 && ![_tree isRegression]) {
         for (NSInteger i = 0; i < distribution.count; ++i) {
@@ -135,9 +140,9 @@
                 id category = distributionElement.firstObject;
                 double confidence =
                 [ML4iOSUtils wsConfidence:category
-                             distribution:@{ category : distributionElement.lastObject }];
-                [output addObject:@{ @"prediction" : category,
-                                     @"confidence" : @(confidence),
+                             distribution:distributionDictionary];
+                [output addObject:@{ @"prediction" : @{ _tree.objectiveFields.firstObject : category },
+                                     @"confidence" : @([self roundedConfidence:confidence]),
                                      @"probability" : @([distributionElement.lastObject doubleValue] / instances),
                                      @"count" : @([distributionElement.lastObject longValue])
                                      }];
@@ -151,8 +156,8 @@
             field = self.fieldNameById[field];
         }
         prediction.next = field;
-        [output addObject:@{ @"prediction" : prediction.prediction,
-                             @"confidence" : @(prediction.confidence),
+        [output addObject:@{ @"prediction" : @{ _tree.objectiveFields.firstObject : prediction.prediction },
+                             @"confidence" : @([self roundedConfidence:prediction.confidence]),
                              @"count" : @(prediction.count)
                              }];
     }
@@ -166,7 +171,7 @@
     return [self predictWithArguments:arguments
                                byName:byName
                              strategy:strategy
-                             multiple:0];
+                             multiple:3];
 }
 
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments

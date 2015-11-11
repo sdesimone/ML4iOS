@@ -61,8 +61,8 @@
         
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
         NSDictionary* prediction = [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
-                                                                            arguments:inputData
-                                                                           argsByName:byName];
+                                                                                  arguments:inputData
+                                                                                 argsByName:byName];
         
         XCTAssertNotNil([prediction objectForKey:@"prediction"], @"Local Prediction value can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
@@ -70,6 +70,21 @@
         return prediction;
     }
     return nil;
+}
+
+- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
+                                       data:(NSDictionary*)inputData
+                                     byName:(BOOL)byName {
+    
+    NSString* predictionId = [apiLibrary createAndWaitPredictionFromModelId:modelId
+                                                                  inputData:@{@"000001": @3.15,
+                                                                              @"000002": @4.07,
+                                                                              @"000003": @1.51}];
+    NSInteger code = 0;
+    NSDictionary* prediction = [apiLibrary getPredictionWithIdSync:predictionId statusCode:&code];
+    XCTAssert(code == 200, @"Could not create prediction %@", predictionId);
+
+    return prediction;
 }
 
 - (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
@@ -91,6 +106,18 @@
         return prediction;
     }
     return nil;
+}
+
+- (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2 {
+    return [prediction1[@"prediction"] isEqualToDictionary:prediction2[@"prediction"]];
+}
+
+- (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2 {
+    
+    float eps = 0.0001;
+    double confidence1 = [prediction1[@"confidence"] doubleValue];
+    double confidence2 = [prediction2[@"confidence"] doubleValue];
+    return ((confidence1 - eps) < confidence2) && ((confidence1 + eps) > confidence2);
 }
 
 - (void)testModel {
@@ -119,19 +146,14 @@
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     XCTAssert(modelId);
     
-    NSString* predictionId = [apiLibrary createAndWaitPredictionFromModelId:modelId
-                                                                  inputData:
-                              @{@"000001": @3.15,
-                                @"000002": @4.07,
-                                @"000003": @1.51}
-                              ];
-    NSInteger code = 0;
-    NSDictionary* prediction = [apiLibrary getPredictionWithIdSync:predictionId statusCode:&code];
-    [apiLibrary deleteModelWithIdSync:modelId];
-    [apiLibrary deletePredictionWithIdSync:predictionId];
+    NSDictionary* prediction = [self remotePredictionForModelId:modelId
+                                                           data:@{@"000001": @3.15,
+                                                                  @"000002": @4.07,
+                                                                  @"000003": @1.51}
+                                                         byName:NO];
     XCTAssert(prediction);
-    
-    [apiLibrary deletePredictionWithIdSync:predictionId];
+    [apiLibrary deletePredictionWithIdSync:
+     [prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
 }
 
 - (void)testLocalPrediction {
@@ -143,14 +165,22 @@
                                                                   @"000003": @1.51}
                                                          byName:NO];
     
-    NSDictionary* prediction2 = [self localPredictionForModelId:modelId
+    NSDictionary* prediction2 = [self remotePredictionForModelId:modelId
+                                                            data:@{@"000001": @3.15,
+                                                                   @"000002": @4.07,
+                                                                   @"000003": @1.51}
+                                                          byName:NO];
+    
+    NSDictionary* prediction3 = [self localPredictionForModelId:modelId
                                                            data:@{@"sepal width": @3.15,
                                                                   @"petal length": @4.07,
                                                                   @"petal width": @1.51}
                                                          byName:YES];
 
-    XCTAssert([prediction1[@"prediction"] isEqualToString:prediction2[@"prediction"]] &&
-              [prediction1[@"confidence"] doubleValue] == [prediction2[@"confidence"] doubleValue]);
+    XCTAssert([self comparePrediction:prediction1 andPrediction:prediction2] &&
+              [self compareConfidence:prediction1 andConfidence:prediction2] &&
+              [self comparePrediction:prediction1 andPrediction:prediction3] &&
+              [self compareConfidence:prediction1 andConfidence:prediction3]);
     
     [apiLibrary deleteModelWithIdSync:modelId];
     XCTAssert(prediction1 && prediction2);

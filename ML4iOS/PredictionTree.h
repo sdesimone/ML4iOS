@@ -48,6 +48,7 @@ typedef enum MissingStrategy {
 @property (nonatomic, strong) Predicate* predicate;
 @property (nonatomic) BOOL isPredicate;
 @property (nonatomic) NSInteger maxBins;
+@property (nonatomic, readonly) NSArray* objectiveFields;
 
 /**
  * Initializes a PredictionTree object
