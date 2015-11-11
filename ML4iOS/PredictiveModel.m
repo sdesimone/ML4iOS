@@ -127,23 +127,22 @@
                                        strategy:strategy];
     NSArray* distribution = [prediction distribution];
     long instances = prediction.count;
-    if (![_tree isRegression]) {
+    if (multiple != 0 && ![_tree isRegression]) {
         for (NSInteger i = 0; i < distribution.count; ++i) {
             NSArray* distributionElement = distribution[i];
-            if (multiple == 0 || i < multiple) {
-                prediction = [TreePrediction new];
+            if (i < multiple) {
+
                 id category = distributionElement.firstObject;
-                prediction.prediction = category;
-                prediction.confidence =
+                double confidence =
                 [ML4iOSUtils wsConfidence:category
                              distribution:@{ category : distributionElement.lastObject }];
-                prediction.probability = [distributionElement.lastObject doubleValue] / instances;
-                prediction.count = [distributionElement.lastObject longValue];
-                [output addObject:prediction];
+                [output addObject:@{ @"prediction" : category,
+                                     @"confidence" : @(confidence),
+                                     @"probability" : @([distributionElement.lastObject doubleValue] / instances),
+                                     @"count" : @([distributionElement.lastObject longValue])
+                                     }];
             }
         }
-        return output;
-        
     } else {
         
         NSArray* children = prediction.children;
@@ -152,9 +151,12 @@
             field = self.fieldNameById[field];
         }
         prediction.next = field;
-        [output addObject:prediction];
-        return output;
+        [output addObject:@{ @"prediction" : prediction.prediction,
+                             @"confidence" : @(prediction.confidence),
+                             @"count" : @(prediction.count)
+                             }];
     }
+    return output;
 }
 
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
@@ -172,29 +174,25 @@
     
     return [self predictWithArguments:arguments
                                byName:byName
-                             strategy:MissingStrategyLastPrediction
-                             multiple:0];
+                             strategy:MissingStrategyLastPrediction];
 }
 
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments {
     
     return [self predictWithArguments:arguments
-                               byName:NO
-                             strategy:MissingStrategyLastPrediction
-                             multiple:0];
+                               byName:NO];
 }
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)inputData
                            argsByName:(BOOL)byName {
 
-    TreePrediction* prediction = nil;
     if (jsonModel != nil && inputData != nil && inputData.allKeys.count > 0) {
         
         PredictiveModel* predictiveModel = [[PredictiveModel alloc] initWithJSONModel:jsonModel];
-        prediction = [predictiveModel predictWithArguments:inputData byName:byName].firstObject;
+        return [predictiveModel predictWithArguments:inputData byName:byName].firstObject;
     }
-    return prediction ? @{ @"prediction" : prediction.prediction, @"confidence" : @(prediction.confidence) } : nil;
+    return nil;
 }
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel

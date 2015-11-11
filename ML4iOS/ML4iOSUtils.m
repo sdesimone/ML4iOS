@@ -181,15 +181,14 @@
 /**
  * Wilson score interval computation of the distribution for the prediction
  *
- * @param prediction {object} prediction Value of the prediction for which confidence
- *        is computed
- * @param distribution {array} distribution Distribution-like structure of predictions
- *        and the associated weights (only for categoricals). (e.g.
- *        {'Iris-setosa': 10, 'Iris-versicolor': 5})
- * @param n {integer} n Total number of instances in the distribution. If
- *        absent, the number is computed as the sum of weights in the
+ * @param prediction Value of the prediction for which confidence is computed
+ * @param distribution Distribution-like structure of predictions
+ *        and the associated weights (only for categoricals). E.g.
+ *        [['Iris-setosa', 10], ['Iris-versicolor', 5]]
+ * @param n Total number of instances in the distribution. If 0,
+ *        the number is computed as the sum of weights in the
  *        provided distribution
- * @param z {float} z Percentile of the standard normal distribution
+ * @param z Percentile of the standard normal distribution
  */
 + (double)wsConfidence:(id)prediction
           distribution:(NSDictionary*)distribution
@@ -199,17 +198,23 @@
     double z2 = 0.0;
     long n2 = 0.0;
     double wsSqrt = 0.0;
+    double wsFactor = 0.0;
     double p = [distribution[prediction] doubleValue];
     NSAssert(p >= 0, @"Distribution weight must be a positive value");
     
-    if (n != 1.0) {
-        p = p / n;
+    double norm = 0.0;
+    for (NSString* value in distribution.allValues) {
+        norm += [value doubleValue];
+    }
+    if (norm != 1.0) {
+        p = p / norm;
     }
 
     z2 = z * z;
+    wsFactor = z2 / n;
     n2 = n * n;
-    wsSqrt = sqrt((p * (1 - p) / n) + (z2 / (4 * n2)));
-    return (p + (z2 / (2 * n)) - (z * wsSqrt));
+    wsSqrt = sqrt((p * (1 - p) + wsFactor / 4) / n);
+    return (p + wsFactor / 2 - z *wsSqrt) / (1 + wsFactor);
 }
 
 + (double)wsConfidence:(id)prediction

@@ -70,7 +70,7 @@
  *              'count': 3}]
  *
  *  The value of this argument is an integer specifying
- *  the maximum number of categories to be returned. If 0,
+ *  the maximum number of categories to be returned. If NSUIntegerMax,
  *  the entire distribution in the node will be returned.
  *
  * This method will return an NSArray of TreePrediction objects.
