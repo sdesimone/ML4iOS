@@ -45,8 +45,10 @@
     MultiVote* votes = [MultiVote new];
     for (NSDictionary* model in _models) {
         [votes append:[PredictiveModel predictWithJSONModel:model
-                                                       arguments:inputData
-                                                      argsByName:byName]];
+                                                  arguments:inputData
+                                                    options:@{ @"byName" : @(byName),
+                                                               @"strategy" : @(missingStrategy),
+                                                               @"addMedian" : @(addMedian) }]];
     }
     return votes;
 }

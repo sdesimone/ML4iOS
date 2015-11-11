@@ -116,9 +116,11 @@
 }
 
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
-                          byName:(BOOL)byName
-                        strategy:(MissingStrategy)strategy
-                        multiple:(NSUInteger)multiple {
+                          options:(NSDictionary*)options {
+    
+    BOOL byName = [options[@"byName"]?:@NO boolValue];
+    MissingStrategy strategy = [options[@"strategy"]?:@(MissingStrategyLastPrediction) intValue];
+    NSUInteger multiple = [options[@"multiple"]?:@0 intValue];
     
     NSAssert(arguments, @"Prediction arguments missing.");
     NSMutableArray* output = [NSMutableArray new];
@@ -164,45 +166,45 @@
     return output;
 }
 
-- (NSArray*)predictWithArguments:(NSDictionary*)arguments
-                          byName:(BOOL)byName
-                        strategy:(MissingStrategy)strategy {
-    
-    return [self predictWithArguments:arguments
-                               byName:byName
-                             strategy:strategy
-                             multiple:3];
-}
-
-- (NSArray*)predictWithArguments:(NSDictionary*)arguments
-                          byName:(BOOL)byName {
-    
-    return [self predictWithArguments:arguments
-                               byName:byName
-                             strategy:MissingStrategyLastPrediction];
-}
-
-- (NSArray*)predictWithArguments:(NSDictionary*)arguments {
-    
-    return [self predictWithArguments:arguments
-                               byName:NO];
-}
+//- (NSArray*)predictWithArguments:(NSDictionary*)arguments
+//                          byName:(BOOL)byName
+//                        strategy:(MissingStrategy)strategy {
+//    
+//    return [self predictWithArguments:arguments
+//                              options:@{ @"byName" : @NO,
+//                                         @"strategy" : @(strategy),
+//                                         @"multiple" : @0}];
+//}
+//
+//- (NSArray*)predictWithArguments:(NSDictionary*)arguments
+//                          byName:(BOOL)byName {
+//    
+//    return [self predictWithArguments:arguments
+//                               options:@{ @"byName" : @NO,
+//                                          @"strategy" : @(MissingStrategyLastPrediction) }];
+//}
+//
+//- (NSArray*)predictWithArguments:(NSDictionary*)arguments {
+//    
+//    return [self predictWithArguments:arguments
+//                              options:@{ @"byName" : @NO }];
+//}
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)inputData
-                           argsByName:(BOOL)byName {
+                           options:(NSDictionary*)options {
 
     if (jsonModel != nil && inputData != nil && inputData.allKeys.count > 0) {
         
         PredictiveModel* predictiveModel = [[PredictiveModel alloc] initWithJSONModel:jsonModel];
-        return [predictiveModel predictWithArguments:inputData byName:byName].firstObject;
+        return [predictiveModel predictWithArguments:inputData options:options].firstObject;
     }
     return nil;
 }
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             inputData:(NSString*)inputData
-                           argsByName:(BOOL)byName {
+                           options:(NSDictionary*)options {
     
     if(jsonModel != nil && inputData != nil) {
         
@@ -211,7 +213,7 @@
         [NSJSONSerialization JSONObjectWithData:[inputData dataUsingEncoding:NSUTF8StringEncoding]
                                         options:NSJSONReadingMutableContainers error:&error];
         
-        return [self predictWithJSONModel:jsonModel arguments:arguments argsByName:byName];
+        return [self predictWithJSONModel:jsonModel arguments:arguments options:options];
     }
     return nil;
 }

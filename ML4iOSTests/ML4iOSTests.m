@@ -62,7 +62,7 @@
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
         NSDictionary* prediction = [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
                                                                                   arguments:inputData
-                                                                                 argsByName:byName];
+                                                                                 options:@{ @"byName" : @(byName) }];
         
         XCTAssertNotNil([prediction objectForKey:@"prediction"], @"Local Prediction value can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
@@ -98,7 +98,7 @@
         NSDictionary* irisModel = [apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
         NSDictionary* prediction = [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
                                                                                        arguments:inputData
-                                                                                      argsByName:byName];
+                                                                                      options:@{ @"byName" : @(byName) }];
         
         XCTAssertNotNil([prediction objectForKey:@"centroidId"], @"Local Prediction centroidId can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"centroidName"], @"Local Prediction centroidName can't be nil");

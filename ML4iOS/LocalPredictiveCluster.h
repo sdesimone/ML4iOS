@@ -42,6 +42,6 @@
 
 + (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
                               arguments:(NSDictionary*)args
-                             argsByName:(BOOL)byName;
+                                options:(NSDictionary*)options;
 
 @end

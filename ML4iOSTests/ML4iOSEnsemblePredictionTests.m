@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "ML4iOSLocalPredictions.h"
 #import "ML4iOSTester.h"
-
+#import "ML4iOSEnums.h"
 
 @interface ML4iOSEnsemblePredictionTests : XCTestCase
 
@@ -44,8 +44,8 @@
                                             @"sepal width": @(3.15),
                                             @"petal width": @(1.51),
                                             @"petal length": @(4.07)}
-                                argsByName:YES
-                                method:ML4iOSPredictionMethodConfidence
+                                options:@{ @"byName" : @NO,
+                                           @"method" : @(ML4iOSPredictionMethodConfidence) }
                                 ml4ios:[ML4iOSTester new]];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");

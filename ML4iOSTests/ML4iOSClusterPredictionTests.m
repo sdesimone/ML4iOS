@@ -38,7 +38,7 @@
     
     NSDictionary* prediction = [LocalPredictiveCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"Message":@"Hello, how are you doing?"}
-                                                                   argsByName:NO];
+                                                                      options:@{ @"byName" : @NO }];
     NSLog(@"TEXT PREDICTION for 'Hello, how are you doing': %@", prediction);
     XCTAssert(prediction, @"Pass");
 }
@@ -56,7 +56,7 @@
     
     NSDictionary* prediction = [LocalPredictiveCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"Message":@"Hello, how are you doing?"}
-                                                                   argsByName:NO];
+                                                                   options:@{ @"byName" : @NO }];
     NSLog(@"CAT PREDICTIONfor 'Hello, how are you doing': %@", prediction);
     XCTAssert(prediction, @"Pass");
 }

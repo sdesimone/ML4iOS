@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ML4iOSLocalPredictions.h"
+#import "ML4iOSEnums.h"
 
 @interface MultiVote : NSObject
 

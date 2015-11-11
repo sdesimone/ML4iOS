@@ -16,15 +16,14 @@
 
 + (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
                                         arguments:(NSDictionary*)args
-                                       argsByName:(BOOL)byName {
+                                          options:(NSDictionary*)options {
     
-    return [PredictiveModel predictWithJSONModel:jsonModel arguments:args argsByName:byName];
+    return [PredictiveModel predictWithJSONModel:jsonModel arguments:args options:options];
 }
 
 + (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
                                            arguments:(NSDictionary*)args
-                                          argsByName:(BOOL)byName
-                                              method:(ML4iOSPredictionMethod)method
+                                             options:(NSDictionary*)options
                                               ml4ios:(ML4iOS*)ml4ios {
     
     NSMutableArray* models = [NSMutableArray new];
@@ -37,19 +36,20 @@
     }
     return [LocalPredictiveEnsemble predictWithJSONModels:models
                                                      args:args
-                                                   byName:byName
-                                                   method:method
-                                                maxModels:0
-                                               confidence:YES];
+                                                  options:options];
+    //                                                   byName:byName
+    //                                                   method:method
+    //                                                maxModels:0
+    //                                               confidence:YES];
 }
 
 + (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
                                          arguments:(NSDictionary*)args
-                                        argsByName:(BOOL)byName {
+                                           options:(NSDictionary*)options {
     
     return [LocalPredictiveCluster predictWithJSONCluster:jsonCluster
                                                 arguments:args
-                                               argsByName:byName];
+                                                  options:options];
 }
 
 @end

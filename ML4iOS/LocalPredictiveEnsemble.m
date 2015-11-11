@@ -9,6 +9,7 @@
 #import "LocalPredictiveEnsemble.h"
 #import "MultiModel.h"
 #import "MultiVote.h"
+#import "ML4iOSEnums.h"
 
 #define NOTHRESHOLD -1
 
@@ -85,19 +86,21 @@
 //}
 
 - (NSDictionary*)predictWithJSONDictionary:(NSDictionary*)inputData
-                                    byName:(BOOL)byName
-                                    method:(ML4iOSPredictionMethod)method
-                                confidence:(BOOL)confidence
-                           missingStrategy:(NSInteger)missingStrategy
-                             addConfidence:(BOOL)addConfidence
-                           addDistribution:(BOOL)addDistribution
-                                  addCount:(BOOL)addCount
-                                 addMedian:(BOOL)addMedian
-                                    addMin:(BOOL)addMin
-                                    addMax:(BOOL)addMax
                                    options:(NSDictionary*)options {
     
-    NSAssert(_isReadyToPredict, @"You should wait for .isReadyToPredict to be YES before calling this method");
+    NSAssert(_isReadyToPredict,
+             @"You should wait for .isReadyToPredict to be YES before calling this method");
+
+    ML4iOSPredictionMethod method = [options[@"method"] ?: @(ML4iOSPredictionMethodThreshold) intValue];
+    MissingStrategy missingStrategy = [options[@"strategy"] ?: @(MissingStrategyLastPrediction) intValue];
+    BOOL byName = [options[@"byName"] ?: @(NO) boolValue];
+    BOOL confidence = [options[@"confidence"] ?: @(YES) boolValue];
+    BOOL addConfidence = [options[@"addConfidence"] ?: @(NO) boolValue];
+    BOOL addDistribution = [options[@"addDistribution"] ?: @(NO) boolValue];
+    BOOL addCount = [options[@"addCount"] ?: @(NO) boolValue];
+    BOOL addMedian = [options[@"addMedian"] ?: @(NO) boolValue];
+    BOOL addMin = [options[@"addMin"] ?: @(NO) boolValue];
+    BOOL addMax = [options[@"addMax"] ?: @(NO) boolValue];
     
     MultiVote* votes = [MultiVote new];
     for (MultiModel* multiModel in _multiModels) {
@@ -124,24 +127,13 @@
 
 + (NSDictionary*)predictWithJSONModels:(NSArray*)models
                                     args:(NSDictionary*)inputData
-                                  byName:(BOOL)byName
-                                  method:(ML4iOSPredictionMethod)method
-                                maxModels:(NSUInteger)maxModels
-                              confidence:(BOOL)confidence {
+                               options:(NSDictionary*)options {
+
+    NSUInteger maxModels = [options[@"maxModels"] ?: @(0) intValue];
 
     return [[[self alloc] initWithModels:models maxModels:maxModels]
             predictWithJSONDictionary:inputData
-            byName:byName
-            method:method
-            confidence:confidence
-            missingStrategy:0
-            addConfidence:NO
-            addDistribution:NO
-            addCount:NO
-            addMedian:NO
-            addMin:NO
-            addMax:NO
-            options:nil];
+            options:options];
 }
 
 - (NSArray*)multiModelsFromModels:(NSArray*)models maxModels:(NSUInteger)maxModels {

@@ -83,6 +83,7 @@
 		494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSUtils.m; sourceTree = "<group>"; };
 		494CAEE61BF0CDE20028D95B /* FieldResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FieldResource.h; sourceTree = "<group>"; };
 		494CAEE71BF0CDE20028D95B /* FieldResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FieldResource.m; sourceTree = "<group>"; };
+		494CAEEA1BF3C2D30028D95B /* ML4iOSEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ML4iOSEnums.h; path = ../ML4iOSEnums.h; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 			children = (
 				DC3AE9741570D293008D2F79 /* ML4iOS.h */,
 				DC3AE9751570D293008D2F79 /* ML4iOSDelegate.h */,
+				494CAEEA1BF3C2D30028D95B /* ML4iOSEnums.h */,
 				49559422192A6693006F4D9E /* Constants.h */,
 			);
 			path = include;

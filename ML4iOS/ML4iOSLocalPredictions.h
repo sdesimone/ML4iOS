@@ -10,50 +10,40 @@
 
 @class ML4iOS;
 
-typedef enum ML4iOSPredictionMethod {
-    
-    ML4iOSPredictionMethodPlurality,
-    ML4iOSPredictionMethodConfidence,
-    ML4iOSPredictionMethodThreshold,
-    ML4iOSPredictionMethodProbability
-    
-} ML4iOSPredictionMethod;
-
 @interface ML4iOSLocalPredictions : NSObject
 
 /**
- * Creates a local prediction using the model and args passed as parameters
+ * Creates a local prediction based on the given model.
  * @param jsonModel The model to use to create the prediction
  * @param args The arguments to create the prediction
- * @param byName The arguments passed in args parameter are passed by name
+ * @param options Options that will affect how the prediction is calculated
  * @return The result of the prediction
  */
 + (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
                                         arguments:(NSDictionary*)args
-                                       argsByName:(BOOL)byName;
+                                          options:(NSDictionary*)options;
 
 /**
- * Creates local prediction using the ensemble and args passed as parameters
+ * Creates local prediction based on the given ensemble.
  * @param jsonEnsemble The ensemble to use to create the prediction
  * @param args The arguments to create the prediction
- * @param byName The arguments passed in args parameter are passed by name
+ * @param options Options that will affect how the prediction is calculated
  * @return The result of the prediction
  */
 + (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
                                            arguments:(NSDictionary*)args
-                                          argsByName:(BOOL)byName
-                                              method:(ML4iOSPredictionMethod)method
+                                             options:(NSDictionary*)options
                                               ml4ios:(ML4iOS*)ml4ios;
 
 /**
  * Creates local centroids using the cluster and args passed as parameters
  * @param jsonCluster The cluster to use to create the prediction
  * @param args The arguments to create the prediction
- * @param byName The arguments passed in args parameter are passed by name
+ * @param options Options that will affect how the prediction is calculated
  * @return The result of the prediction
  */
 + (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
                                          arguments:(NSDictionary*)args
-                                        argsByName:(BOOL)byName;
+                                           options:(NSDictionary*)options;
 
 @end

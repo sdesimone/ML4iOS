@@ -76,9 +76,7 @@
  * This method will return an NSArray of TreePrediction objects.
  */
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
-                          byName:(BOOL)byName
-                        strategy:(MissingStrategy)strategy
-                        multiple:(NSUInteger)multiple;
+                         options:(NSDictionary*)options;
 
 /**
  * Creates a local prediction using the model and args passed as parameters
@@ -89,7 +87,7 @@
  */
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             inputData:(NSString*)args
-                           argsByName:(BOOL)byName;
+                              options:(NSDictionary*)options;
 
 /**
  * Creates a local prediction using the model and args passed as parameters
@@ -101,6 +99,6 @@
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)args
-                           argsByName:(BOOL)byName;
+                              options:(NSDictionary*)options;
 
 @end
