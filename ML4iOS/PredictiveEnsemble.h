@@ -15,7 +15,7 @@
 #import <Foundation/Foundation.h>
 #import "ML4iOSLocalPredictions.h"
 
-@interface LocalPredictiveEnsemble : NSObject
+@interface PredictiveEnsemble : NSObject
 
 @property (nonatomic) BOOL isReadyToPredict;
 

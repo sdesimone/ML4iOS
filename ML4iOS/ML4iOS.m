@@ -23,7 +23,7 @@
 #import "HTTPCommsManager.h"
 #import "Constants.h"
 #import "PredictiveModel.h"
-#import "LocalPredictiveCluster.h"
+#import "PredictiveCluster.h"
 
 /**
  * Interface that contains private methods

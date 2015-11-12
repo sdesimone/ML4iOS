@@ -14,8 +14,8 @@
 
 #import "ML4iOSLocalPredictions.h"
 #import "PredictiveModel.h"
-#import "LocalPredictiveCluster.h"
-#import "LocalPredictiveEnsemble.h"
+#import "PredictiveCluster.h"
+#import "PredictiveEnsemble.h"
 #import "ML4iOS.h"
 
 @implementation ML4iOSLocalPredictions
@@ -40,7 +40,7 @@
         if (code != 200)
             return nil;
     }
-    return [LocalPredictiveEnsemble predictWithJSONModels:models
+    return [PredictiveEnsemble predictWithJSONModels:models
                                                      args:args
                                                   options:options];
     //                                                   byName:byName
@@ -53,7 +53,7 @@
                                          arguments:(NSDictionary*)args
                                            options:(NSDictionary*)options {
     
-    return [LocalPredictiveCluster predictWithJSONCluster:jsonCluster
+    return [PredictiveCluster predictWithJSONCluster:jsonCluster
                                                 arguments:args
                                                   options:options];
 }

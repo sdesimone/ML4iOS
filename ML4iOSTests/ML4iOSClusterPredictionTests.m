@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "LocalPredictiveCluster.h"
+#import "PredictiveCluster.h"
 
 @interface ML4iOSClusterPredictionTests : XCTestCase
 
@@ -36,7 +36,7 @@
                                                             options:0
                                                               error:&error];
     
-    NSDictionary* prediction = [LocalPredictiveCluster predictWithJSONCluster:cluster
+    NSDictionary* prediction = [PredictiveCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"Message":@"Hello, how are you doing?"}
                                                                       options:@{ @"byName" : @NO }];
     NSLog(@"TEXT PREDICTION for 'Hello, how are you doing': %@", prediction);
@@ -54,7 +54,7 @@
                                                             options:0
                                                               error:&error];
     
-    NSDictionary* prediction = [LocalPredictiveCluster predictWithJSONCluster:cluster
+    NSDictionary* prediction = [PredictiveCluster predictWithJSONCluster:cluster
                                                                     arguments:@{@"Message":@"Hello, how are you doing?"}
                                                                    options:@{ @"byName" : @NO }];
     NSLog(@"CAT PREDICTIONfor 'Hello, how are you doing': %@", prediction);

@@ -12,13 +12,13 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-#import "LocalPredictiveCluster.h"
-#import "LocalPredictionCentroid.h"
+#import "PredictiveCluster.h"
+#import "PredictionCentroid.h"
 
 #define TM_TOKENS @"tokens_only"
 #define TM_FULL_TERM @"full_terms_only"
 
-@interface LocalPredictiveCluster ()
+@interface PredictiveCluster ()
 
 @property (nonatomic, strong) NSDictionary* fields;
 @property (nonatomic, strong) NSMutableDictionary* termForms;
@@ -40,7 +40,7 @@ Uses a BigML remote cluster model to build a local version that can be used
 to generate centroid predictions locally.
 
 **/
-@implementation LocalPredictiveCluster
+@implementation PredictiveCluster
 
 + (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
                               arguments:(NSDictionary*)args
@@ -65,7 +65,7 @@ to generate centroid predictions locally.
     NSDictionary* clusters = resourceDict[@"clusters"][@"clusters"];
     self.centroids = [NSMutableArray array];
     for (NSDictionary* cluster in clusters) {
-        [_centroids addObject:[[LocalPredictionCentroid alloc] initWithCluster:cluster]];
+        [_centroids addObject:[[PredictionCentroid alloc] initWithCluster:cluster]];
     }
     self.scales = resourceDict[@"scales"];
     NSDictionary* fields = resourceDict[@"clusters"][@"fields"];
@@ -162,7 +162,7 @@ to generate centroid predictions locally.
                                @"centroidName":@"",
                                @"distance":@(INFINITY) };
     
-    for (LocalPredictionCentroid* centroid in self.centroids) {
+    for (PredictionCentroid* centroid in self.centroids) {
         
         float distance2 = [centroid distance2WithInputData:inputData
                                                uniqueTerms:uniqueTerms

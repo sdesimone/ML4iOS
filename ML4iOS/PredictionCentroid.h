@@ -14,7 +14,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LocalPredictionCentroid : NSObject
+@interface PredictionCentroid : NSObject
 
 @property (nonatomic, strong) NSDictionary* center;
 @property (nonatomic) NSUInteger count;

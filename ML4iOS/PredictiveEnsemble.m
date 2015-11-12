@@ -12,14 +12,14 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-#import "LocalPredictiveEnsemble.h"
+#import "PredictiveEnsemble.h"
 #import "MultiModel.h"
 #import "MultiVote.h"
 #import "ML4iOSEnums.h"
 
 #define NOTHRESHOLD -1
 
-@implementation LocalPredictiveEnsemble {
+@implementation PredictiveEnsemble {
     
     NSArray* _distributions;
     NSArray* _models;

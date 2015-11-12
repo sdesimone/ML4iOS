@@ -12,10 +12,10 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-#import "LocalPredictionCentroid.h"
+#import "PredictionCentroid.h"
 
 
-@implementation LocalPredictionCentroid
+@implementation PredictionCentroid
 
 - (instancetype)initWithCluster:(NSDictionary*)dict {
 
