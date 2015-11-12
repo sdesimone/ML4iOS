@@ -87,16 +87,17 @@ NSString* plural(NSString* string, int multiplicity) {
     return self;
 }
 
+/**
+ * Returns a boolean showing if a term is considered as a full_term
+ */
 - (BOOL)isFullTermWithFields:(NSDictionary*)fields {
     
-    if (fields[self.field][@"term_analysis"]) {
+    if (_term && fields[self.field][@"term_analysis"]) {
     
         NSAssert([fields[self.field] isKindOfClass:[NSDictionary class]], @"Bad fields");
         NSAssert(!fields[self.field][@"term_analysis"] ||
                  [fields[self.field][@"term_analysis"] isKindOfClass:[NSDictionary class]],
                  @"Bad term_analysis");
-        NSAssert([fields[self.field][@"term_analysis"][@"token_mode"] isKindOfClass:[NSString class]],
-                 @"Bad token_mode");
 
         if ([fields[self.field][@"term_analysis"][@"token_mode"] isEqualToString:TM_FULL_TERMS]) {
             return YES;

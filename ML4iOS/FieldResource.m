@@ -80,7 +80,8 @@
         if (value) {
             if (byName)
                 fieldId = _fieldIdByName[fieldId];
-            [filteredInputData setObject:value forKey:fieldId];
+            if (fieldId)
+                [filteredInputData setObject:value forKey:fieldId];
         }
     }
     return filteredInputData;
@@ -116,16 +117,18 @@
     }
     
     for (id fieldId in fields.allKeys) {
-        [_fieldIds addObject:fieldId];
-        NSString* name = fields[fieldId][@"name"];
-        if ([_fieldNames indexOfObject:name] != NSNotFound) {
-            name = [NSString stringWithFormat:@"%@%@", name, fields[fieldId][@"column_number"]];
+        if ([_fieldIds indexOfObject:fieldId] == NSNotFound) {
+            [_fieldIds addObject:fieldId];
+            NSString* name = fields[fieldId][@"name"];
             if ([_fieldNames indexOfObject:name] != NSNotFound) {
-                name = [NSString stringWithFormat:@"%@%@", name, fieldId];
+                name = [NSString stringWithFormat:@"%@%@", name, fields[fieldId][@"column_number"]];
+                if ([_fieldNames indexOfObject:name] != NSNotFound) {
+                    name = [NSString stringWithFormat:@"%@%@", name, fieldId];
+                }
             }
+            [self addFieldId:fieldId name:name];
+            [fields[fieldId] setObject:name forKey:@"name"];
         }
-        [self addFieldId:fieldId name:name];
-        [fields[fieldId] setObject:name forKey:@"name"];
     }
 }
 @end

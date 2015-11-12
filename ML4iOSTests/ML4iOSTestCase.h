@@ -12,13 +12,7 @@
 
 @interface ML4iOSTestCase : XCTestCase
 
-@property (nonatomic, strong) ML4iOSTester* apiLibrary;
-@property (nonatomic, strong) NSString* sourceId;
-@property (nonatomic, strong) NSString* datasetId;
-
-- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
-                                       data:(NSDictionary*)inputData
-                                     byName:(BOOL)byName;
+@property (nonatomic, readonly) ML4iOSTester* apiLibrary;
 
 @end
 

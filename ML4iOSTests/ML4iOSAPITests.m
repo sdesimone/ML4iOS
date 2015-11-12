@@ -76,11 +76,11 @@
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     XCTAssert(modelId);
     
-    NSDictionary* prediction = [self remotePredictionForModelId:modelId
-                                                           data:@{@"000001": @3.15,
-                                                                  @"000002": @4.07,
-                                                                  @"000003": @1.51}
-                                                         byName:NO];
+    NSDictionary* prediction = [self.apiLibrary remotePredictionForModelId:modelId
+                                                                      data:@{@"000001": @3.15,
+                                                                             @"000002": @4.07,
+                                                                             @"000003": @1.51}
+                                                                   options:@{ @"byName" : @(NO) }];
     XCTAssert(prediction);
     [apiLibrary deletePredictionWithIdSync:
      [prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];

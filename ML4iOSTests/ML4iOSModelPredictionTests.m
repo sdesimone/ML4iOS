@@ -32,87 +32,110 @@
     [super tearDown];
 }
 
-- (NSDictionary*)localPredictionForModelId:(NSString*)modelId
-                                      data:(NSDictionary*)inputData
-                                    byName:(BOOL)byName {
+- (NSDictionary*)localPredictionWithModelId:(NSString*)modelId
+                                  arguments:(NSDictionary*)arguments
+                                    options:(NSDictionary*)options {
     
-    NSInteger httpStatusCode = 0;
-    if ([modelId length] > 0) {
-        
-        NSDictionary* irisModel = [self.apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
-        NSDictionary* prediction = [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
-                                                                                  arguments:inputData
-                                                                                    options:@{ @"byName" : @(byName) }];
-        
-        XCTAssertNotNil([prediction objectForKey:@"prediction"], @"Local Prediction value can't be nil");
-        XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
-        
-        return prediction;
-    }
-    return nil;
+    NSDictionary* prediction1 = [self.apiLibrary localPredictionForModelId:modelId
+                                                                      data:arguments
+                                                                   options:options];
+    
+    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForModelId:modelId
+                                                                       data:arguments
+                                                                    options:options];
+    
+    XCTAssert(prediction1 && prediction2);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2],
+              @"Wrong predictions: %@ -- %@", prediction1[@"prediction"], prediction2[@"output"]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2],
+              @"Wrong confidences: %@ -- %@", prediction1[@"confidence"], prediction2[@"confidence"]);
+    
+    return prediction1;
 }
 
-- (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
-                                        data:(NSDictionary*)inputData
-                                      byName:(BOOL)byName {
+- (void)testLocalIrisPredictionAgainstRemote1 {
     
-    NSInteger httpStatusCode = 0;
-    
-    if ([clusterId length] > 0) {
-        
-        NSDictionary* irisModel = [self.apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
-        NSDictionary* prediction = [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
-                                                                                   arguments:inputData
-                                                                                     options:@{ @"byName" : @(byName) }];
-        
-        XCTAssertNotNil([prediction objectForKey:@"centroidId"], @"Local Prediction centroidId can't be nil");
-        XCTAssertNotNil([prediction objectForKey:@"centroidName"], @"Local Prediction centroidName can't be nil");
-        
-        return prediction;
-    }
-    return nil;
-}
-
-- (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2 {
-    return [prediction1[@"prediction"] isEqualToDictionary:prediction2[@"prediction"]];
-}
-
-- (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2 {
-    
-    float eps = 0.0001;
-    double confidence1 = [prediction1[@"confidence"] doubleValue];
-    double confidence2 = [prediction2[@"confidence"] doubleValue];
-    return ((confidence1 - eps) < confidence2) && ((confidence1 + eps) > confidence2);
-}
-
-- (void)testLocalPrediction {
-    
-    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.datasetId];
-    NSDictionary* prediction1 = [self localPredictionForModelId:modelId
-                                                           data:@{@"000001": @3.15,
-                                                                  @"000002": @4.07,
-                                                                  @"000003": @1.51}
-                                                         byName:NO];
-    
-    NSDictionary* prediction2 = [self remotePredictionForModelId:modelId
-                                                            data:@{@"000001": @3.15,
+    self.apiLibrary.csvFileName = @"iris.csv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{@"000001": @3.15,
                                                                    @"000002": @4.07,
                                                                    @"000003": @1.51}
-                                                          byName:NO];
+                                                         options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction3 = [self localPredictionForModelId:modelId
-                                                           data:@{@"sepal width": @3.15,
-                                                                  @"petal length": @4.07,
-                                                                  @"petal width": @1.51}
-                                                         byName:YES];
-    
-    XCTAssert([self comparePrediction:prediction1 andPrediction:prediction2] &&
-              [self compareConfidence:prediction1 andConfidence:prediction2] &&
-              [self comparePrediction:prediction1 andPrediction:prediction3] &&
-              [self compareConfidence:prediction1 andConfidence:prediction3]);
+    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{@"sepal width": @3.15,
+                                                                   @"petal length": @4.07,
+                                                                   @"petal width": @1.51}
+                                                         options:@{ @"byName" : @(YES) }];
     
     [self.apiLibrary deleteModelWithIdSync:modelId];
-    XCTAssert(prediction1 && prediction2);
+    
+    XCTAssert([prediction1[@"prediction"] isEqualToString:@"Iris-versicolor"]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+}
+
+- (void)testLocalIrisPredictionAgainstRemote2 {
+    
+    self.apiLibrary.csvFileName = @"iris.csv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{@"000001": @4.1,
+                                                                   @"000002": @0.96,
+                                                                   @"000003": @2.52}
+                                                         options:@{ @"byName" : @(NO) }];
+    
+    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{@"sepal width": @4.1,
+                                                                   @"petal length": @0.96,
+                                                                   @"petal width": @2.52}
+                                                         options:@{ @"byName" : @(YES) }];
+    
+    [self.apiLibrary deleteModelWithIdSync:modelId];
+    
+    XCTAssert([prediction1[@"prediction"] isEqualToString:@"Iris-setosa"]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+}
+
+- (void)testLocalSpamPredictionAgainstRemote1 {
+    
+    self.apiLibrary.csvFileName = @"spam.tsv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{ @"000001": @"Hey there!" }
+                                                         options:@{ @"byName" : @(NO) }];
+    
+    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{ @"Message": @"Hey there!" }
+                                                         options:@{ @"byName" : @(YES) }];
+    
+    [self.apiLibrary deleteModelWithIdSync:modelId];
+    
+    XCTAssert([prediction1[@"prediction"] isEqualToString:@"ham"]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+}
+
+- (void)testLocalSpamPredictionAgainstRemote2 {
+    
+    NSString* spam = @"Congratulations! Thanks to a good friend U have WON the £2,000 Xmas prize. 2 claim is easy, just call 08718726971 NOW! Only 10p per minute. BT-national-rate.";
+    self.apiLibrary.csvFileName = @"spam.tsv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{ @"000001": spam }
+                                                         options:@{ @"byName" : @(NO) }];
+    
+    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+                                                       arguments:@{ @"Message": spam }
+                                                         options:@{ @"byName" : @(YES) }];
+    
+    [self.apiLibrary deleteModelWithIdSync:modelId];
+
+    XCTAssert([prediction1[@"prediction"] isEqualToString:@"spam"]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
 }
 
 @end

@@ -26,6 +26,9 @@
 		494CAEEC1BF499990028D95B /* ML4iOSModelPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEEB1BF499990028D95B /* ML4iOSModelPredictionTests.m */; settings = {ASSET_TAGS = (); }; };
 		494CAEEE1BF4A1D40028D95B /* ML4iOSAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEED1BF4A1D40028D95B /* ML4iOSAPITests.m */; settings = {ASSET_TAGS = (); }; };
 		494CAEF01BF4A3FC0028D95B /* ML4iOSTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEEF1BF4A3FC0028D95B /* ML4iOSTestCase.m */; settings = {ASSET_TAGS = (); }; };
+		494CAEF51BF4C40A0028D95B /* spam.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 494CAEF21BF4C40A0028D95B /* spam.tsv */; settings = {ASSET_TAGS = (); }; };
+		494CAEF61BF4C40A0028D95B /* diab.csv in Resources */ = {isa = PBXBuildFile; fileRef = 494CAEF31BF4C40A0028D95B /* diab.csv */; settings = {ASSET_TAGS = (); }; };
+		494CAEF71BF4C40A0028D95B /* wines.csv in Resources */ = {isa = PBXBuildFile; fileRef = 494CAEF41BF4C40A0028D95B /* wines.csv */; settings = {ASSET_TAGS = (); }; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
@@ -90,6 +93,9 @@
 		494CAEED1BF4A1D40028D95B /* ML4iOSAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSAPITests.m; sourceTree = "<group>"; };
 		494CAEEF1BF4A3FC0028D95B /* ML4iOSTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSTestCase.m; sourceTree = "<group>"; };
 		494CAEF11BF4A4330028D95B /* ML4iOSTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ML4iOSTestCase.h; sourceTree = "<group>"; };
+		494CAEF21BF4C40A0028D95B /* spam.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.tsv; sourceTree = "<group>"; };
+		494CAEF31BF4C40A0028D95B /* diab.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diab.csv; sourceTree = "<group>"; };
+		494CAEF41BF4C40A0028D95B /* wines.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wines.csv; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
@@ -238,6 +244,9 @@
 			children = (
 				492CC72319D2B240001829F5 /* testCluster.json */,
 				DCD306BC1723602400CC9364 /* iris.csv */,
+				494CAEF21BF4C40A0028D95B /* spam.tsv */,
+				494CAEF31BF4C40A0028D95B /* diab.csv */,
+				494CAEF41BF4C40A0028D95B /* wines.csv */,
 				4962DC6B19DDA5DE00058FF6 /* spam.model */,
 				4962DC6D19DDA73B00058FF6 /* iris.model */,
 				49C6CD7C19E6E6B200891301 /* spam.cluster */,
@@ -376,10 +385,13 @@
 				492CC72419D2B240001829F5 /* testCluster.json in Resources */,
 				DCD306BD1723602400CC9364 /* iris.csv in Resources */,
 				494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */,
+				494CAEF51BF4C40A0028D95B /* spam.tsv in Resources */,
 				49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */,
+				494CAEF71BF4C40A0028D95B /* wines.csv in Resources */,
 				49C6CD8519E7F07100891301 /* spam-text.cluster in Resources */,
 				4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */,
 				4962DC6E19DDA73B00058FF6 /* iris.model in Resources */,
+				494CAEF61BF4C40A0028D95B /* diab.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

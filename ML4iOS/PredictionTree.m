@@ -452,8 +452,7 @@ typedef PredictionTree TreeHolder;
                     treePrediction:@(mean)
                     confidence:confidence
                     count:totalInstances
-                    median:[ML4iOSUtils medianOfDistribution:distribution
-                                                   instances:totalInstances]
+                    median:[ML4iOSUtils medianOfDistribution:distribution instances:totalInstances]
                     path:path
                     distribution:distribution
                     distributionUnit:distributionUnit

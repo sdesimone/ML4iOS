@@ -20,7 +20,7 @@
 #define ML4iOS_DEFAULT_LOCALE @"en.US"
 
 @implementation PredictiveModel {
-
+    
     NSString* _description;
     NSMutableArray* _fieldImportance;
     NSString* _resourceId;
@@ -40,7 +40,7 @@
     NSString* locale;
     NSString* objectiveField;
     NSDictionary* model = jsonModel[@"object"] ?: jsonModel;
-
+    
     //-- base model
     NSDictionary* status = model[@"status"];
     NSAssert([status[@"code"] intValue] == 5, @"The model is not ready");
@@ -63,9 +63,9 @@
         objectiveField = [objectiveFields firstObject];
     else
         objectiveField = objectiveFields;
-
+    
     locale = jsonModel[@"locale"] ?: ML4iOS_DEFAULT_LOCALE;
-
+    
     if (self = [super initWithFields:fields
                     objectiveFieldId:objectiveField
                               locale:locale
@@ -74,7 +74,7 @@
         _maxBins = 0;
         _model = model;
         _root = _model[@"model"][@"root"];
-
+        
         _description = jsonModel[@"description"] ?: @"";
         NSArray* modelFieldImportance = _model[@"model"][@"importance"];
         
@@ -109,7 +109,7 @@
 }
 
 - (NSArray*)predictWithArguments:(NSDictionary*)arguments
-                          options:(NSDictionary*)options {
+                         options:(NSDictionary*)options {
     
     BOOL byName = [options[@"byName"]?:@NO boolValue];
     MissingStrategy strategy = [options[@"strategy"]?:@(MissingStrategyLastPrediction) intValue];
@@ -117,7 +117,7 @@
     
     NSAssert(arguments, @"Prediction arguments missing.");
     NSMutableArray* output = [NSMutableArray new];
-
+    
     arguments = [ML4iOSUtils cast:[self filteredInputData:arguments byName:byName]
                            fields:self.fields];
     
@@ -131,12 +131,13 @@
         for (NSInteger i = 0; i < distribution.count; ++i) {
             NSArray* distributionElement = distribution[i];
             if (i < multiple) {
-
+                
                 id category = distributionElement.firstObject;
                 double confidence =
                 [ML4iOSUtils wsConfidence:category
                              distribution:distributionDictionary];
-                [output addObject:@{ @"prediction" : @{ _tree.objectiveFields.firstObject : category },
+                [output addObject:@{ //@"prediction" : @{ _tree.objectiveFields.firstObject : category },
+                                     @"prediction" : category,
                                      @"confidence" : @([self roundedConfidence:confidence]),
                                      @"probability" : @([distributionElement.lastObject doubleValue] / instances),
                                      @"count" : @([distributionElement.lastObject longValue])
@@ -151,7 +152,8 @@
             field = self.fieldNameById[field];
         }
         prediction.next = field;
-        [output addObject:@{ @"prediction" : @{ _tree.objectiveFields.firstObject : prediction.prediction },
+        [output addObject:@{ //@"prediction" : @{ _tree.objectiveFields.firstObject : prediction.prediction },
+                             @"prediction" : prediction.prediction,
                              @"confidence" : @([self roundedConfidence:prediction.confidence]),
                              @"count" : @(prediction.count)
                              }];
@@ -159,34 +161,10 @@
     return output;
 }
 
-//- (NSArray*)predictWithArguments:(NSDictionary*)arguments
-//                          byName:(BOOL)byName
-//                        strategy:(MissingStrategy)strategy {
-//    
-//    return [self predictWithArguments:arguments
-//                              options:@{ @"byName" : @NO,
-//                                         @"strategy" : @(strategy),
-//                                         @"multiple" : @0}];
-//}
-//
-//- (NSArray*)predictWithArguments:(NSDictionary*)arguments
-//                          byName:(BOOL)byName {
-//    
-//    return [self predictWithArguments:arguments
-//                               options:@{ @"byName" : @NO,
-//                                          @"strategy" : @(MissingStrategyLastPrediction) }];
-//}
-//
-//- (NSArray*)predictWithArguments:(NSDictionary*)arguments {
-//    
-//    return [self predictWithArguments:arguments
-//                              options:@{ @"byName" : @NO }];
-//}
-
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)inputData
-                           options:(NSDictionary*)options {
-
+                              options:(NSDictionary*)options {
+    
     if (jsonModel != nil && inputData != nil && inputData.allKeys.count > 0) {
         
         PredictiveModel* predictiveModel = [[PredictiveModel alloc] initWithJSONModel:jsonModel];
@@ -197,7 +175,7 @@
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             inputData:(NSString*)inputData
-                           options:(NSDictionary*)options {
+                              options:(NSDictionary*)options {
     
     if(jsonModel != nil && inputData != nil) {
         

@@ -18,6 +18,9 @@
 
 @interface ML4iOSTester : ML4iOS <ML4iOSDelegate>
 
+@property (nonatomic, strong) NSString* datasetId;
+@property (nonatomic, strong) NSString* csvFileName;
+
 - (NSString*)createAndWaitSourceFromCSV:(NSString*)path;
 - (NSString*)createAndWaitDatasetFromSourceId:(NSString*)srcId;
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId;
@@ -25,5 +28,20 @@
 - (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId
                                       inputData:(NSDictionary*)inputData;
+
+- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
+                                       data:(NSDictionary*)inputData
+                                    options:(NSDictionary*)options;
+
+- (NSDictionary*)localPredictionForModelId:(NSString*)modelId
+                                      data:(NSDictionary*)inputData
+                                   options:(NSDictionary*)options;
+
+- (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
+                                        data:(NSDictionary*)inputData
+                                     options:(NSDictionary*)options;
+
+- (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2;
+- (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2;
 
 @end

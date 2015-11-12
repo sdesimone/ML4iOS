@@ -15,43 +15,19 @@
 #import "ML4iOSTestCase.h"
 #import "ML4iOSTester.h"
 
+@interface ML4iOSTestCase ()
+
+@property (nonatomic, strong) ML4iOSTester* apiLibrary;
+
+@end
+
 @implementation ML4iOSTestCase
 
 - (void)setUp {
     [super setUp];
-
+    
     self.apiLibrary = [ML4iOSTester new];
-    
-    self.sourceId = [self.apiLibrary createAndWaitSourceFromCSV:[[NSBundle bundleForClass:[self class]]
-                                                                 pathForResource:@"iris" ofType:@"csv"]];
-    XCTAssert(self.sourceId, @"Could not create source");
-    
-    self.datasetId = [self.apiLibrary createAndWaitDatasetFromSourceId:self.sourceId];
-    XCTAssert(self.datasetId, @"Could not create dataset");
-}
-
-- (void)tearDown {
-
-    [self.apiLibrary cancelAllAsynchronousOperations];
-    [self.apiLibrary deleteSourceWithIdSync:self.sourceId];
-    [self.apiLibrary deleteDatasetWithIdSync:self.datasetId];
-
-    [super tearDown];
-}
-
-- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
-                                       data:(NSDictionary*)inputData
-                                     byName:(BOOL)byName {
-    
-    NSString* predictionId = [self.apiLibrary createAndWaitPredictionFromModelId:modelId
-                                                                  inputData:@{@"000001": @3.15,
-                                                                              @"000002": @4.07,
-                                                                              @"000003": @1.51}];
-    NSInteger code = 0;
-    NSDictionary* prediction = [self.apiLibrary getPredictionWithIdSync:predictionId statusCode:&code];
-    XCTAssert(code == 200, @"Could not create prediction %@", predictionId);
-    
-    return prediction;
+    self.apiLibrary.csvFileName = @"iris.csv";
 }
 
 @end

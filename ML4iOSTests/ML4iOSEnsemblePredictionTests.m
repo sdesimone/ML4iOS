@@ -50,7 +50,7 @@
                                             @"sepal width": @(3.15),
                                             @"petal width": @(1.51),
                                             @"petal length": @(4.07)}
-                                options:@{ @"byName" : @NO,
+                                options:@{ @"byName" : @YES,
                                            @"method" : @(ML4iOSPredictionMethodConfidence) }
                                 ml4ios:[ML4iOSTester new]];
     

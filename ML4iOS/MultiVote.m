@@ -432,7 +432,8 @@ static NSString* const kNullCategory = @"kNullCategory";
     if (weightLabel) {
         for (NSDictionary* prediction in _predictions) {
             NSAssert(prediction[@"confidence"] && prediction[weightLabel],
-                     @"MultiVote weightedConfidence: not enough data to use selected method (missing %@)", weightLabel);
+                     @"MultiVote weightedConfidence: not enough data to use selected method (missing %@)",
+                     weightLabel);
         }
     }
     
@@ -520,11 +521,16 @@ static NSString* const kNullCategory = @"kNullCategory";
             [tuples addObject:tuple];
         }
     }
-    NSArray* tuple = [tuples sortedArrayUsingComparator:^NSComparisonResult(NSDictionary*  _Nonnull obj1, NSDictionary*  _Nonnull obj2) {
-        double w1 = [obj1[@"count"] doubleValue];
-        double w2 = [obj2[@"count"] doubleValue];
-        int order1 = [obj1[@"order"] intValue];
-        int order2 = [obj2[@"order"] intValue];
+    NSArray* tuple =
+    [tuples sortedArrayUsingComparator:^NSComparisonResult(NSArray*  _Nonnull obj1,
+                                                           NSArray*  _Nonnull obj2) {
+        
+        NSDictionary* d1 = obj1[1];
+        NSDictionary* d2 = obj2[1];
+        double w1 = [d1[@"count"] doubleValue];
+        double w2 = [d2[@"count"] doubleValue];
+        int order1 = [d1[@"order"] intValue];
+        int order2 = [d2[@"order"] intValue];
         return w1 > w2 ? -1 : (w1 < w2 ? 1 : order1 < order2 ? -1 : 1);
     }].firstObject;
     id predictionName = tuple.firstObject;
@@ -631,14 +637,16 @@ static NSString* const kNullCategory = @"kNullCategory";
  * @param predictionInfo the prediction to be appended
  * @return the this instance
  */
-- (void)append:(NSMutableDictionary*)predictionInfo {
+- (void)append:(NSDictionary*)predictionInfo {
     
     NSAssert(predictionInfo.allKeys.count > 0 && predictionInfo[@"prediction"],
              @"Failed to append prediction");
+
+    NSMutableDictionary* dict = [predictionInfo mutableCopy];
  
     NSInteger order = [self nextOrder];
-    [predictionInfo setObject:@(order) forKey:@"order"];
-    [_predictions addObject:predictionInfo];
+    [dict setObject:@(order) forKey:@"order"];
+    [_predictions addObject:dict];
 }
 
 - (void)addMedian {

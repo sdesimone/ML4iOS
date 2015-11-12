@@ -16,6 +16,7 @@
 
 #import "ML4iOSTester.h"
 #import "Constants.h"
+#import "ML4iOSLocalPredictions.h"
 #import "objc/message.h"
 
 @implementation ML4iOSTester
@@ -23,12 +24,41 @@
 - (instancetype)init {
     
     if (self = [super initWithUsername:@"sdesimone"
-                               key:@"4ce2604fb1920124a697cbd5c5d63c5d754a746d"
+                                   key:@"4ce2604fb1920124a697cbd5c5d63c5d754a746d"
                        developmentMode:YES]) {
         
         [self setDelegate:self];
     }
     return self;
+}
+
+- (void)dealloc {
+    
+    [self cancelAllAsynchronousOperations];
+    [self deleteDatasetWithIdSync:_datasetId];
+}
+
+- (NSString*)datasetId {
+    
+    NSAssert(_datasetId || _csvFileName, @"Neither dataset id not csv file specified");
+    if (!_datasetId) {
+        if (_csvFileName) {
+            NSString* sourceId = [self createAndWaitSourceFromCSV:
+                                  [[NSBundle bundleForClass:[self class]]
+                                   pathForResource:_csvFileName ofType:nil]];
+            if (sourceId) {
+                _datasetId = [self createAndWaitDatasetFromSourceId:sourceId];
+                [self deleteSourceWithIdSync:sourceId];
+            }
+        }
+    }
+    return _datasetId;
+}
+
+- (void)setCsvFileName:(NSString*)csvFileName {
+    
+    _csvFileName = csvFileName;
+    _datasetId = nil;
 }
 
 - (NSString*)typeFromFullUuid:(NSString*)fullUuid {
@@ -38,19 +68,21 @@
 
 - (NSInteger)resourceStatus:(NSDictionary*)resource {
     
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"get%@WithIdSync:statusCode:",
-                                         [[self typeFromFullUuid:resource[@"resource"]] capitalizedString]]);
+    SEL selector =
+    NSSelectorFromString([NSString stringWithFormat:@"get%@WithIdSync:statusCode:",
+                          [[self typeFromFullUuid:resource[@"resource"]] capitalizedString]]);
     NSInteger statusCode = 0;
     NSString* identifier = [ML4iOS getResourceIdentifierFromJSONObject:resource];
     NSDictionary* dataSource = objc_msgSend(self, selector, identifier, &statusCode);
     return [dataSource[@"status"][@"code"] intValue];
 }
 
-- (NSString*)waitResource:(NSDictionary*)resource finalExpectedStatus:(NSInteger)expectedStatus sleep:(float)duration {
+- (NSString*)waitResource:(NSDictionary*)resource
+      finalExpectedStatus:(NSInteger)expectedStatus
+                    sleep:(float)duration {
     
     NSInteger status = 0;
     while ((status = [self resourceStatus:resource]) != expectedStatus) {
-//        XCTAssert(status > 0, @"Failed creating resource!");
         sleep(duration);
     }
     return [ML4iOS getResourceIdentifierFromJSONObject:resource];
@@ -59,9 +91,11 @@
 - (NSString*)createAndWaitSourceFromCSV:(NSString*)path {
     
     NSInteger httpStatusCode = 0;
-    NSDictionary* dataSource = [self createSourceWithNameSync:path project:nil filePath:path statusCode:&httpStatusCode];
+    NSDictionary* dataSource = [self createSourceWithNameSync:path
+                                                      project:nil
+                                                     filePath:path
+                                                   statusCode:&httpStatusCode];
     
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating data source from iris.csv");
     if (dataSource != nil && httpStatusCode == HTTP_CREATED) {
         
         return [self waitResource:dataSource finalExpectedStatus:5 sleep:1];
@@ -73,11 +107,10 @@
     
     NSInteger httpStatusCode = 0;
     NSDictionary* dataSet = [self createDatasetWithDataSourceIdSync:srcId
-                                                                     name:@"iris_dataset"
-                                                               statusCode:&httpStatusCode];
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating dataset from iris_source");
+                                                               name:@"iris_dataset"
+                                                         statusCode:&httpStatusCode];
     
-    if(dataSet != nil && httpStatusCode == HTTP_CREATED) {
+    if (dataSet != nil && httpStatusCode == HTTP_CREATED) {
         
         return [self waitResource:dataSet finalExpectedStatus:5 sleep:1];
     }
@@ -88,11 +121,10 @@
     
     NSInteger httpStatusCode = 0;
     NSDictionary* model = [self createModelWithDataSetIdSync:dataSetId
-                                                              name:@"iris_model"
-                                                        statusCode:&httpStatusCode];
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating model from iris_dataset");
+                                                        name:@"iris_model"
+                                                  statusCode:&httpStatusCode];
     
-    if(model != nil && httpStatusCode == HTTP_CREATED) {
+    if (model != nil && httpStatusCode == HTTP_CREATED) {
         
         return [self waitResource:model finalExpectedStatus:5 sleep:3];
     }
@@ -103,11 +135,10 @@
     
     NSInteger httpStatusCode = 0;
     NSDictionary* cluster = [self createClusterWithDataSetIdSync:dataSetId
-                                                                  name:@"iris_model"
-                                                            statusCode:&httpStatusCode];
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating cluster from iris_dataset");
+                                                            name:@"iris_model"
+                                                      statusCode:&httpStatusCode];
     
-    if(cluster != nil && httpStatusCode == HTTP_CREATED) {
+    if (cluster != nil && httpStatusCode == HTTP_CREATED) {
         
         return [self waitResource:cluster finalExpectedStatus:5 sleep:3];
     }
@@ -120,8 +151,6 @@
     NSDictionary* ensemble = [self createEnsembleWithDataSetIdSync:dataSetId
                                                               name:@"iris_model"
                                                         statusCode:&httpStatusCode];
-    
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating model from iris_dataset");
     
     if (ensemble != nil && httpStatusCode == HTTP_CREATED) {
         
@@ -139,13 +168,71 @@
                                                            arguments:inputData
                                                           statusCode:&httpStatusCode];
     
-//    XCTAssertEqual(httpStatusCode, HTTP_CREATED, @"Error creating prediction from iris_model");
     NSString* predictionId = nil;
     if (prediction != nil) {
         
         return [self waitResource:prediction finalExpectedStatus:5 sleep:1];
     }
     return predictionId;
+}
+
+- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
+                                       data:(NSDictionary*)inputData
+                                    options:(NSDictionary*)options {
+    
+    NSString* predictionId = [self createAndWaitPredictionFromModelId:modelId
+                                                            inputData:inputData];
+    NSInteger code = 0;
+    NSDictionary* prediction = [self getPredictionWithIdSync:predictionId statusCode:&code];
+    return prediction;
+}
+
+- (NSDictionary*)localPredictionForModelId:(NSString*)modelId
+                                      data:(NSDictionary*)inputData
+                                    options:(NSDictionary*)options {
+    
+    NSInteger httpStatusCode = 0;
+    if ([modelId length] > 0) {
+        
+        NSDictionary* irisModel = [self getModelWithIdSync:modelId statusCode:&httpStatusCode];
+        NSDictionary* prediction =
+        [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
+                                                       arguments:inputData
+                                                         options:options];
+        return prediction;
+    }
+    return nil;
+}
+
+- (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
+                                        data:(NSDictionary*)inputData
+                                      options:(NSDictionary*)options {
+    
+    NSInteger httpStatusCode = 0;
+    
+    if ([clusterId length] > 0) {
+        
+        NSDictionary* irisModel = [self getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
+        NSDictionary* prediction =
+        [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
+                                                        arguments:inputData
+                                                          options:options];
+        return prediction;
+    }
+    return nil;
+}
+
+- (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2 {
+    return [prediction1[@"output"]?:prediction1[@"prediction"]
+            isEqual:prediction2[@"output"]?:prediction2[@"prediction"]];
+}
+
+- (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2 {
+    
+    float eps = 0.0001;
+    double confidence1 = [prediction1[@"confidence"] doubleValue];
+    double confidence2 = [prediction2[@"confidence"] doubleValue];
+    return ((confidence1 - eps) < confidence2) && ((confidence1 + eps) > confidence2);
 }
 
 #pragma mark -
