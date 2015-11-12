@@ -24,6 +24,8 @@
 		494CAEE81BF0CDE20028D95B /* FieldResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 494CAEE61BF0CDE20028D95B /* FieldResource.h */; settings = {ASSET_TAGS = (); }; };
 		494CAEE91BF0CDE20028D95B /* FieldResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEE71BF0CDE20028D95B /* FieldResource.m */; settings = {ASSET_TAGS = (); }; };
 		494CAEEC1BF499990028D95B /* ML4iOSModelPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEEB1BF499990028D95B /* ML4iOSModelPredictionTests.m */; settings = {ASSET_TAGS = (); }; };
+		494CAEEE1BF4A1D40028D95B /* ML4iOSAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEED1BF4A1D40028D95B /* ML4iOSAPITests.m */; settings = {ASSET_TAGS = (); }; };
+		494CAEF01BF4A3FC0028D95B /* ML4iOSTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAEEF1BF4A3FC0028D95B /* ML4iOSTestCase.m */; settings = {ASSET_TAGS = (); }; };
 		49559423192A6693006F4D9E /* Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 49559422192A6693006F4D9E /* Constants.h */; };
 		4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6B19DDA5DE00058FF6 /* spam.model */; };
 		4962DC6E19DDA73B00058FF6 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 4962DC6D19DDA73B00058FF6 /* iris.model */; };
@@ -85,6 +87,9 @@
 		494CAEE71BF0CDE20028D95B /* FieldResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FieldResource.m; sourceTree = "<group>"; };
 		494CAEEA1BF3C2D30028D95B /* ML4iOSEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ML4iOSEnums.h; path = ../ML4iOSEnums.h; sourceTree = "<group>"; };
 		494CAEEB1BF499990028D95B /* ML4iOSModelPredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSModelPredictionTests.m; sourceTree = "<group>"; };
+		494CAEED1BF4A1D40028D95B /* ML4iOSAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSAPITests.m; sourceTree = "<group>"; };
+		494CAEEF1BF4A3FC0028D95B /* ML4iOSTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSTestCase.m; sourceTree = "<group>"; };
+		494CAEF11BF4A4330028D95B /* ML4iOSTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ML4iOSTestCase.h; sourceTree = "<group>"; };
 		49559422192A6693006F4D9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4962DC6B19DDA5DE00058FF6 /* spam.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spam.model; sourceTree = "<group>"; };
 		4962DC6D19DDA73B00058FF6 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
@@ -195,8 +200,11 @@
 			isa = PBXGroup;
 			children = (
 				DC3AE99C1570DD90008D2F79 /* data */,
+				494CAEEF1BF4A3FC0028D95B /* ML4iOSTestCase.m */,
+				494CAEF11BF4A4330028D95B /* ML4iOSTestCase.h */,
 				494CAED01BE90EAA0028D95B /* ML4iOSTester.h */,
 				494CAED11BE90EAA0028D95B /* ML4iOSTester.m */,
+				494CAEED1BF4A1D40028D95B /* ML4iOSAPITests.m */,
 				494CAED31BEB67BB0028D95B /* PredicatesTests.m */,
 				494CAEEB1BF499990028D95B /* ML4iOSModelPredictionTests.m */,
 				492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */,
@@ -403,8 +411,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494CAEEE1BF4A1D40028D95B /* ML4iOSAPITests.m in Sources */,
 				494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */,
 				494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */,
+				494CAEF01BF4A3FC0028D95B /* ML4iOSTestCase.m in Sources */,
 				494CAEEC1BF499990028D95B /* ML4iOSModelPredictionTests.m in Sources */,
 				492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */,
 				494CAED41BEB67BB0028D95B /* PredicatesTests.m in Sources */,

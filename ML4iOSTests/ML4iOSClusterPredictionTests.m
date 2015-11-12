@@ -14,21 +14,57 @@
 
 #import <XCTest/XCTest.h>
 #import "PredictiveCluster.h"
+#import "ML4iOSTestCase.h"
+#import "ML4iOSTester.h"
+#import "ML4iOSLocalPredictions.h"
 
-@interface ML4iOSClusterPredictionTests : XCTestCase
+@interface ML4iOSClusterPredictionTests : ML4iOSTestCase
 
 @end
 
 @implementation ML4iOSClusterPredictionTests
 
-- (void)setUp {
-    [super setUp];
-
+- (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
+                                        data:(NSDictionary*)inputData
+                                      byName:(BOOL)byName {
+    
+    NSInteger httpStatusCode = 0;
+    
+    if ([clusterId length] > 0) {
+        
+        NSDictionary* irisModel = [self.apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
+        NSDictionary* prediction = [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
+                                                                                   arguments:inputData
+                                                                                     options:@{ @"byName" : @(byName) }];
+        
+        XCTAssertNotNil([prediction objectForKey:@"centroidId"], @"Local Prediction centroidId can't be nil");
+        XCTAssertNotNil([prediction objectForKey:@"centroidName"], @"Local Prediction centroidName can't be nil");
+        
+        return prediction;
+    }
+    return nil;
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+- (void)testLocalClusterPredictionByName {
+    
+    NSString* clusterId = [self.apiLibrary createAndWaitClusterFromDatasetId:self.datasetId];
+    NSDictionary* prediction = [self localPredictionForClusterId:clusterId
+                                                            data:@{@"sepal length": @2,
+                                                                   @"sepal width": @1,
+                                                                   @"petal length": @1}
+                                                          byName:YES];
+    [self.apiLibrary deleteClusterWithIdSync:clusterId];
+    XCTAssert(prediction);
+}
+
+- (void)testLocalClusterPrediction {
+    
+    NSString* clusterId = [self.apiLibrary createAndWaitClusterFromDatasetId:self.datasetId];
+    NSDictionary* prediction = [self localPredictionForClusterId:clusterId
+                                                            data:@{@"000001": @2, @"000002": @1, @"000003": @1}
+                                                          byName:NO];
+    [self.apiLibrary deleteClusterWithIdSync:clusterId];
+    XCTAssert(prediction);
 }
 
 - (void)testSpanTextCluster {
