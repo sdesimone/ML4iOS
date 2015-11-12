@@ -87,7 +87,7 @@
     }
     return [ML4iOS getResourceIdentifierFromJSONObject:resource];
 }
-
+#pragma mark - Create and Wait
 - (NSString*)createAndWaitSourceFromCSV:(NSString*)path {
     
     NSInteger httpStatusCode = 0;
@@ -176,6 +176,7 @@
     return predictionId;
 }
 
+#pragma mark - Remote Prediction Helpers
 - (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
                                        data:(NSDictionary*)inputData
                                     options:(NSDictionary*)options {
@@ -186,7 +187,7 @@
     NSDictionary* prediction = [self getPredictionWithIdSync:predictionId statusCode:&code];
     return prediction;
 }
-
+#pragma mark - Local Prediction Helpers
 - (NSDictionary*)localPredictionForModelId:(NSString*)modelId
                                       data:(NSDictionary*)inputData
                                     options:(NSDictionary*)options {
@@ -221,7 +222,7 @@
     }
     return nil;
 }
-
+#pragma mark - Prediction Result Check Helpers
 - (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2 {
     return [prediction1[@"output"]?:prediction1[@"prediction"]
             isEqual:prediction2[@"output"]?:prediction2[@"prediction"]];
@@ -234,10 +235,7 @@
     double confidence2 = [prediction2[@"confidence"] doubleValue];
     return ((confidence1 - eps) < confidence2) && ((confidence1 + eps) > confidence2);
 }
-
-#pragma mark -
-#pragma mark ML4iOSDelegate
-
+#pragma mark - ML4iOSDelegate
 -(void)dataSourceCreated:(NSDictionary*)dataSource statusCode:(NSInteger)code
 {
     

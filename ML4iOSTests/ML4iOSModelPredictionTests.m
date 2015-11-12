@@ -32,7 +32,7 @@
     [super tearDown];
 }
 
-- (NSDictionary*)localPredictionWithModelId:(NSString*)modelId
+- (NSDictionary*)comparePredictionsWithModelId:(NSString*)modelId
                                   arguments:(NSDictionary*)arguments
                                     options:(NSDictionary*)options {
     
@@ -57,13 +57,13 @@
     
     self.apiLibrary.csvFileName = @"iris.csv";
     NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{@"000001": @3.15,
                                                                    @"000002": @4.07,
                                                                    @"000003": @1.51}
                                                          options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{@"sepal width": @3.15,
                                                                    @"petal length": @4.07,
                                                                    @"petal width": @1.51}
@@ -80,13 +80,13 @@
     
     self.apiLibrary.csvFileName = @"iris.csv";
     NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{@"000001": @4.1,
                                                                    @"000002": @0.96,
                                                                    @"000003": @2.52}
                                                          options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{@"sepal width": @4.1,
                                                                    @"petal length": @0.96,
                                                                    @"petal width": @2.52}
@@ -103,11 +103,11 @@
     
     self.apiLibrary.csvFileName = @"spam.tsv";
     NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{ @"000001": @"Hey there!" }
                                                          options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{ @"Message": @"Hey there!" }
                                                          options:@{ @"byName" : @(YES) }];
     
@@ -123,11 +123,11 @@
     NSString* spam = @"Congratulations! Thanks to a good friend U have WON the £2,000 Xmas prize. 2 claim is easy, just call 08718726971 NOW! Only 10p per minute. BT-national-rate.";
     self.apiLibrary.csvFileName = @"spam.tsv";
     NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{ @"000001": spam }
                                                          options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction2 = [self localPredictionWithModelId:modelId
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
                                                        arguments:@{ @"Message": spam }
                                                          options:@{ @"byName" : @(YES) }];
     
