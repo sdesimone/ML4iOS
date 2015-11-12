@@ -1,30 +1,27 @@
-/**
- *
- * ML4iOSTests.m
- * ML4iOSTests
- *
- * Created by Felix Garcia Lainez on May 26, 2012
- * Copyright 2012 Felix Garcia Lainez
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2014-2015 BigML
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
 
-#import "ML4iOSTests.h"
+#import <XCTest/XCTest.h>
 #import "ML4iOS.h"
 #import "ML4iOSTester.h"
 #import "ML4iOSLocalPredictions.h"
 
-@implementation ML4iOSTests {
+@interface ML4iOSModelPredictionTests : XCTestCase
+
+@end
+
+@implementation ML4iOSModelPredictionTests {
     
     ML4iOSTester* apiLibrary;
     NSString* sourceId;
@@ -36,9 +33,9 @@
     
     apiLibrary = [ML4iOSTester new];
     
-    sourceId = [apiLibrary createAndWaitSourceFromCSV:[[NSBundle bundleForClass:[ML4iOSTests class]] pathForResource:@"iris" ofType:@"csv"]];
+    sourceId = [apiLibrary createAndWaitSourceFromCSV:[[NSBundle bundleForClass:[ML4iOSModelPredictionTests class]] pathForResource:@"iris" ofType:@"csv"]];
     XCTAssert(sourceId, @"Could not create source");
-
+    
     datasetId = [apiLibrary createAndWaitDatasetFromSourceId:sourceId];
     XCTAssert(datasetId, @"Could not create dataset");
 }
@@ -62,7 +59,7 @@
         NSDictionary* irisModel = [apiLibrary getModelWithIdSync:modelId statusCode:&httpStatusCode];
         NSDictionary* prediction = [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
                                                                                   arguments:inputData
-                                                                                 options:@{ @"byName" : @(byName) }];
+                                                                                    options:@{ @"byName" : @(byName) }];
         
         XCTAssertNotNil([prediction objectForKey:@"prediction"], @"Local Prediction value can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"confidence"], @"Local Prediction confidence can't be nil");
@@ -83,7 +80,7 @@
     NSInteger code = 0;
     NSDictionary* prediction = [apiLibrary getPredictionWithIdSync:predictionId statusCode:&code];
     XCTAssert(code == 200, @"Could not create prediction %@", predictionId);
-
+    
     return prediction;
 }
 
@@ -97,8 +94,8 @@
         
         NSDictionary* irisModel = [apiLibrary getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
         NSDictionary* prediction = [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
-                                                                                       arguments:inputData
-                                                                                      options:@{ @"byName" : @(byName) }];
+                                                                                   arguments:inputData
+                                                                                     options:@{ @"byName" : @(byName) }];
         
         XCTAssertNotNil([prediction objectForKey:@"centroidId"], @"Local Prediction centroidId can't be nil");
         XCTAssertNotNil([prediction objectForKey:@"centroidName"], @"Local Prediction centroidName can't be nil");
@@ -176,7 +173,7 @@
                                                                   @"petal length": @4.07,
                                                                   @"petal width": @1.51}
                                                          byName:YES];
-
+    
     XCTAssert([self comparePrediction:prediction1 andPrediction:prediction2] &&
               [self compareConfidence:prediction1 andConfidence:prediction2] &&
               [self comparePrediction:prediction1 andPrediction:prediction3] &&

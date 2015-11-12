@@ -1,10 +1,16 @@
+// Copyright 2014-2015 BigML
 //
-//  PredicatesTests.m
-//  ML4iOS
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
 //
-//  Created by sergio on 05/11/15.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
 
 #import <XCTest/XCTest.h>
 #import "Predicates.h"
@@ -36,13 +42,19 @@
                @"Failed Regex: ^a");
 
     XCTAssert(![RegExHelper isRegex:@"a$" matching:@"abcdefg"], @"Failed Regex: g$");
-    XCTAssert(![RegExHelper isRegex:@"$$^^" matching:@"abcdefg"], @"Failed Regex: g$");
+    XCTAssert(![RegExHelper isRegex:@"a$" matching:@"abcdefg"], @"Failed Regex: g$");
 }
 
 - (void)testPerformanceExample {
+    
     // This is an example of a performance test case.
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        [RegExHelper isRegex:@"g$" matching:@"abcdefg"];
+        [RegExHelper isRegex:@"^a" matching:@"abcdefg"];
+        [[RegExHelper firstRegexMatch:@"g$" in:@"abcdefg"] isEqualToString:@"g"];
+        [[RegExHelper firstRegexMatch:@"^a" in:@"abcdefg"] isEqualToString:@"a"];
+        [RegExHelper isRegex:@"a$" matching:@"abcdefg"];
+        [RegExHelper isRegex:@"a$" matching:@"abcdefg"];
     }];
 }
 
