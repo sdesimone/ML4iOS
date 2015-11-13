@@ -985,22 +985,26 @@
 //************* https://bigml.com/developers/predictions ************************
 //*******************************************************************************
 
-#pragma mark -
-#pragma mark Predictions
+#pragma mark - Model Predictions
 
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
-                                           name:(NSString*)name
-                                      inputData:(NSString*)inputData
-                                     statusCode:(NSInteger*)code
+-(NSDictionary*)createPredictionWithResourceIdSync:(NSString*)resourceId
+                              resourceType:(NSString*)resourceType
+                                      name:(NSString*)name
+                                 inputData:(NSString*)inputData
+                                statusCode:(NSInteger*)code
 {
-    return [commsManager createPredictionWithModelId:modelId name:name inputData:inputData
+    return [commsManager createPredictionWithResourceId:resourceId
+                                           resourceType:resourceType
+                                                   name:name
+                                              inputData:inputData
                                           statusCode:code];
 }
 
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
-                                           name:(NSString*)name
-                                      arguments:(NSDictionary*)arguments
-                                     statusCode:(NSInteger*)code
+-(NSDictionary*)createPredictionWithResourceIdSync:(NSString*)resourceId
+                              resourceType:(NSString*)resourceType
+                                      name:(NSString*)name
+                                 arguments:(NSDictionary*)arguments
+                                statusCode:(NSInteger*)code
 {
     NSError *error = nil;
     NSString* inputData =
@@ -1011,27 +1015,34 @@
                           encoding:NSUTF8StringEncoding];
     
     if (!error)
-        return [self createPredictionWithModelIdSync:modelId name:name inputData:inputData statusCode:code];
+        return [self createPredictionWithResourceIdSync:resourceId
+                                   resourceType:resourceType
+                                           name:name
+                                      inputData:inputData
+                                     statusCode:code];
     return nil;
 }
 
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId
-                                      name:(NSString*)name
-                                 inputData:(NSString*)inputData
+-(NSOperation*)createPredictionWithResourceId:(NSString*)resourceId
+                         resourceType:(NSString*)resourceType
+                                 name:(NSString*)name
+                            inputData:(NSString*)inputData
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
-    params[@"identifier"] = modelId;
+    params[@"identifier"] = resourceId;
+    params[@"resourceType"] = resourceType;
     params[@"name"] = name;
     params[@"inputData"] = inputData;
     
     return [self launchOperationWithSelector:@selector(createPredictionAction:) params:params];
 }
 
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId
-                                      name:(NSString*)name
-                                 arguments:(NSDictionary*)arguments
+-(NSOperation*)createPredictionWithResourceId:(NSString*)resourceId
+                         resourceType:(NSString*)resourceType
+                                 name:(NSString*)name
+                            arguments:(NSDictionary*)arguments
 {
-
+    
     NSError *error = nil;
     NSString* inputData =
     [[NSString alloc] initWithData:
@@ -1041,7 +1052,10 @@
                           encoding:NSUTF8StringEncoding];
     
     if (!error)
-        return [self createPredictionWithModelId:modelId name:name inputData:inputData];
+        return [self createPredictionWithResourceId:resourceId
+                               resourceType:resourceType
+                                       name:name
+                                  inputData:inputData];
     return nil;
 }
 
@@ -1052,18 +1066,24 @@
     NSString* name = params[@"name"];
     NSString* inputData = params[@"inputData"];
     
-    NSDictionary* prediction = [commsManager createPredictionWithModelId:identifier name:name
-                                                               inputData:inputData statusCode:&statusCode];
+    NSDictionary* prediction = [commsManager createPredictionWithResourceId:identifier
+                                                               resourceType:params[@"resourceType"]
+                                                                       name:name
+                                                                  inputData:inputData
+                                                                 statusCode:&statusCode];
     
     [delegate predictionCreated:prediction statusCode:statusCode];
 }
 
--(NSDictionary*)updatePredictionWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+-(NSDictionary*)updatePredictionWithIdSync:(NSString*)identifier
+                                      name:(NSString*)name
+                                statusCode:(NSInteger*)code
 {
     return [commsManager updatePredictionWithId:identifier name:name statusCode:code];
 }
 
--(NSOperation*)updatePredictionWithId:(NSString*)identifier name:(NSString*)name
+-(NSOperation*)updatePredictionWithId:(NSString*)identifier
+                                 name:(NSString*)name
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"identifier"] = identifier;
@@ -1103,12 +1123,17 @@
     [delegate predictionDeletedWithStatusCode:statusCode];
 }
 
--(NSDictionary*)getAllPredictionsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+-(NSDictionary*)getAllPredictionsWithNameSync:(NSString*)name
+                                       offset:(NSInteger)offset
+                                        limit:(NSInteger)limit
+                                   statusCode:(NSInteger*)code
 {
     return [commsManager getAllPredictionsWithName:name offset:offset limit:limit statusCode:code];
 }
 
--(NSOperation*)getAllPredictionsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+-(NSOperation*)getAllPredictionsWithName:(NSString*)name
+                                  offset:(NSInteger)offset
+                                   limit:(NSInteger)limit
 {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
     params[@"name"] = name;

@@ -340,14 +340,19 @@
 
 /**
  * Creates a prediction from a given model.
- * @param modelId The identifier of the model
+ * @param resourceId The identifier of the model
+ * @param resourceType The type of resource to create the prediction (model/ensemble/regression)
  * @param name This optional parameter provides the name of the prediction to be created
  * @param inputData This optional parameter must be a JSON object that contents the pairs field_id : field_value (For instance @"{\"000001\": 1, \"000002\": 3}").
  * It initializes the values of the given fields before creating the prediction.
  * @param code The HTTP status code returned
  * @return The model created if success, else nil
  */
--(NSDictionary*)createPredictionWithModelId:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData statusCode:(NSInteger*)code;
+-(NSDictionary*)createPredictionWithResourceId:(NSString*)resourceId
+                                  resourceType:(NSString*)resourceType
+                                          name:(NSString*)name
+                                     inputData:(NSString*)inputData
+                                    statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given prediction. 

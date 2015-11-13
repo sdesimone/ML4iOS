@@ -40,9 +40,10 @@
                                                                       data:arguments
                                                                    options:options];
     
-    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForModelId:modelId
-                                                                       data:arguments
-                                                                    options:options];
+    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForId:modelId
+                                                          resourceType:@"model"
+                                                                  data:arguments
+                                                               options:options];
     
     XCTAssert(prediction1 && prediction2);
     XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2],

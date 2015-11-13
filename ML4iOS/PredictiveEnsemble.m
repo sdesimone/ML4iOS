@@ -55,7 +55,7 @@
     NSAssert(_isReadyToPredict,
              @"You should wait for .isReadyToPredict to be YES before calling this method");
 
-    ML4iOSPredictionMethod method = [options[@"method"] ?: @(ML4iOSPredictionMethodThreshold) intValue];
+    ML4iOSPredictionMethod method = [options[@"method"] ?: @(ML4iOSPredictionMethodPlurality) intValue];
     MissingStrategy missingStrategy = [options[@"strategy"] ?: @(MissingStrategyLastPrediction) intValue];
     BOOL byName = [options[@"byName"] ?: @(NO) boolValue];
     BOOL confidence = [options[@"confidence"] ?: @(YES) boolValue];
@@ -90,7 +90,7 @@
 }
 
 + (NSDictionary*)predictWithJSONModels:(NSArray*)models
-                                    args:(NSDictionary*)inputData
+                                  args:(NSDictionary*)inputData
                                options:(NSDictionary*)options
                          distributions:(NSArray*)distributions {
 

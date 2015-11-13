@@ -481,9 +481,14 @@ typedef PredictionTree TreeHolder;
 }
 
 - (TreePrediction*)predict:(NSDictionary*)inputData
-                    path:(NSMutableArray*)path {
-
+                      path:(NSMutableArray*)path {
+    
     return [self predict:inputData path:path strategy:MissingStrategyLastPrediction];
+}
+
+- (TreePrediction*)predict:(NSDictionary*)inputData {
+    
+    return [self predict:inputData path:nil strategy:MissingStrategyLastPrediction];
 }
 
 @end

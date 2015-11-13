@@ -71,19 +71,39 @@
     [apiLibrary deleteEnsembleWithIdSync:identifier];
 }
 
-- (void)testPrediction {
+- (void)testModelPrediction {
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     XCTAssert(modelId);
     
-    NSDictionary* prediction = [self.apiLibrary remotePredictionForModelId:modelId
-                                                                      data:@{@"000001": @3.15,
-                                                                             @"000002": @4.07,
-                                                                             @"000003": @1.51}
-                                                                   options:@{ @"byName" : @(NO) }];
+    NSDictionary* prediction = [apiLibrary remotePredictionForId:modelId
+                                                    resourceType:@"model"
+                                                            data:@{@"000001": @3.15,
+                                                                   @"000002": @4.07,
+                                                                   @"000003": @1.51}
+                                                         options:@{ @"byName" : @(NO) }];
     XCTAssert(prediction);
-    [apiLibrary deletePredictionWithIdSync:
-     [prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
+    
+    [apiLibrary deleteModelWithIdSync:modelId];
+    [apiLibrary
+     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
+}
+
+- (void)testEnsemblePrediction {
+    
+    NSString* ensembleId = [apiLibrary createAndWaitEnsembleFromDatasetId:datasetId];
+    XCTAssert(ensembleId);
+    
+    NSDictionary* prediction = [apiLibrary remotePredictionForId:ensembleId
+                                                    resourceType:@"ensemble"
+                                                            data:@{@"000001": @3.15,
+                                                                   @"000002": @4.07,
+                                                                   @"000003": @1.51}
+                                                         options:@{ @"byName" : @(NO) }];
+    XCTAssert(prediction);
+    [apiLibrary deleteEnsembleWithIdSync:ensembleId];
+    [apiLibrary
+     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
 }
 
 @end

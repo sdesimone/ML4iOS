@@ -22,6 +22,8 @@
 #import <Foundation/Foundation.h>
 #import "ML4iOSDelegate.h"
 
+#define ML4iOS_DEPRECATED __attribute__( (deprecated) )
+
 @class HTTPCommsManager;
 
 /**
@@ -76,7 +78,7 @@
 #pragma mark -
 
 /**
- * Initializes the library with the BigML username and API key 
+ * Initializes the library with the BigML username and API key
  * @param username The BigML username
  * @param key The BigML.io API key
  * @param devMode true if we want to use the library on development mode, else false
@@ -121,8 +123,8 @@
 -(NSOperation*)createSourceWithName:(NSString*)name project:(NSString*)fullUUid filePath:(NSString*)filePath;
 
 /**
- * Updates the name of a given data source. 
- * @param identifier The identifier of the data source to update 
+ * Updates the name of a given data source.
+ * @param identifier The identifier of the data source to update
  * @param name The new name of the data source
  * @param code The HTTP status code returned
  * @return The data source updated if success, else nil
@@ -131,29 +133,29 @@
 
 /**
  * Updates the name of a given data source. The response is provided in the method dataSourceUpdated of the delegate.
- * @param identifier The identifier of the data source to update 
+ * @param identifier The identifier of the data source to update
  * @param name The new name of the data source
  * @return The async NSOperation created
  */
 -(NSOperation*)updateSourceNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
- * Deletes a given data source. 
- * @param identifier The identifier of the data source to delete 
+ * Deletes a given data source.
+ * @param identifier The identifier of the data source to delete
  * @return The HTTP status code returned
  */
 -(NSInteger)deleteSourceWithIdSync:(NSString*)identifier;
 
 /**
  * Deletes a given data source. The response is provided in the method dataSourceDeletedWithStatusCode of the delegate.
- * @param identifier The identifier of the data source to delete 
+ * @param identifier The identifier of the data source to delete
  * @return The async NSOperation created
  */
 -(NSOperation*)deleteSourceWithId:(NSString*)identifier;
 
 /**
  * Get a list of data sources filtered by name.
- * @param name This optional parameter provides the name of the data sources to be returned. If it is nil then will be 
+ * @param name This optional parameter provides the name of the data sources to be returned. If it is nil then will be
  * retrieved all data sources without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -164,7 +166,7 @@
 
 /**
  * Get a list of data sources filtered by name. The response is provided in the method dataSourcesRetrieved of the delegate.
- * @param name This optional parameter provides the name of the data sources to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the data sources to be retrieved. If it is nil then will be
  * retrieved all data sources without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -174,7 +176,7 @@
 
 /**
  * Get a data source.
- * @param identifier The identifier of the data source to get 
+ * @param identifier The identifier of the data source to get
  * @param code The HTTP status code returned
  * @return The data source if success, else nil
  */
@@ -182,14 +184,14 @@
 
 /**
  * Get a data source. The response is provided in the method dataSourceRetrieved of the delegate.
- * @param identifier The identifier of the data source to get 
+ * @param identifier The identifier of the data source to get
  * @return The async NSOperation created
  */
 -(NSOperation*)getSourceWithId:(NSString*)identifier;
 
 /**
  * Check if the status of the data source is FINISHED.
- * @param identifier The identifier of the data source to check the status 
+ * @param identifier The identifier of the data source to check the status
  * @return true if the status of the data source is FINISHED, else false
  */
 -(BOOL)checkSourceIsReadyWithIdSync:(NSString*)identifier;
@@ -227,8 +229,8 @@
 -(NSOperation*)createDatasetWithDataSourceId:(NSString*)sourceId name:(NSString*)name;
 
 /**
- * Updates the name of a given dataset. 
- * @param identifier The identifier of the dataset to update 
+ * Updates the name of a given dataset.
+ * @param identifier The identifier of the dataset to update
  * @param name The new name of the dataset
  * @param code The HTTP status code returned
  * @return The dataset updated if success, else nil
@@ -237,15 +239,15 @@
 
 /**
  * Updates the name of a given dataset. The response is provided in the method dataSetUpdated of the delegate.
- * @param identifier The identifier of the dataset to update 
+ * @param identifier The identifier of the dataset to update
  * @param name The new name of the dataset
  * @return The async NSOperation created
  */
 -(NSOperation*)updateDatasetNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
- * Deletes a given dataset. 
- * @param identifier The identifier of the dataset to delete 
+ * Deletes a given dataset.
+ * @param identifier The identifier of the dataset to delete
  * @return The HTTP status code returned
  */
 -(NSInteger)deleteDatasetWithIdSync:(NSString*)identifier;
@@ -259,7 +261,7 @@
 
 /**
  * Get a list of datasets filtered by name.
- * @param name This optional parameter provides the name of the datasets to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the datasets to be retrieved. If it is nil then will be
  * retrieved all datasets without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -270,7 +272,7 @@
 
 /**
  * Get a list of datasets filtered by name. The response is provided in the method dataSetsRetrieved of the delegate.
- * @param name This optional parameter provides the name of the datasets to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the datasets to be retrieved. If it is nil then will be
  * retrieved all datasets without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -280,7 +282,7 @@
 
 /**
  * Get a dataset.
- * @param identifier The identifier of the dataset to get 
+ * @param identifier The identifier of the dataset to get
  * @param code The HTTP status code returned
  * @return The dataset if success, else nil
  */
@@ -288,14 +290,14 @@
 
 /**
  * Get a dataset. The response is provided in the method dataSetRetrieved of the delegate.
- * @param identifier The identifier of the dataset to get 
+ * @param identifier The identifier of the dataset to get
  * @return The async NSOperation created
  */
 -(NSOperation*)getDatasetWithId:(NSString*)identifier;
 
 /**
  * Check if the status of the dataset is FINISHED.
- * @param identifier The identifier of the dataset to check the status 
+ * @param identifier The identifier of the dataset to check the status
  * @return true if the status of the dataset is FINISHED, else false
  */
 -(BOOL)checkDatasetIsReadyWithIdSync:(NSString*)identifier;
@@ -333,8 +335,8 @@
 -(NSOperation*)createModelWithDataSetId:(NSString*)dataSetId name:(NSString*)name;
 
 /**
- * Updates the name of a given model. 
- * @param identifier The identifier of the model to update 
+ * Updates the name of a given model.
+ * @param identifier The identifier of the model to update
  * @param name The new name of the model
  * @param code The HTTP status code returned
  * @return The model updated if success, else nil
@@ -343,15 +345,15 @@
 
 /**
  * Updates the name of a given model. The response is provided in the method modelUpdated of the delegate.
- * @param identifier The identifier of the model to update 
+ * @param identifier The identifier of the model to update
  * @param name The new name of the model
  * @return The async NSOperation created
  */
 -(NSOperation*)updateModelNameWithId:(NSString*)identifier name:(NSString*)name;
 
 /**
- * Deletes a given model. 
- * @param identifier The identifier of the model to delete 
+ * Deletes a given model.
+ * @param identifier The identifier of the model to delete
  * @return The HTTP status code returned
  */
 -(NSInteger)deleteModelWithIdSync:(NSString*)identifier;
@@ -365,7 +367,7 @@
 
 /**
  * Get a list of models filtered by name.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
  * retrieved all models without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -376,7 +378,7 @@
 
 /**
  * Get a list of models filtered by name. The response is provided in the method modelsRetrieved of the delegate.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
  * retrieved all models without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
@@ -386,7 +388,7 @@
 
 /**
  * Get a model.
- * @param identifier The identifier of the model to get 
+ * @param identifier The identifier of the model to get
  * @param code The HTTP status code returned
  * @return The model if success, else nil
  */
@@ -394,14 +396,14 @@
 
 /**
  * Get a model. The response is provided in the method modelRetrieved of the delegate.
- * @param identifier The identifier of the model to get 
+ * @param identifier The identifier of the model to get
  * @return The async NSOperation created
  */
 -(NSOperation*)getModelWithId:(NSString*)identifier;
 
 /**
  * Check if the status of the model is FINISHED.
- * @param identifier The identifier of the model to check the status 
+ * @param identifier The identifier of the model to check the status
  * @return true if the status of the model is FINISHED, else false
  */
 -(BOOL)checkModelIsReadyWithIdSync:(NSString*)identifier;
@@ -536,15 +538,17 @@
  * @param code The HTTP status code returned
  * @return The model created if success, else nil
  */
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
-                                           name:(NSString*)name
-                                      inputData:(NSString*)inputData
-                                     statusCode:(NSInteger*)code;
+-(NSDictionary*)createPredictionWithResourceIdSync:(NSString*)resourceId
+                              resourceType:(NSString*)resourceType
+                                      name:(NSString*)name
+                                 inputData:(NSString*)inputData
+                                statusCode:(NSInteger*)code;
 
--(NSDictionary*)createPredictionWithModelIdSync:(NSString*)modelId
-                                           name:(NSString*)name
-                                      arguments:(NSDictionary*)arguments
-                                     statusCode:(NSInteger*)code;
+-(NSDictionary*)createPredictionWithResourceIdSync:(NSString*)resourceId
+                              resourceType:(NSString*)resourceType
+                                      name:(NSString*)name
+                                 arguments:(NSDictionary*)arguments
+                                statusCode:(NSInteger*)code;
 
 /**
  * Creates a prediction from a given model. The response is provided in the method predictionCreated of the delegate.
@@ -554,34 +558,39 @@
  * It initializes the values of the given fields before creating the prediction.
  * @return The async NSOperation created
  */
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId
-                                      name:(NSString*)name
-                                 inputData:(NSString*)inputData;
+- (NSOperation*)createPredictionWithResourceId:(NSString*)resourceId
+                          resourceType:(NSString*)resourceType
+                                  name:(NSString*)name
+                             inputData:(NSString*)inputData;
 
--(NSOperation*)createPredictionWithModelId:(NSString*)modelId
-                                      name:(NSString*)name
-                                 arguments:(NSDictionary*)arguments;
+- (NSOperation*)createPredictionWithResourceId:(NSString*)resourceId
+                          resourceType:(NSString*)resourceType
+                                  name:(NSString*)name
+                             arguments:(NSDictionary*)arguments;
 
 /**
- * Updates the name of a given prediction. 
- * @param identifier The identifier of the prediction to update 
+ * Updates the name of a given prediction.
+ * @param identifier The identifier of the prediction to update
  * @param name The new name of the prediction
  * @param code The HTTP status code returned
  * @return The model updated if success, else nil
  */
--(NSDictionary*)updatePredictionWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+-(NSDictionary*)updatePredictionWithIdSync:(NSString*)identifier
+                                      name:(NSString*)name
+                                statusCode:(NSInteger*)code;
 
 /**
  * Updates the name of a given prediction. The response is provided in the method predictionUpdated of the delegate.
- * @param identifier The identifier of the prediction to update 
+ * @param identifier The identifier of the prediction to update
  * @param name The new name of the prediction
  * @return The async NSOperation created
  */
--(NSOperation*)updatePredictionWithId:(NSString*)identifier name:(NSString*)name;
+-(NSOperation*)updatePredictionWithId:(NSString*)identifier
+                                 name:(NSString*)name;
 
 /**
- * Deletes a given prediction. 
- * @param identifier The identifier of the prediction to delete 
+ * Deletes a given prediction.
+ * @param identifier The identifier of the prediction to delete
  * @return The HTTP status code returned
  */
 -(NSInteger)deletePredictionWithIdSync:(NSString*)identifier;
@@ -595,43 +604,49 @@
 
 /**
  * Get a list of predictions filtered by name.
- * @param name This optional parameter provides the name of the predictions to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the predictions to be retrieved. If it is nil then will be
  * retrieved all predictions without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
  * @param code The HTTP status code returned
  * @return The list of predictions found if success, else nil
  */
--(NSDictionary*)getAllPredictionsWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+-(NSDictionary*)getAllPredictionsWithNameSync:(NSString*)name
+                                       offset:(NSInteger)offset
+                                        limit:(NSInteger)limit
+                                   statusCode:(NSInteger*)code;
 
 /**
  * Get a list of predictions filtered by name. The response is provided in the method predictionsRetrieved of the delegate.
- * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be 
+ * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
  * retrieved all predictions without any filtering
  * @param offset The offset to paginate the results
  * @param limit The maximum number of results
  * @return The async NSOperation created
  */
--(NSOperation*)getAllPredictionsWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+-(NSOperation*)getAllPredictionsWithName:(NSString*)name
+                                  offset:(NSInteger)offset
+                                   limit:(NSInteger)limit;
 
 /**
  * Get a prediction.
- * @param identifier The identifier of the prediction to get 
+ * @param identifier The identifier of the prediction to get
  * @param code The HTTP status code returned
  * @return The prediction if success, else nil
  */
--(NSDictionary*)getPredictionWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+-(NSDictionary*)getPredictionWithIdSync:(NSString*)identifier
+                             statusCode:(NSInteger*)code;
 
 /**
  * Get a model. The response is provided in the method predictionRetrieved of the delegate.
- * @param identifier The identifier of the prediction to get 
+ * @param identifier The identifier of the prediction to get
  * @return The async NSOperation created
  */
 -(NSOperation*)getPredictionWithId:(NSString*)identifier;
 
 /**
  * Check if the status of a given prediction is FINISHED.
- * @param identifier The identifier of the prediction to check the status 
+ * @param identifier The identifier of the prediction to check the status
  * @return true if the status of the prediction is FINISHED, else false
  */
 -(BOOL)checkPredictionIsReadyWithIdSync:(NSString*)identifier;

@@ -19,7 +19,7 @@
 @interface ML4iOSLocalPredictions : NSObject
 
 /**
- * Creates a local prediction based on the given model.
+ * Computes a local prediction based on the given model.
  * @param jsonModel The model to use to create the prediction
  * @param args The arguments to create the prediction
  * @param options A dictionary of options that will affect the prediction.
@@ -33,9 +33,11 @@
                                           options:(NSDictionary*)options;
 
 /**
- * Creates local prediction based on the given ensemble.
+ * Computes local prediction based on the given ensemble.
+ * This method will get all the models belonging to the ensemble from the server.
+ *
  * @param jsonEnsemble The ensemble to use to create the prediction
- * @param args The arguments to create the prediction
+ * @param arguments The arguments to create the prediction
  * @param options A dictionary of options that will affect the prediction.
           This is a list of allowed options:
             - byName: set to YES when specifying arguments by their names
@@ -46,6 +48,11 @@
               MissingStrategyProportional is only supported for classifications,
               not regressions).
               Default is MissingStrategyLastPrediction.
+            - method: the method to use; a value from ML4iOSPredictionMethod type.
+              See the ML4iOSPredictionMethod definition for more allowed values.
+              Default is ML4iOSPredictionMethodPlurality.
+            - threshold: the vote threshold to use when method is
+              ML4iOSPredictionMethodThreshold.
             - multiple: for classification problems, this parameter specifies
               the number of categories to include in the distribution of the 
               predicted node, e.g.:
@@ -74,13 +81,23 @@
                                              options:(NSDictionary*)options
                                               ml4ios:(ML4iOS*)ml4ios;
 
+/** 
+ * Computes a local prediction from the given set of models/distributions.
+ * This method is useful, e.g., if you store locally all the models that belong to
+ * an ensemble to avoid the latency of getting them from the server (as 
+ * localPredictionWithJSONModelSync: does).
+ * In such case, you can also pass a list of distributions from the ensemble,
+ * which are stored in the jsonEnsemble[@"models"][@"distribution"] element.
+ *
+ * For a description of arguments and options, see localPredictionWithJSONModelSync:
+ */
 + (NSDictionary*)localPredictionWithJSONEnsembleModelsSync:(NSDictionary*)jsonEnsemble
                                                  arguments:(NSDictionary*)args
                                                    options:(NSDictionary*)options
                                              distributions:(NSArray*)distributions;
 
 /**
- * Creates local centroids using the cluster and args passed as parameters
+ * Computes local centroids using the cluster and args passed as parameters
  * @param jsonCluster The cluster to use to create the prediction
  * @param args The arguments to create the prediction
  * @param options A dictionary of options that will affect the prediction.

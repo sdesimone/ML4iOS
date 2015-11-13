@@ -358,26 +358,25 @@ static NSString* const kNullCategory = @"kNullCategory";
         medianResult = NAN;
     }
 
-    NSMutableDictionary* output = [@{ @"prediction" : @(result)} mutableCopy];
-    if (addConfidence || addDistribution || addCount || addMedian || addMin || addMax) {
-        if (addConfidence) {
-            [output setObject:@(confidenceValue) forKey:@"confidence"];
-        }
-        if (addDistribution) {
-            [self mergeDistributionInPrediction:output];
-        }
-        if (addCount) {
-            [output setObject:@(instances) forKey:@"count"];
-        }
-        if (addMedian) {
-            [output setObject:@(medianResult) forKey:@"median"];
-        }
-        if (addMin) {
-            [output setObject:@(dMin) forKey:@"min"];
-        }
-        if (addMax) {
-            [output setObject:@(dMax) forKey:@"max"];
-        }
+    NSMutableDictionary* output = [@{ @"prediction" : @(result),
+                                      @"confidence" : @(confidence) } mutableCopy];
+    if (addConfidence) {
+        [output setObject:@(confidenceValue) forKey:@"confidence"];
+    }
+    if (addDistribution) {
+        [self mergeDistributionInPrediction:output];
+    }
+    if (addCount) {
+        [output setObject:@(instances) forKey:@"count"];
+    }
+    if (addMedian) {
+        [output setObject:@(medianResult) forKey:@"median"];
+    }
+    if (addMin) {
+        [output setObject:@(dMin) forKey:@"min"];
+    }
+    if (addMax) {
+        [output setObject:@(dMax) forKey:@"max"];
     }
     return output;
 }
@@ -429,7 +428,7 @@ static NSString* const kNullCategory = @"kNullCategory";
 //        [predictions addObject:predictionList[]];
 //    }
     
-    if (weightLabel) {
+    if (weightLabel != kNullCategory) {
         for (NSDictionary* prediction in _predictions) {
             NSAssert(prediction[@"confidence"] && prediction[weightLabel],
                      @"MultiVote weightedConfidence: not enough data to use selected method (missing %@)",
@@ -554,6 +553,30 @@ static NSString* const kNullCategory = @"kNullCategory";
     return result;
 }
 
+- (NSArray*)probabilityWeight {
+    
+    NSMutableArray* predictions = [NSMutableArray new];
+    
+    for (NSDictionary* prediction in _predictions) {
+     
+        NSAssert(prediction[@"distribution"] && prediction[@"count"],
+                 @"Wrong prediction found: no distribution/count info");
+        long total = [prediction[@"count"] longValue];
+        NSAssert(total >= 0, @"Wrong total in probabilityWeight");
+        
+        NSMutableDictionary* distribution = prediction[@"distribution"];
+        for (NSString* key in distribution.allKeys) {
+            int instances = [distribution[key] intValue];
+            [predictions addObject:@{ @"prediction" : key,
+                                      @"probability" : @((double)instances / total),
+                                      @"count" : @(instances),
+                                      @"order" : prediction[@"order"]
+                                     }];
+        }
+    }
+    return predictions;
+}
+
 /**
  * Reduces a number of predictions voting for classification and averaging
  * predictions for regression.
@@ -583,7 +606,8 @@ static NSString* const kNullCategory = @"kNullCategory";
     if ([self isRegression]) {
         
         for (NSMutableDictionary* prediction in _predictions) {
-            [prediction setObject:prediction[@"confidence"]?:@(0) forKey:@"confidence"];
+            if (!prediction[@"confidence"])
+                prediction[@"confidence"] = @(0);
         }
         if (method == ML4iOSPredictionMethodConfidence) {
             return [self weightedErrorWithConfidence:confidence
@@ -609,7 +633,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         NSString* category = options[@"category"];
         votes = [self singleOutCategory:category threshold:threshold];
     } else if (method == ML4iOSPredictionMethodProbability) {
-//        votes = [MultiVote multiVoteWithProbabilityWeight:[self probabilityWeight]];
+        votes = [[MultiVote alloc] initWithPredictions:[self probabilityWeight]];
     } else {
         votes = self;
     }

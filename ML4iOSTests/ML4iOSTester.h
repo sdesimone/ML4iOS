@@ -26,16 +26,22 @@
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitClusterFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId;
-- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId
-                                      inputData:(NSDictionary*)inputData;
+- (NSString*)createAndWaitPredictionFromId:(NSString*)modelId
+                              resourceType:(NSString*)resourceTyp
+                                 inputData:(NSDictionary*)inputData;
 
-- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
-                                       data:(NSDictionary*)inputData
-                                    options:(NSDictionary*)options;
+- (NSDictionary*)remotePredictionForId:(NSString*)resourceId
+                          resourceType:(NSString*)resourceType
+                                  data:(NSDictionary*)inputData
+                               options:(NSDictionary*)options;
 
 - (NSDictionary*)localPredictionForModelId:(NSString*)modelId
                                       data:(NSDictionary*)inputData
                                    options:(NSDictionary*)options;
+
+- (NSDictionary*)localPredictionForEnsembleId:(NSString*)ensembleId
+                                         data:(NSDictionary*)inputData
+                                      options:(NSDictionary*)options;
 
 - (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
                                         data:(NSDictionary*)inputData

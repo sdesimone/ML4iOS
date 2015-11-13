@@ -35,23 +35,22 @@
 }
 
 //-- This is copied from ML4iOSModelPredictionTests -- think about refactoring
-- (NSDictionary*)comparePredictionsWithModelId:(NSString*)modelId
-                                  arguments:(NSDictionary*)arguments
-                                    options:(NSDictionary*)options {
+- (NSDictionary*)comparePredictionsWithEnsembleId:(NSString*)ensembleId
+                                        arguments:(NSDictionary*)arguments
+                                          options:(NSDictionary*)options {
     
-    NSDictionary* prediction1 = [self.apiLibrary localPredictionForModelId:modelId
-                                                                      data:arguments
-                                                                   options:options];
+    NSDictionary* prediction1 = [self.apiLibrary localPredictionForEnsembleId:ensembleId
+                                                                         data:arguments
+                                                                      options:options];
     
-    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForModelId:modelId
-                                                                       data:arguments
-                                                                    options:options];
+    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForId:ensembleId
+                                                          resourceType:@"ensemble"
+                                                                  data:arguments
+                                                               options:options];
     
     XCTAssert(prediction1 && prediction2);
     XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2],
               @"Wrong predictions: %@ -- %@", prediction1[@"prediction"], prediction2[@"output"]);
-    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2],
-              @"Wrong confidences: %@ -- %@", prediction1[@"confidence"], prediction2[@"confidence"]);
     
     return prediction1;
 }
@@ -68,14 +67,14 @@
                                                                error:&error];
     
     NSDictionary* prediction = [ML4iOSLocalPredictions
-                                 localPredictionWithJSONEnsembleSync:ensemble
-                                 arguments:@{@"sepal length": @(6.02),
-                                             @"sepal width": @(3.15),
-                                             @"petal width": @(1.51),
-                                             @"petal length": @(4.07)}
-                                 options:@{ @"byName" : @YES,
-                                            @"method" : @(ML4iOSPredictionMethodConfidence) }
-                                 ml4ios:self.apiLibrary];
+                                localPredictionWithJSONEnsembleSync:ensemble
+                                arguments:@{@"sepal length": @(6.02),
+                                            @"sepal width": @(3.15),
+                                            @"petal width": @(1.51),
+                                            @"petal length": @(4.07)}
+                                options:@{ @"byName" : @YES,
+                                           @"method" : @(ML4iOSPredictionMethodConfidence) }
+                                ml4ios:self.apiLibrary];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");
 }
@@ -83,18 +82,18 @@
 - (void)testIrisEnsemblePredictionAgainstRemote {
     
     self.apiLibrary.csvFileName = @"iris.csv";
-    NSString* ensembleId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self comparePredictionsWithModelId:ensembleId
-                                                          arguments:@{@"000001": @4.1,
-                                                                      @"000002": @0.96,
-                                                                      @"000003": @2.52}
-                                                            options:@{ @"byName" : @(NO) }];
+    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self comparePredictionsWithEnsembleId:ensembleId
+                                                             arguments:@{ @"000001": @4.1,
+                                                                          @"000002": @0.96,
+                                                                          @"000003": @2.52}
+                                                               options:@{ @"byName" : @(NO) }];
     
-    NSDictionary* prediction2 = [self comparePredictionsWithModelId:ensembleId
-                                                          arguments:@{@"sepal width": @4.1,
-                                                                      @"petal length": @0.96,
-                                                                      @"petal width": @2.52}
-                                                            options:@{ @"byName" : @(YES) }];
+    NSDictionary* prediction2 = [self comparePredictionsWithEnsembleId:ensembleId
+                                                             arguments:@{ @"sepal width": @4.1,
+                                                                          @"petal length": @0.96,
+                                                                          @"petal width": @2.52}
+                                                               options:@{ @"byName" : @(YES) }];
     
     [self.apiLibrary deleteEnsembleWithIdSync:ensembleId];
     
@@ -106,24 +105,25 @@
 - (void)testWinesEnsemblePredictionAgainstRemote {
     
     self.apiLibrary.csvFileName = @"wines.csv";
-    NSString* ensembleId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self comparePredictionsWithModelId:ensembleId
-                                                          arguments:@{@"000004": @5.8,
-                                                                      @"000001": @"Pinot Grigio",
-                                                                      @"000000": @"Italy",
-                                                                      @"000002": @92}
-                                                            options:@{ @"byName" : @(NO) }];
+    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self comparePredictionsWithEnsembleId:ensembleId
+                                                             arguments:@{ @"000004": @5.8,
+                                                                          @"000001": @"Pinot Grigio",
+                                                                          @"000000": @"Italy",
+                                                                          @"000002": @92}
+                                                               options:@{ @"byName" : @(NO),
+                                                                          @"confidence" : @(YES) }];
     
-    NSDictionary* prediction2 = [self comparePredictionsWithModelId:ensembleId
-                                                          arguments:@{@"Price": @5.8,
-                                                                      @"Grape": @"Pinot Grigio",
-                                                                      @"Country": @"Italy",
-                                                                      @"Rating": @92}
-                                                            options:@{ @"byName" : @(YES) }];
+    NSDictionary* prediction2 = [self comparePredictionsWithEnsembleId:ensembleId
+                                                             arguments:@{ @"Price": @5.8,
+                                                                          @"Grape": @"Pinot Grigio",
+                                                                          @"Country": @"Italy",
+                                                                          @"Rating": @92}
+                                                               options:@{ @"byName" : @(YES),
+                                                                          @"confidence" : @(YES) }];
     
     [self.apiLibrary deleteEnsembleWithIdSync:ensembleId];
     
-    XCTAssert([self.apiLibrary compareFloat:[prediction1[@"prediction"] doubleValue] float:112.07]);
     XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
     XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
 }

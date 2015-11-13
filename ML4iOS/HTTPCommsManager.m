@@ -673,12 +673,16 @@
 #pragma mark -
 #pragma mark Predictions
 
--(NSDictionary*)createPredictionWithModelId:(NSString*)modelId name:(NSString*)name inputData:(NSString*)inputData statusCode:(NSInteger*)code
+-(NSDictionary*)createPredictionWithResourceId:(NSString*)resourceId
+                                  resourceType:(NSString*)resourceType
+                                          name:(NSString*)name
+                                     inputData:(NSString*)inputData
+                                    statusCode:(NSInteger*)code
 {
     NSString* urlString = [NSString stringWithFormat:@"%@%@", BIGML_IO_PREDICTION_URL, authToken];
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
-    [bodyString appendFormat:@"{\"model\":\"model/%@\"", modelId];
+    [bodyString appendFormat:@"{\"%@\":\"%@/%@\"", resourceType, resourceType, resourceId];
     
     if([name length] > 0)
         [bodyString appendFormat:@", \"name\":\"%@\"", name];

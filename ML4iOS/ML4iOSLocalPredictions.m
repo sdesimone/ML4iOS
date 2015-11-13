@@ -43,13 +43,13 @@
     return [PredictiveEnsemble predictWithJSONModels:models
                                                 args:args
                                              options:options
-                                       distributions:nil];
+                                       distributions:jsonEnsemble[@"distribution"]];
 }
 
 + (NSDictionary*)localPredictionWithJSONEnsembleModelsSync:(NSArray*)models
                                                  arguments:(NSDictionary*)args
                                                    options:(NSDictionary*)options
-                                             distributions:(NSArray*)distributions {
+                                             distributions:distributions {
     
     return [PredictiveEnsemble predictWithJSONModels:models
                                                 args:args

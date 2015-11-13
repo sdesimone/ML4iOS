@@ -15,12 +15,20 @@
 #ifndef ML4iOSEnums_h
 #define ML4iOSEnums_h
 
+/**
+ * Combination methods used in ensemble classifications/regressions:
+ *
+ * ML4iOSPredictionMethodPlurality: majority vote (plurality)/ average
+ * ML4iOSPredictionMethodConfidence: confidence weighted majority vote / weighted error
+ * ML4iOSPredictionMethodProbability: probability weighted majority vote / average
+ * ML4iOSPredictionMethodThreshold: threshold filtered vote
+ */
 typedef enum ML4iOSPredictionMethod {
     
     ML4iOSPredictionMethodPlurality,
     ML4iOSPredictionMethodConfidence,
-    ML4iOSPredictionMethodThreshold,
-    ML4iOSPredictionMethodProbability
+    ML4iOSPredictionMethodProbability,
+    ML4iOSPredictionMethodThreshold
     
 } ML4iOSPredictionMethod;
 

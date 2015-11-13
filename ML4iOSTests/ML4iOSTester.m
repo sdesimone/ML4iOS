@@ -23,8 +23,12 @@
 
 - (instancetype)init {
     
-    if (self = [super initWithUsername:@"sdesimone"
-                                   key:@"4ce2604fb1920124a697cbd5c5d63c5d754a746d"
+    NSString* userName = nil;
+    NSString* apiKey = nil;
+    NSAssert(userName && apiKey, @"Please, provide correct username and apiKey");
+    
+    if (self = [super initWithUsername:userName
+                                   key:apiKey
                        developmentMode:YES]) {
         
         [self setDelegate:self];
@@ -67,6 +71,9 @@
 }
 
 - (NSInteger)resourceStatus:(NSDictionary*)resource {
+    
+    NSAssert(!resource[@"Response"] || [resource[@"Response"][@"code"] intValue]/100 == 2,
+             @"Received wrong HTTP code  or nil response: %@", resource);
     
     SEL selector =
     NSSelectorFromString([NSString stringWithFormat:@"get%@WithIdSync:statusCode:",
@@ -159,14 +166,16 @@
     return nil;
 }
 
-- (NSString*)createAndWaitPredictionFromModelId:(NSString*)modelId
-                                      inputData:(NSDictionary*)inputData {
+- (NSString*)createAndWaitPredictionFromId:(NSString*)resourceId
+                              resourceType:(NSString*)resourceType
+                                 inputData:(NSDictionary*)inputData {
     
     NSInteger httpStatusCode = 0;
-    NSDictionary* prediction = [self createPredictionWithModelIdSync:modelId
-                                                                name:@"iris_prediction"
-                                                           arguments:inputData
-                                                          statusCode:&httpStatusCode];
+    NSDictionary* prediction = [self createPredictionWithResourceIdSync:resourceId
+                                                   resourceType:resourceType
+                                                           name:@"test_prediction"
+                                                      arguments:inputData
+                                                     statusCode:&httpStatusCode];
     
     NSString* predictionId = nil;
     if (prediction != nil) {
@@ -177,12 +186,14 @@
 }
 
 #pragma mark - Remote Prediction Helpers
-- (NSDictionary*)remotePredictionForModelId:(NSString*)modelId
-                                       data:(NSDictionary*)inputData
-                                    options:(NSDictionary*)options {
+- (NSDictionary*)remotePredictionForId:(NSString*)resourceId
+                          resourceType:(NSString*)resourceType
+                                  data:(NSDictionary*)inputData
+                               options:(NSDictionary*)options {
     
-    NSString* predictionId = [self createAndWaitPredictionFromModelId:modelId
-                                                            inputData:inputData];
+    NSString* predictionId = [self createAndWaitPredictionFromId:resourceId
+                                                    resourceType:resourceType
+                                                       inputData:inputData];
     NSInteger code = 0;
     NSDictionary* prediction = [self getPredictionWithIdSync:predictionId statusCode:&code];
     return prediction;
@@ -200,6 +211,24 @@
         [ML4iOSLocalPredictions localPredictionWithJSONModelSync:model
                                                        arguments:inputData
                                                          options:options];
+        return prediction;
+    }
+    return nil;
+}
+
+- (NSDictionary*)localPredictionForEnsembleId:(NSString*)ensembleId
+                                         data:(NSDictionary*)inputData
+                                      options:(NSDictionary*)options {
+    
+    NSInteger httpStatusCode = 0;
+    if ([ensembleId length] > 0) {
+        
+        NSDictionary* ensemble = [self getEnsembleWithIdSync:ensembleId statusCode:&httpStatusCode];
+        NSDictionary* prediction =
+        [ML4iOSLocalPredictions localPredictionWithJSONEnsembleSync:ensemble
+                                                          arguments:inputData
+                                                            options:options
+                                                             ml4ios:self];
         return prediction;
     }
     return nil;
