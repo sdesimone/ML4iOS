@@ -44,7 +44,7 @@ to generate centroid predictions locally.
 
 + (NSDictionary*)predictWithJSONCluster:(NSDictionary*)jsonCluster
                               arguments:(NSDictionary*)args
-                             argsByName:(BOOL)byName {
+                                options:(NSDictionary*)options {
     
     NSDictionary* fields = jsonCluster[@"clusters"][@"fields"];
     NSMutableDictionary* inputData = [NSMutableDictionary dictionaryWithCapacity:[fields allKeys].count];
