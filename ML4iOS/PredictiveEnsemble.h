@@ -19,14 +19,6 @@
 
 @property (nonatomic) BOOL isReadyToPredict;
 
-//- (instancetype)initWithEnsemble:(NSDictionary*)ensemble;
-//
-//- (instancetype)initWithEnsemble:(NSDictionary*)ensemble threshold:(NSUInteger)threshold;
-//
-//- (instancetype)initWithModelsIds:(NSArray*)modelIds
-//                        threshold:(NSUInteger)threshold
-//                    distributions:(NSArray*)distributions;
-
 - (instancetype)initWithModels:(NSArray*)models
                      maxModels:(NSUInteger)maxModels
                  distributions:(NSArray*)distributions;

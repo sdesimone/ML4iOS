@@ -49,48 +49,6 @@
     return [self initWithModels:models maxModels:maxModels distributions:nil];
 }
 
-//- (instancetype)initWithModelsIds:(NSArray*)modelIds
-//                        threshold:(NSUInteger)threshold
-//                    distributions:(NSArray*)distributions {
-// 
-//    NSAssert([modelIds isKindOfClass:[NSArray class]] &&
-//             [modelIds count] > 0 &&
-//             threshold > 0,
-//             @"initWithModelIds:threshold:distributions: contract unfulfilled.");
-//    
-//    if (self = [super init]) {
-//
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-//            _multiModels = [self multiModelsFromModels:[self modelsFromIds:modelIds]
-//                                             threshold:threshold];
-//            _isReadyToPredict = YES;
-//            _distributions = distributions;
-//        });
-//
-//    }
-//    return self;
-//}
-
-//- (instancetype)initWithEnsemble:(NSDictionary*)ensemble
-//                       threshold:(NSUInteger)threshold {
-//    
-//    NSAssert(ensemble[@"models"],
-//             @"Ensemble does not contain a model array.");
-//    
-//    if (self = [self initWithModelsIds:ensemble[@"models"]
-//                         threshold:threshold
-//                         distributions:ensemble[@"distributions"]]) {
-//
-//        _distributions = ensemble[@"distributions"];
-//    }
-//    return self;
-//}
-//
-//- (instancetype)initWithEnsemble:(NSDictionary*)ensemble {
-//    
-//    return [self initWithEnsemble:ensemble threshold:NOTHRESHOLD];
-//}
-
 - (NSDictionary*)predictWithArguments:(NSDictionary*)inputData
                                    options:(NSDictionary*)options {
     

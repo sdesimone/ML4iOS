@@ -18,7 +18,6 @@
 
 @interface MultiVote : NSObject
 
-//- (MultiVote*)extendWithPredictions:(NSDictionary*)predictions;
 - (MultiVote*)extendWithMultiVote:(MultiVote*)votes;
 
 - (NSDictionary*)combineWithMethod:(ML4iOSPredictionMethod)method
