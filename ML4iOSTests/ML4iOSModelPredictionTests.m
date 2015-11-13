@@ -99,6 +99,56 @@
     XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
 }
 
+- (void)testLocalWinesPredictionAgainstRemote1 {
+    
+    self.apiLibrary.csvFileName = @"wines.csv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
+                                                          arguments:@{@"000004": @32.0,
+                                                                      @"000001": @"Cabernet Sauvignon",
+                                                                      @"000000": @"France",
+                                                                      @"000002": @90}
+                                                            options:@{ @"byName" : @(NO) }];
+    
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
+                                                          arguments:@{@"Price": @32.0,
+                                                                      @"Grape": @"Cabernet Sauvignon",
+                                                                      @"Country": @"France",
+                                                                      @"Rating": @90}
+                                                            options:@{ @"byName" : @(YES) }];
+    
+    [self.apiLibrary deleteModelWithIdSync:modelId];
+    
+    XCTAssert([self.apiLibrary compareFloat:[prediction1[@"prediction"] doubleValue] float:78.57]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+}
+
+- (void)testLocalWinesPredictionAgainstRemote2 {
+    
+    self.apiLibrary.csvFileName = @"wines.csv";
+    NSString* modelId = [self.apiLibrary createAndWaitModelFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction1 = [self comparePredictionsWithModelId:modelId
+                                                          arguments:@{@"000004": @5.8,
+                                                                      @"000001": @"Pinot Grigio",
+                                                                      @"000000": @"Italy",
+                                                                      @"000002": @92}
+                                                            options:@{ @"byName" : @(NO) }];
+    
+    NSDictionary* prediction2 = [self comparePredictionsWithModelId:modelId
+                                                          arguments:@{@"Price": @5.8,
+                                                                      @"Grape": @"Pinot Grigio",
+                                                                      @"Country": @"Italy",
+                                                                      @"Rating": @92}
+                                                            options:@{ @"byName" : @(YES) }];
+    
+    [self.apiLibrary deleteModelWithIdSync:modelId];
+    
+    XCTAssert([self.apiLibrary compareFloat:[prediction1[@"prediction"] doubleValue] float:112.07]);
+    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+}
+
 - (void)testLocalSpamPredictionAgainstRemote1 {
     
     self.apiLibrary.csvFileName = @"spam.tsv";

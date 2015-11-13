@@ -41,6 +41,7 @@
                                         data:(NSDictionary*)inputData
                                      options:(NSDictionary*)options;
 
+- (BOOL)compareFloat:(double)f1 float:(float)f2;
 - (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2;
 - (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2;
 

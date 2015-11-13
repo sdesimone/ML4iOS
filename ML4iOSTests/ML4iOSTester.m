@@ -195,9 +195,9 @@
     NSInteger httpStatusCode = 0;
     if ([modelId length] > 0) {
         
-        NSDictionary* irisModel = [self getModelWithIdSync:modelId statusCode:&httpStatusCode];
+        NSDictionary* model = [self getModelWithIdSync:modelId statusCode:&httpStatusCode];
         NSDictionary* prediction =
-        [ML4iOSLocalPredictions localPredictionWithJSONModelSync:irisModel
+        [ML4iOSLocalPredictions localPredictionWithJSONModelSync:model
                                                        arguments:inputData
                                                          options:options];
         return prediction;
@@ -222,7 +222,14 @@
     }
     return nil;
 }
+
 #pragma mark - Prediction Result Check Helpers
+
+- (BOOL)compareFloat:(double)f1 float:(float)f2 {
+    float eps = 0.01;
+    return ((f1 - eps) < f2) && ((f1 + eps) > f2);
+}
+
 - (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2 {
     return [prediction1[@"output"]?:prediction1[@"prediction"]
             isEqual:prediction2[@"output"]?:prediction2[@"prediction"]];
@@ -230,12 +237,13 @@
 
 - (BOOL)compareConfidence:(NSDictionary*)prediction1 andConfidence:(NSDictionary*)prediction2 {
     
-    float eps = 0.0001;
     double confidence1 = [prediction1[@"confidence"] doubleValue];
     double confidence2 = [prediction2[@"confidence"] doubleValue];
-    return ((confidence1 - eps) < confidence2) && ((confidence1 + eps) > confidence2);
+    return [self compareFloat:confidence1 float:confidence2];
 }
+
 #pragma mark - ML4iOSDelegate
+
 -(void)dataSourceCreated:(NSDictionary*)dataSource statusCode:(NSInteger)code
 {
     
