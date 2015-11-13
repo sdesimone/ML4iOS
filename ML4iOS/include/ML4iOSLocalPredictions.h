@@ -40,7 +40,31 @@
           This is a list of allowed options:
             - byName: set to YES when specifying arguments by their names
               (vs. field IDs)
-            - 
+              Default is NO.
+            - strategy: a strategy to handle missing values; this should be
+              one of the value of the MissingStrategy type (currently,
+              MissingStrategyProportional is only supported for classifications,
+              not regressions).
+              Default is MissingStrategyLastPrediction.
+            - multiple: for classification problems, this parameter specifies
+              the number of categories to include in the distribution of the 
+              predicted node, e.g.:
+                 [{'prediction': 'Iris-setosa',
+                   'confidence': 0.9154
+                   'probability': 0.97
+                   'count': 97},
+                  {'prediction': 'Iris-virginica',
+                   'confidence': 0.0103
+                   'probability': 0.03,
+                   'count': 3}]
+              Default value is 0, so no distributions are provided. Give NSUIntegerMax
+              if you want them all.
+ 
+            Example:
+              @{ @"byName" : @(YES),
+                 @"strategy" : @(MissingStrategyProportional),
+                 @"multiple" : @(3) }
+
  * @return The result of the prediction
  */
 + (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
