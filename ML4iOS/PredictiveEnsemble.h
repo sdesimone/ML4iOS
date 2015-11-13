@@ -31,7 +31,7 @@
                      maxModels:(NSUInteger)maxModels
                  distributions:(NSArray*)distributions;
 
-- (NSDictionary*)predictWithJSONDictionary:(NSDictionary*)inputData
+- (NSDictionary*)predictWithArguments:(NSDictionary*)inputData
                                    options:(NSDictionary*)options;
 
 + (NSDictionary*)predictWithJSONModels:(NSArray*)models

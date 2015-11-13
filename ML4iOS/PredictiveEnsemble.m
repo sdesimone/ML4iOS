@@ -91,7 +91,7 @@
 //    return [self initWithEnsemble:ensemble threshold:NOTHRESHOLD];
 //}
 
-- (NSDictionary*)predictWithJSONDictionary:(NSDictionary*)inputData
+- (NSDictionary*)predictWithArguments:(NSDictionary*)inputData
                                    options:(NSDictionary*)options {
     
     NSAssert(_isReadyToPredict,
@@ -138,7 +138,7 @@
     NSUInteger maxModels = [options[@"maxModels"] ?: @(0) intValue];
 
     return [[[self alloc] initWithModels:models maxModels:maxModels]
-            predictWithJSONDictionary:inputData
+            predictWithArguments:inputData
             options:options];
 }
 

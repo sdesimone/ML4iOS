@@ -41,12 +41,8 @@
             return nil;
     }
     return [PredictiveEnsemble predictWithJSONModels:models
-                                                     args:args
-                                                  options:options];
-    //                                                   byName:byName
-    //                                                   method:method
-    //                                                maxModels:0
-    //                                               confidence:YES];
+                                                args:args
+                                             options:options];
 }
 
 + (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
@@ -54,8 +50,8 @@
                                            options:(NSDictionary*)options {
     
     return [PredictiveCluster predictWithJSONCluster:jsonCluster
-                                                arguments:args
-                                                  options:options];
+                                           arguments:args
+                                             options:options];
 }
 
 @end
