@@ -57,20 +57,27 @@
                    'confidence': 0.0103
                    'probability': 0.03,
                    'count': 3}]
-              Default value is 0, so no distributions are provided. Give NSUIntegerMax
-              if you want them all.
+              Default value is 0, so no distributions are provided.
+              Pass NSUIntegerMax if you want them all.
  
             Example:
               @{ @"byName" : @(YES),
                  @"strategy" : @(MissingStrategyProportional),
                  @"multiple" : @(3) }
 
+ * @param ml4ios An ML4iOS instance that is used to retrieve that models that 
+          make the ensemble.
  * @return The result of the prediction
  */
 + (NSDictionary*)localPredictionWithJSONEnsembleSync:(NSDictionary*)jsonEnsemble
                                            arguments:(NSDictionary*)args
                                              options:(NSDictionary*)options
                                               ml4ios:(ML4iOS*)ml4ios;
+
++ (NSDictionary*)localPredictionWithJSONEnsembleModelsSync:(NSDictionary*)jsonEnsemble
+                                                 arguments:(NSDictionary*)args
+                                                   options:(NSDictionary*)options
+                                             distributions:(NSArray*)distributions;
 
 /**
  * Creates local centroids using the cluster and args passed as parameters

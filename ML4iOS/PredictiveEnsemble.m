@@ -50,7 +50,7 @@
 }
 
 - (NSDictionary*)predictWithArguments:(NSDictionary*)inputData
-                                   options:(NSDictionary*)options {
+                              options:(NSDictionary*)options {
     
     NSAssert(_isReadyToPredict,
              @"You should wait for .isReadyToPredict to be YES before calling this method");
@@ -91,11 +91,12 @@
 
 + (NSDictionary*)predictWithJSONModels:(NSArray*)models
                                     args:(NSDictionary*)inputData
-                               options:(NSDictionary*)options {
+                               options:(NSDictionary*)options
+                         distributions:(NSArray*)distributions {
 
     NSUInteger maxModels = [options[@"maxModels"] ?: @(0) intValue];
 
-    return [[[self alloc] initWithModels:models maxModels:maxModels]
+    return [[[self alloc] initWithModels:models maxModels:maxModels distributions:distributions]
             predictWithArguments:inputData
             options:options];
 }

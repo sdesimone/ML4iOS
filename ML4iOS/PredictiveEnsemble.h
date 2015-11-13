@@ -28,6 +28,7 @@
 
 + (NSDictionary*)predictWithJSONModels:(NSArray*)models
                                   args:(NSDictionary*)inputData
-                               options:(NSDictionary*)options;
+                               options:(NSDictionary*)options
+                         distributions:(NSArray*)distributions;
 
 @end

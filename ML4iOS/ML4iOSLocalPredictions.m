@@ -42,7 +42,19 @@
     }
     return [PredictiveEnsemble predictWithJSONModels:models
                                                 args:args
-                                             options:options];
+                                             options:options
+                                       distributions:nil];
+}
+
++ (NSDictionary*)localPredictionWithJSONEnsembleModelsSync:(NSArray*)models
+                                                 arguments:(NSDictionary*)args
+                                                   options:(NSDictionary*)options
+                                             distributions:(NSArray*)distributions {
+    
+    return [PredictiveEnsemble predictWithJSONModels:models
+                                                args:args
+                                             options:options
+                                       distributions:distributions];
 }
 
 + (NSDictionary*)localCentroidsWithJSONClusterSync:(NSDictionary*)jsonCluster
