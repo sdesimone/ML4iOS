@@ -27,7 +27,7 @@
 - (MultiVote*)generateVotes:(NSDictionary*)inputData
                      byName:(BOOL)byName
             missingStrategy:(NSInteger)missingStrategy
-                  addMedian:(BOOL)addMedian;
+                     median:(BOOL)median;
 
 @end
 

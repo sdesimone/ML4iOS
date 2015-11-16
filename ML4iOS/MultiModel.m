@@ -23,7 +23,7 @@
 }
 
 - (instancetype)initWithModels:(NSArray*)models {
-
+    
     if (self = [super init]) {
         _models = models;
     }
@@ -46,7 +46,7 @@
 - (MultiVote*)generateVotes:(NSDictionary*)inputData
                      byName:(BOOL)byName
             missingStrategy:(NSInteger)missingStrategy
-                  addMedian:(BOOL)addMedian {
+                     median:(BOOL)median {
     
     MultiVote* votes = [MultiVote new];
     for (NSDictionary* model in _models) {
@@ -54,7 +54,7 @@
                                                   arguments:inputData
                                                     options:@{ @"byName" : @(byName),
                                                                @"strategy" : @(missingStrategy),
-                                                               @"addMedian" : @(addMedian) }]];
+                                                               @"median" : @(median) }]];
     }
     return votes;
 }

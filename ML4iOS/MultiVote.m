@@ -242,13 +242,12 @@ static NSString* const kNullCategory = @"kNullCategory";
  *         predictions.
  */
 - (NSDictionary*)weightedErrorWithConfidence:(BOOL)confidence
-                               addConfidence:(BOOL)addConfidence
-                             addDistribution:(BOOL)addDistribution
-                                    addCount:(BOOL)addCount
-                                   addMedian:(BOOL)addMedian
-                                      addMin:(BOOL)addMin
-                                      addMax:(BOOL)addMax {
-    
+                                distribution:(BOOL)distribution
+                                       count:(BOOL)count
+                                      median:(BOOL)median
+                                         min:(BOOL)addMin
+                                         max:(BOOL)addMax {
+
     NSAssert([self areKeysValid:@[@"confidence"]],
              @"MultiVote weightedErrorWithConfidence's contract unfulfilled: missing confidence key");
     
@@ -270,10 +269,10 @@ static NSString* const kNullCategory = @"kNullCategory";
         
         double medianError = [prediction[@"median"] doubleValue] * [prediction[@"errorWeight"] doubleValue];
         result += medianError;
-        if (addMedian) {
+        if (median) {
             medianResult += medianError;
         }
-        if (addCount) {
+        if (count) {
             instances += [prediction[@"count"] longValue];
         }
         if (addMin && min > [prediction[@"min"] doubleValue]) {
@@ -282,18 +281,18 @@ static NSString* const kNullCategory = @"kNullCategory";
         if (addMax && max < [prediction[@"max"] doubleValue]) {
             max = [prediction[@"max"] doubleValue];
         }
-        if (confidence || addConfidence) {
+        if (confidence) {
             combinedError += [prediction[@"confidence"] doubleValue] * [prediction[@"errorWeight"] doubleValue];
         }
     }
     [newPrediction setObject:@(result/normalizationFactor) forKey:@"prediction"];
-    if (addConfidence) {
+    if (confidence) {
         [newPrediction setObject:@(combinedError/normalizationFactor) forKey:@"confidence"];
     }
-    if (addCount) {
+    if (count) {
         [newPrediction setObject:@(instances) forKey:@"count"];
     }
-    if (addMedian) {
+    if (median) {
         [newPrediction setObject:@(medianResult/normalizationFactor) forKey:@"median"];
     }
     if (addMin) {
@@ -315,12 +314,11 @@ static NSString* const kNullCategory = @"kNullCategory";
  *
  */
 - (NSDictionary*)averageWithConfidence:(BOOL)confidence
-                         addConfidence:(BOOL)addConfidence
-                       addDistribution:(BOOL)addDistribution
-                              addCount:(BOOL)addCount
-                             addMedian:(BOOL)addMedian
-                                addMin:(BOOL)addMin
-                                addMax:(BOOL)addMax {
+                          distribution:(BOOL)distribution
+                                 count:(BOOL)count
+                                median:(BOOL)median
+                                   min:(BOOL)min
+                                   max:(BOOL)max {
 
     NSInteger total = _predictions.count;
     double result = 0.0;
@@ -331,19 +329,19 @@ static NSString* const kNullCategory = @"kNullCategory";
     long instances = 0;
     for (NSDictionary* prediction in _predictions) {
         result += [prediction[@"prediction"] doubleValue];
-        if (addMedian) {
+        if (median) {
             medianResult += [prediction[@"median"] doubleValue];
         }
         if (confidence) {
             confidenceValue += [prediction[@"confidence"] doubleValue];
         }
-        if (addCount) {
+        if (count) {
             instances += [prediction[@"count"] doubleValue];
         }
-        if (addMin) {
+        if (min) {
             dMin += [prediction[@"min"] doubleValue];
         }
-        if (addMax) {
+        if (max) {
             dMax += [prediction[@"max"] doubleValue];
         }
     }
@@ -360,22 +358,22 @@ static NSString* const kNullCategory = @"kNullCategory";
 
     NSMutableDictionary* output = [@{ @"prediction" : @(result),
                                       @"confidence" : @(confidenceValue) } mutableCopy];
-    if (addConfidence) {
+    if (confidence) {
         [output setObject:@(confidenceValue) forKey:@"confidence"];
     }
-    if (addDistribution) {
+    if (distribution) {
         [self mergeDistributionInPrediction:output];
     }
-    if (addCount) {
+    if (count) {
         [output setObject:@(instances) forKey:@"count"];
     }
-    if (addMedian) {
+    if (median) {
         [output setObject:@(medianResult) forKey:@"median"];
     }
-    if (addMin) {
+    if (min) {
         [output setObject:@(dMin) forKey:@"min"];
     }
-    if (addMax) {
+    if (max) {
         [output setObject:@(dMax) forKey:@"max"];
     }
     return output;
@@ -590,12 +588,11 @@ static NSString* const kNullCategory = @"kNullCategory";
  */
 - (NSDictionary*)combineWithMethod:(ML4iOSPredictionMethod)method
                         confidence:(BOOL)confidence
-                     addConfidence:(BOOL)addConfidence
-                   addDistribution:(BOOL)addDistribution
-                          addCount:(BOOL)addCount
-                         addMedian:(BOOL)addMedian
-                            addMin:(BOOL)addMin
-                            addMax:(BOOL)addMax
+                      distribution:(BOOL)distribution
+                             count:(BOOL)count
+                            median:(BOOL)median
+                               min:(BOOL)min
+                               max:(BOOL)max
                            options:(NSDictionary*)options {
     
     NSAssert(_predictions && _predictions.count > 0,
@@ -611,20 +608,18 @@ static NSString* const kNullCategory = @"kNullCategory";
         }
         if (method == ML4iOSPredictionMethodConfidence) {
             return [self weightedErrorWithConfidence:confidence
-                                       addConfidence:addConfidence
-                                     addDistribution:addDistribution
-                                            addCount:addCount
-                                           addMedian:addMedian
-                                              addMin:addMin
-                                              addMax:addMax];
+                                        distribution:(BOOL)distribution
+                                               count:(BOOL)count
+                                              median:(BOOL)median
+                                                 min:(BOOL)min
+                                                 max:(BOOL)max];
         }
         return [self averageWithConfidence:confidence
-                             addConfidence:addConfidence
-                           addDistribution:addDistribution
-                                  addCount:addCount
-                                 addMedian:addMedian
-                                    addMin:addMin
-                                    addMax:addMax];
+                              distribution:(BOOL)distribution
+                                     count:(BOOL)count
+                                    median:(BOOL)median
+                                       min:(BOOL)min
+                                       max:(BOOL)max];
     }
     
     MultiVote* votes = nil;

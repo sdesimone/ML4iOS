@@ -59,20 +59,19 @@
     MissingStrategy missingStrategy = [options[@"strategy"] ?: @(MissingStrategyLastPrediction) intValue];
     BOOL byName = [options[@"byName"] ?: @(NO) boolValue];
     BOOL confidence = [options[@"confidence"] ?: @(YES) boolValue];
-    BOOL addConfidence = [options[@"addConfidence"] ?: @(NO) boolValue];
-    BOOL addDistribution = [options[@"addDistribution"] ?: @(NO) boolValue];
-    BOOL addCount = [options[@"addCount"] ?: @(NO) boolValue];
-    BOOL addMedian = [options[@"addMedian"] ?: @(NO) boolValue];
-    BOOL addMin = [options[@"addMin"] ?: @(NO) boolValue];
-    BOOL addMax = [options[@"addMax"] ?: @(NO) boolValue];
+    BOOL distribution = [options[@"distribution"] ?: @(NO) boolValue];
+    BOOL count = [options[@"count"] ?: @(NO) boolValue];
+    BOOL median = [options[@"median"] ?: @(NO) boolValue];
+    BOOL min = [options[@"min"] ?: @(NO) boolValue];
+    BOOL max = [options[@"max"] ?: @(NO) boolValue];
     
     MultiVote* votes = [MultiVote new];
     for (MultiModel* multiModel in _multiModels) {
         MultiVote* partialVote = [multiModel generateVotes:inputData
                                                     byName:byName
                                            missingStrategy:missingStrategy
-                                                 addMedian:addMedian];
-        if (addMedian) {
+                                                 median:median];
+        if (median) {
             [partialVote addMedian];
         }
         [votes extendWithMultiVote:partialVote];
@@ -80,12 +79,11 @@
 
     return [votes combineWithMethod:method
                          confidence:confidence
-                      addConfidence:addConfidence
-                    addDistribution:addDistribution
-                           addCount:addCount
-                          addMedian:addMedian
-                             addMin:addMin
-                             addMax:addMax
+                    distribution:distribution
+                           count:count
+                          median:median
+                             min:min
+                             max:max
                             options:options];
 }
 

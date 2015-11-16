@@ -22,12 +22,11 @@
 
 - (NSDictionary*)combineWithMethod:(ML4iOSPredictionMethod)method
                         confidence:(BOOL)confidence
-                     addConfidence:(BOOL)addConfidence
-                   addDistribution:(BOOL)addDistribution
-                          addCount:(BOOL)addCount
-                         addMedian:(BOOL)addMedian
-                            addMin:(BOOL)addMin
-                            addMax:(BOOL)addMax
+                      distribution:(BOOL)distribution
+                             count:(BOOL)count
+                            median:(BOOL)median
+                               min:(BOOL)min
+                               max:(BOOL)max
                            options:(NSDictionary*)options;
 
 - (void)append:(NSDictionary*)predictionInfo;
