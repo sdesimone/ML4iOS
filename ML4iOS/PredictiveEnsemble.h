@@ -13,7 +13,6 @@
 // under the License.
 
 #import <Foundation/Foundation.h>
-#import "ML4iOSLocalPredictions.h"
 
 @interface PredictiveEnsemble : NSObject
 

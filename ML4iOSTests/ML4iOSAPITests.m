@@ -16,7 +16,6 @@
 #import "ML4iOS.h"
 #import "ML4iOSTestCase.h"
 #import "ML4iOSTester.h"
-#import "ML4iOSLocalPredictions.h"
 
 @interface ML4iOSAPITests : ML4iOSTestCase
 

@@ -16,7 +16,6 @@
 #import "PredictiveCluster.h"
 #import "ML4iOSTestCase.h"
 #import "ML4iOSTester.h"
-#import "ML4iOSLocalPredictions.h"
 
 @interface ML4iOSClusterPredictionTests : ML4iOSTestCase
 

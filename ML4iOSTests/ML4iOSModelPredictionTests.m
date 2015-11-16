@@ -15,7 +15,6 @@
 #import <XCTest/XCTest.h>
 #import "ML4iOS.h"
 #import "ML4iOSTester.h"
-#import "ML4iOSLocalPredictions.h"
 #import "ML4iOSTestCase.h"
 
 @interface ML4iOSModelPredictionTests : ML4iOSTestCase
