@@ -51,6 +51,7 @@
     XCTAssert(prediction1 && prediction2);
     XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2],
               @"Wrong predictions: %@ -- %@", prediction1[@"prediction"], prediction2[@"output"]);
+    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
     
     return prediction1;
 }

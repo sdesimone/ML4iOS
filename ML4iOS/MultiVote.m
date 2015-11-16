@@ -359,7 +359,7 @@ static NSString* const kNullCategory = @"kNullCategory";
     }
 
     NSMutableDictionary* output = [@{ @"prediction" : @(result),
-                                      @"confidence" : @(confidence) } mutableCopy];
+                                      @"confidence" : @(confidenceValue) } mutableCopy];
     if (addConfidence) {
         [output setObject:@(confidenceValue) forKey:@"confidence"];
     }
