@@ -72,6 +72,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4910F5F51BF9E62C0087E85A /* Credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Credentials.h; path = ML4iOSTests/Credentials.h; sourceTree = SOURCE_ROOT; };
 		492CC71919D2B021001829F5 /* PredictionCentroid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictionCentroid.h; sourceTree = "<group>"; };
 		492CC71A19D2B021001829F5 /* PredictionCentroid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictionCentroid.m; sourceTree = "<group>"; };
 		492CC71B19D2B021001829F5 /* PredictiveCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveCluster.h; sourceTree = "<group>"; };
@@ -244,6 +245,7 @@
 				494CAEFA1BF5E8E80028D95B /* ML4iOSLocalPredictions.h */,
 				DC3AE9751570D293008D2F79 /* ML4iOSDelegate.h */,
 				49559422192A6693006F4D9E /* Constants.h */,
+				4910F5F51BF9E62C0087E85A /* Credentials.h */,
 			);
 			path = include;
 			sourceTree = "<group>";

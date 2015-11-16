@@ -19,16 +19,16 @@
 #import "ML4iOSLocalPredictions.h"
 #import "objc/message.h"
 
+#import "Credentials.h"
+
 @implementation ML4iOSTester
 
 - (instancetype)init {
     
-    NSString* userName = nil;
-    NSString* apiKey = nil;
-    NSAssert(userName && apiKey, @"Please, provide correct username and apiKey");
+    NSAssert(_BML_USERNAME && _BML_APIKEY, @"Please, provide correct username and apiKey");
     
-    if (self = [super initWithUsername:userName
-                                   key:apiKey
+    if (self = [super initWithUsername:_BML_USERNAME
+                                   key:_BML_APIKEY
                        developmentMode:YES]) {
         
         [self setDelegate:self];
