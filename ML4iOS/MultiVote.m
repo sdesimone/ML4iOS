@@ -117,7 +117,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         
         NSInteger order = [self nextOrder];
         for (NSMutableDictionary* prediction in votes.predictions) {
-            [prediction setObject:@(order + 1) forKey:@"order"];
+            [prediction setObject:@(++order) forKey:@"order"];
             [_predictions addObject:prediction];
         }
     }

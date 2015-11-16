@@ -200,7 +200,7 @@
         self.options = @{ @"combiner" : @(ML4iOSPredictionMethodProbability)};
     } else if ([options[@"method"] intValue] == ML4iOSPredictionMethodThreshold) {
         self.options = @{ @"combiner" : @(ML4iOSPredictionMethodThreshold),
-                          @"thrashold" : @{ @"k" : options[@"threshold-k"],
+                          @"threshold" : @{ @"k" : options[@"threshold-k"],
                                              @"class" : options[@"threshold-category"]}};
     }
     

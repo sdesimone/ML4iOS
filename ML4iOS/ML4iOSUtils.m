@@ -200,7 +200,7 @@
           distribution:(NSDictionary*)distribution
                  count:(NSInteger)n
                      z:(double)z {
-    
+
     double z2 = 0.0;
     long n2 = 0.0;
     double wsSqrt = 0.0;

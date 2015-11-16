@@ -55,6 +55,9 @@
                                                     options:@{ @"byName" : @(byName),
                                                                @"strategy" : @(missingStrategy),
                                                                @"median" : @(median),
+                                                               @"confidence" : @(YES),
+                                                               @"count" : @(YES),
+                                                               @"distribution" : @(YES),
                                                                @"multiple" : @NSUIntegerMax}]];
     }
     return votes;

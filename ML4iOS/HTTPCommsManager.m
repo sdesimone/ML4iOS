@@ -247,15 +247,27 @@
 
 - (NSString*)optionsToString {
     
-    NSString* result = @"";
-    for (NSString* options in [_options allValues]) {
-        if ([options length] > 0) {
-            NSString* trimmedOptions = [options substringWithRange:NSMakeRange(1, [options length] - 2)];
-            result = [NSString stringWithFormat:@"%@, %@", result, trimmedOptions];
-        }
-    }
+    if (!_options)
+        return @"";
+    NSError* error = nil;
+    NSData* data = [NSJSONSerialization dataWithJSONObject:_options
+                                                   options:0
+                                                     error:&error];
+    NSString* result = [[NSString alloc] initWithData:data
+                                             encoding:NSUTF8StringEncoding];
     _options = nil;
-    return result;
+    return [result substringWithRange:NSMakeRange(1, [result length] - 2)];
+
+//    NSString* result = @"";
+//    for (NSString* options in [_options allValues]) {
+//        if ([options isKindOfClass:[NSString class]]) {
+//            if ([options length] > 0) {
+//                NSString* trimmedOptions = [options substringWithRange:NSMakeRange(1, [options length] - 2)];
+//                result = [NSString stringWithFormat:@"%@, %@", result, trimmedOptions];
+//            }
+//        } else
+//             result = [NSString stringWithFormat:@"%@, %@", result, options];
+//    }
 }
 
 //*******************************************************************************
@@ -683,7 +695,11 @@
     
     NSMutableString* bodyString = [NSMutableString stringWithCapacity:30];
     [bodyString appendFormat:@"{\"%@\":\"%@/%@\"", resourceType, resourceType, resourceId];
-    
+
+    NSString* options = [self optionsToString];
+    if ([options length] > 0)
+        [bodyString appendFormat:@", %@", options];
+
     if([name length] > 0)
         [bodyString appendFormat:@", \"name\":\"%@\"", name];
     

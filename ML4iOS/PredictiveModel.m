@@ -139,6 +139,7 @@
                 [output addObject:@{ @"prediction" : category,
                                      @"confidence" : @([self roundedConfidence:confidence]),
                                      @"probability" : @([distributionElement.lastObject doubleValue] / instances),
+                                     @"distribution" : distributionDictionary,
                                      @"count" : @([distributionElement.lastObject longValue])
                                      }];
             }
@@ -153,6 +154,7 @@
         prediction.next = field;
         [output addObject:@{ @"prediction" : prediction.prediction,
                              @"confidence" : @([self roundedConfidence:prediction.confidence]),
+                             @"distribution" : distributionDictionary,
                              @"count" : @(prediction.count)
                              }];
     }
