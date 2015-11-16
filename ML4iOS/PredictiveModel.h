@@ -43,16 +43,17 @@
  * By default the input fields must be keyed by field name but you can use
  *  `byName` to input them directly keyed by id.
  *
- * @param inputData: Input data to be predicted
+ * @param arguments: Input data to be predicted
  *
- * @param byName: Boolean, True if input_data is keyed by names
+ * @param options: a map of options that will determine how the prediction
+ *        is calculated. It may include the following key/values:
  *
- * @param missingStrategy: LAST_PREDICTION|PROPORTIONAL missing strategy for
- *                         missing fields
+ *        - missingStrategy: LAST_PREDICTION|PROPORTIONAL missing strategy for
+ *                           missing fields
  *
- * @param multiple: For categorical fields, it will make this method return
- *                  the categories in the distribution of the predicted node as a
- *                  list of dicts, e.g.:
+ *        - multiple: For categorical fields, it will make this method return
+ *                    the categories in the distribution of the predicted node as a
+ *                    list of dicts, e.g.:
  *
  *          [{'prediction': 'Iris-setosa',
  *              'confidence': 0.9154
@@ -75,9 +76,10 @@
 /**
  * Creates a local prediction using the model and args passed as parameters
  * @param jsonModel The model to use to create the prediction
- * @param args The arguments to create the prediction
- * @param byName The arguments passed in args parameter are passed by name
- * @return The result of the prediction encoded in an NSDictionary
+ * @param args The arguments to create the prediction as a string
+ * @param options a map of options that will determine how the prediction
+ *        is calculated. See predictWithArguments:options: for a list of them.
+ * @return The result of the prediction encoded in a NSDictionary
  */
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             inputData:(NSString*)args
@@ -86,9 +88,10 @@
 /**
  * Creates a local prediction using the model and args passed as parameters
  * @param jsonModel The model to use to create the prediction
- * @param argumentDictionary An NSDictionary containing the arguments to create the prediction
- * @param byName The arguments passed in args parameter are passed by name
- * @return The result of the prediction encoded in an NSDictionary
+ * @param arguments An NSDictionary containing the arguments to create the prediction
+ * @param options a map of options that will determine how the prediction
+ *        is calculated. See predictWithArguments:options: for a list of them.
+ * @return The result of the prediction encoded in a NSDictionary
  */
 
 + (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel

@@ -54,7 +54,8 @@
                                                   arguments:inputData
                                                     options:@{ @"byName" : @(byName),
                                                                @"strategy" : @(missingStrategy),
-                                                               @"median" : @(median) }]];
+                                                               @"median" : @(median),
+                                                               @"multiple" : @NSUIntegerMax}]];
     }
     return votes;
 }

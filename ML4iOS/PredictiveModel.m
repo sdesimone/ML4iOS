@@ -136,8 +136,7 @@
                 double confidence =
                 [ML4iOSUtils wsConfidence:category
                              distribution:distributionDictionary];
-                [output addObject:@{ //@"prediction" : @{ _tree.objectiveFields.firstObject : category },
-                                     @"prediction" : category,
+                [output addObject:@{ @"prediction" : category,
                                      @"confidence" : @([self roundedConfidence:confidence]),
                                      @"probability" : @([distributionElement.lastObject doubleValue] / instances),
                                      @"count" : @([distributionElement.lastObject longValue])
@@ -152,8 +151,7 @@
             field = self.fieldNameById[field];
         }
         prediction.next = field;
-        [output addObject:@{ //@"prediction" : @{ _tree.objectiveFields.firstObject : prediction.prediction },
-                             @"prediction" : prediction.prediction,
+        [output addObject:@{ @"prediction" : prediction.prediction,
                              @"confidence" : @([self roundedConfidence:prediction.confidence]),
                              @"count" : @(prediction.count)
                              }];

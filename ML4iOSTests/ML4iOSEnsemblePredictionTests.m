@@ -56,6 +56,20 @@
     return prediction1;
 }
 
+- (NSDictionary*)comparePredictionsWithEnsembleCSV:(NSString*)csvName
+                                         arguments:(NSDictionary*)arguments
+                                           options:(NSDictionary*)options {
+    
+    self.apiLibrary.csvFileName = csvName;
+    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleId:ensembleId
+                                                            arguments:arguments
+                                                              options:options];
+    
+    [self.apiLibrary deleteEnsembleWithIdSync:ensembleId];
+    return prediction;
+}
+
 - (void)testStoredEnsemble {
     
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
@@ -69,10 +83,10 @@
     
     NSDictionary* prediction = [ML4iOSLocalPredictions
                                 localPredictionWithJSONEnsembleSync:ensemble
-                                arguments:@{@"sepal length": @(6.02),
-                                            @"sepal width": @(3.15),
-                                            @"petal width": @(1.51),
-                                            @"petal length": @(4.07)}
+                                arguments:@{ @"sepal length": @(6.02),
+                                             @"sepal width": @(3.15),
+                                             @"petal width": @(1.51),
+                                             @"petal length": @(4.07) }
                                 options:@{ @"byName" : @YES,
                                            @"method" : @(ML4iOSPredictionMethodConfidence) }
                                 ml4ios:self.apiLibrary];
@@ -80,7 +94,7 @@
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");
 }
 
-- (void)testIrisEnsemblePredictionAgainstRemote {
+- (void)testEnsemblePredictionFieldNameResolution {
     
     self.apiLibrary.csvFileName = @"iris.csv";
     NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
@@ -103,19 +117,61 @@
     XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
 }
 
+- (void)testIrisEnsemblePredictionAgainstRemote1 {
+    
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                                             arguments:@{ @"sepal width": @4.1,
+                                                                          @"petal length": @0.96,
+                                                                          @"petal width": @2.52}
+                                                               options:@{ @"byName" : @(YES) }];
+    
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
+}
+
+- (void)testIrisEnsemblePredictionAgainstRemote2 {
+    
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                                             arguments:@{ @"sepal width": @3.9,
+                                                                          @"petal length": @0.95,
+                                                                          @"petal width": @1.52,
+                                                                          @"sepal length": @7.0}
+                                                               options:@{ @"byName" : @(YES),
+                                                                          @"method" : @(ML4iOSPredictionMethodConfidence) }];
+    
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
+}
+
+- (void)testIrisEnsemblePredictionAgainstRemote3 {
+    
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                                             arguments:@{ @"sepal width": @3.9,
+                                                                          @"petal length": @0.95,
+                                                                          @"petal width": @1.52,
+                                                                          @"sepal length": @7.0}
+                                                               options:@{ @"byName" : @(YES),
+                                                                          @"method" : @(ML4iOSPredictionMethodProbability) }];
+    
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
+}
+
+- (void)testIrisEnsemblePredictionAgainstRemote4 {
+    
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                                             arguments:@{ @"sepal width": @3.9,
+                                                                          @"petal length": @0.95,
+                                                                          @"petal width": @1.52,
+                                                                          @"sepal length": @7.0}
+                                                               options:@{ @"byName" : @(YES),
+                                                                          @"method" : @(ML4iOSPredictionMethodThreshold),
+                                                                          @"threshold-k" : @(5),
+                                                                          @"threshold-category" : @"Iris-setosa" }];
+    
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
+}
+
 - (void)testWinesEnsemblePredictionAgainstRemote {
     
-    self.apiLibrary.csvFileName = @"wines.csv";
-    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction1 = [self comparePredictionsWithEnsembleId:ensembleId
-                                                             arguments:@{ @"000004": @5.8,
-                                                                          @"000001": @"Pinot Grigio",
-                                                                          @"000000": @"Italy",
-                                                                          @"000002": @92}
-                                                               options:@{ @"byName" : @(NO),
-                                                                          @"confidence" : @(YES) }];
-    
-    NSDictionary* prediction2 = [self comparePredictionsWithEnsembleId:ensembleId
+    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"wines.csv"
                                                              arguments:@{ @"Price": @5.8,
                                                                           @"Grape": @"Pinot Grigio",
                                                                           @"Country": @"Italy",
@@ -123,10 +179,7 @@
                                                                options:@{ @"byName" : @(YES),
                                                                           @"confidence" : @(YES) }];
     
-    [self.apiLibrary deleteEnsembleWithIdSync:ensembleId];
-    
-    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2]);
-    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
+    XCTAssert(prediction && prediction[@"prediction"]);
 }
 
 @end

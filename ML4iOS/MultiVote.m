@@ -392,7 +392,7 @@ static NSString* const kNullCategory = @"kNullCategory";
 - (MultiVote*)singleOutCategory:(NSString*)category threshold:(NSInteger)threshold {
     
     NSAssert(threshold > 0 && category.length > 0, @"MultiVote singleOutCategory contract unfulfilled");
-    NSAssert(threshold <= _predictions.count, @"MultiVote singleOutCategory: threashold higher than prediction count");
+    NSAssert(threshold <= _predictions.count, @"MultiVote singleOutCategory: threshold higher than prediction count");
     NSMutableArray* categoryPredictions = [NSMutableArray new];
     NSMutableArray* restOfPredictions = [NSMutableArray new];
     for (NSDictionary* prediction in _predictions) {
@@ -560,7 +560,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         NSAssert(prediction[@"distribution"] && prediction[@"count"],
                  @"Wrong prediction found: no distribution/count info");
         long total = [prediction[@"count"] longValue];
-        NSAssert(total >= 0, @"Wrong total in probabilityWeight");
+        NSAssert(total > 0, @"Wrong total in probabilityWeight");
         
         NSMutableDictionary* distribution = prediction[@"distribution"];
         for (NSString* key in distribution.allKeys) {
@@ -624,8 +624,8 @@ static NSString* const kNullCategory = @"kNullCategory";
     
     MultiVote* votes = nil;
     if (method == ML4iOSPredictionMethodThreshold) {
-        NSInteger threshold = [options[@"threshold"] intValue];
-        NSString* category = options[@"category"];
+        NSInteger threshold = [options[@"threshold-k"] intValue];
+        NSString* category = options[@"threshold-category"];
         votes = [self singleOutCategory:category threshold:threshold];
     } else if (method == ML4iOSPredictionMethodProbability) {
         votes = [[MultiVote alloc] initWithPredictions:[self probabilityWeight]];

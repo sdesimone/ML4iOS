@@ -15,6 +15,7 @@
 #import <XCTest/XCTest.h>
 
 #import "ML4iOSTester.h"
+#import "ML4iOSEnums.h"
 #import "Constants.h"
 #import "ML4iOSLocalPredictions.h"
 #import "objc/message.h"
@@ -190,6 +191,18 @@
                           resourceType:(NSString*)resourceType
                                   data:(NSDictionary*)inputData
                                options:(NSDictionary*)options {
+    
+    if (!options || [options[@"method"] intValue] == ML4iOSPredictionMethodPlurality) {
+        self.options = @{ @"combiner" : @(ML4iOSPredictionMethodPlurality)};
+    } else if ([options[@"method"] intValue] == ML4iOSPredictionMethodConfidence) {
+        self.options = @{ @"combiner" : @(ML4iOSPredictionMethodConfidence)};
+    } else if ([options[@"method"] intValue] == ML4iOSPredictionMethodProbability) {
+        self.options = @{ @"combiner" : @(ML4iOSPredictionMethodProbability)};
+    } else if ([options[@"method"] intValue] == ML4iOSPredictionMethodThreshold) {
+        self.options = @{ @"combiner" : @(ML4iOSPredictionMethodThreshold),
+                          @"thrashold" : @{ @"k" : options[@"threshold-k"],
+                                             @"class" : options[@"threshold-category"]}};
+    }
     
     NSString* predictionId = [self createAndWaitPredictionFromId:resourceId
                                                     resourceType:resourceType
