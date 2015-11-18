@@ -18,42 +18,6 @@
 
 @implementation ML4iOSAnomalyScoreTests
 
-//-- This is copied from ML4iOSModelPredictionTests -- think about refactoring
-- (NSDictionary*)comparePredictionsWithEnsembleId:(NSString*)ensembleId
-                                        arguments:(NSDictionary*)arguments
-                                          options:(NSDictionary*)options {
-    
-    NSDictionary* prediction1 = [self.apiLibrary localPredictionForEnsembleId:ensembleId
-                                                                         data:arguments
-                                                                      options:options];
-    
-    NSDictionary* prediction2 = [self.apiLibrary remotePredictionForId:ensembleId
-                                                          resourceType:@"ensemble"
-                                                                  data:arguments
-                                                               options:options];
-    
-    XCTAssert(prediction1 && prediction2);
-    XCTAssert([self.apiLibrary comparePrediction:prediction1 andPrediction:prediction2],
-              @"Wrong predictions: %@ -- %@", prediction1[@"prediction"], prediction2[@"output"]);
-    XCTAssert([self.apiLibrary compareConfidence:prediction1 andConfidence:prediction2]);
-    
-    return prediction1;
-}
-
-- (NSDictionary*)comparePredictionsWithEnsembleCSV:(NSString*)csvName
-                                         arguments:(NSDictionary*)arguments
-                                           options:(NSDictionary*)options {
-    
-    self.apiLibrary.csvFileName = csvName;
-    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
-    NSDictionary* prediction = [self comparePredictionsWithEnsembleId:ensembleId
-                                                            arguments:arguments
-                                                              options:options];
-    
-    [self.apiLibrary deleteEnsembleWithIdSync:ensembleId];
-    return prediction;
-}
-
 - (void)testStoredAnomaly {
     
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
@@ -67,14 +31,61 @@
                                       error:&error];
     
     double score = [ML4iOSLocalPredictions
-                     localScoreWithJSONAnomalySync:ensemble
-                     arguments:@{ @"sepal length": @(6.02),
-                                  @"sepal width": @(3.15),
-                                  @"petal width": @(1.51),
-                                  @"petal length": @(4.07) }
-                     options:@{ @"byName" : @YES }];
+                    localScoreWithJSONAnomalySync:ensemble
+                    arguments:@{ @"sepal length": @(6.02),
+                                 @"sepal width": @(3.15),
+                                 @"petal width": @(1.51),
+                                 @"petal length": @(4.07) }
+                    options:@{ @"byName": @YES }];
     
     XCTAssert([self.apiLibrary compareFloat:score float:0.699], @"Pass");
+}
+
+- (void)testWinesAnomalyScore {
+    
+    self.apiLibrary.csvFileName = @"wines.csv";
+    NSString* anomalyId = [self.apiLibrary createAndWaitAnomalyFromDatasetId:self.apiLibrary.datasetId];
+
+    double score = [self.apiLibrary localAnomalyScoreForAnomalyId:anomalyId
+                                                             data:@{ @"Price": @5.8,
+                                                                     @"Grape": @"Pinot Grigio",
+                                                                     @"Country": @"Italy",
+                                                                     @"Rating": @91,
+                                                                     @"Total Sales": @89.11}
+                                                          options:@{ @"byName": @YES }];
+    
+    [self.apiLibrary deleteAnomalyWithIdSync:anomalyId];
+    
+    //-- score from web
+    XCTAssert([self.apiLibrary compareFloat:score float:0.5793]);
+}
+
+- (void)testIrisAnomalyScore {
+    
+    self.apiLibrary.csvFileName = @"iris.csv";
+    NSString* anomalyId = [self.apiLibrary createAndWaitAnomalyFromDatasetId:self.apiLibrary.datasetId];
+    
+    double score1 = [self.apiLibrary localAnomalyScoreForAnomalyId:anomalyId
+                                                             data:@{ @"sepal width": @4.1,
+                                                                     @"petal length": @0.96,
+                                                                     @"petal width": @2.52,
+                                                                     @"sepal length": @6.02,
+                                                                     @"species": @"Iris-setosa"}
+                                                          options:@{ @"byName": @YES }];
+    
+
+    
+    double score2 = [self.apiLibrary localAnomalyScoreForAnomalyId:anomalyId
+                                                      data:@{ @"sepal width": @4.1,
+                                                              @"petal length": @0.96,
+                                                              @"petal width": @2.52,
+                                                              @"species": @"Iris-setosa"}
+                                                   options:@{ @"byName": @YES }];
+
+    [self.apiLibrary deleteAnomalyWithIdSync:anomalyId];
+
+    XCTAssert([self.apiLibrary compareFloat:score1 float:0.6447]);
+    XCTAssert([self.apiLibrary compareFloat:score2 float:0.7679]);
 }
 
 @end

@@ -81,8 +81,11 @@ NSString* plural(NSString* string, int multiplicity) {
         _missing = NO;
         if ([RegExHelper isRegex:@"\\*$" matching:_op]) {
             _missing = YES;
-            _op = [_op substringToIndex:_op.length - 2];
+            _op = [_op substringToIndex:_op.length - 1];
         }
+        if ([_op length] == 0)
+            NSLog(@"CONY");
+
     }
     return self;
 }
@@ -199,6 +202,8 @@ NSString* plural(NSString* string, int multiplicity) {
 
 - (BOOL)evalPredicate:(NSString*)predicate args:(NSDictionary*)args {
     
+    if ([predicate isEqualToString:@"ls  rs"])
+        NSLog(@"CONY");
     NSPredicate* p = [NSPredicate predicateWithFormat:predicate];
     return [p evaluateWithObject:args];
 }
