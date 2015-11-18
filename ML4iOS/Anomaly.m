@@ -60,24 +60,27 @@
  *
  * @return
  */
-- (NSUInteger)verifiedDepthForTree:(NSDictionary*)tree path:(NSMutableArray*)path {
+- (NSUInteger)verifiedDepthForTree:(NSDictionary*)tree
+                              path:(NSMutableArray*)path
+                             depth:(NSInteger)depth {
 
-    if (!path) {
-        if (![self.predicates apply:tree fields:_fields]) {
-            return 0;
-        }
-    } else {
+    if (!path)
         path = [NSMutableArray new];
+    if (depth == 0) {
+        if (![self.predicates apply:tree fields:_fields]) {
+            return depth;
+        }
+        ++depth;
     }
     for (AnomalyTreeNode* child in _children) {
         if (_anomaly.stopped)
             return 0;
-        if ([self.predicates apply:tree fields:_fields]) {
+        if ([child.predicates apply:tree fields:_fields]) {
             [path addObject:[child.predicates ruleWithFields:_fields label:nil]];
-            return [self verifiedDepthForTree:tree path:path];
+            return [child verifiedDepthForTree:tree path:path depth:++depth];
         }
     }
-    return path.count;
+    return depth;
 }
 
 @end
@@ -106,7 +109,7 @@
         _sampleSize = [anomalyDictionary[@"sample_size"] doubleValue];
         _inputFields = anomalyDictionary[@"input_field"];
         
-        _meanDepth = [model[@"meanDepth"] doubleValue];
+        _meanDepth = [model[@"mean_depth"] doubleValue];
         double defaultDepth = 2 * (DEPTH_FACTOR + log(_sampleSize - 1) -
                                    ((_sampleSize - 1) / _sampleSize));
         _expectedMeanDepth = fmin(_meanDepth, defaultDepth);
@@ -128,7 +131,7 @@
     NSDictionary* filteredInput = [self filteredInputData:input byName:byName];
     double depthSum = 0.0;
     for (AnomalyTreeNode* tree in _iForest) {
-        depthSum += _stopped ? 0 : [tree verifiedDepthForTree:filteredInput path:nil];
+        depthSum += _stopped ? 0 : [tree verifiedDepthForTree:filteredInput path:nil depth:0];
     }
     double observedMeanDepth = depthSum / _iForest.count;
     return pow(2.0, -observedMeanDepth / _expectedMeanDepth);

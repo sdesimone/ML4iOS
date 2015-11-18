@@ -38,7 +38,6 @@
     
     NSMutableDictionary* _fieldIdByName;
     NSMutableDictionary* _fieldNameById;
-
 }
 
 @synthesize fieldIdByName = _fieldIdByName;
@@ -50,6 +49,15 @@
                  missingTokens:(NSArray*)missingTokens {
     
     if (self = [super init]) {
+        
+        for (NSString* fieldName in fields.allKeys) {
+            NSMutableDictionary* field = fields[fieldName];
+            NSAssert(field, @"Missing field %@", fieldName);
+            NSDictionary* modelField = fields[fieldName];
+            [field setObject:modelField[@"summary"] forKey:@"summary"];
+            [field setObject:modelField[@"name"] forKey:@"name"];
+        }
+        
         _fields = fields;
         _objectiveFieldId = objectiveFieldId;
         _locale = locale;

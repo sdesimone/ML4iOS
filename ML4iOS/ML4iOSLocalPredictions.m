@@ -21,7 +21,7 @@
 
 @implementation ML4iOSLocalPredictions
 
-+ (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
++ (NSDictionary*)localPredictionWithJSONModelSync:(NSMutableDictionary*)jsonModel
                                         arguments:(NSDictionary*)args
                                           options:(NSDictionary*)options {
     
@@ -67,9 +67,9 @@
                                              options:options];
 }
 
-+ (double)localScoreWithJSONAnomalySync:(NSDictionary*)jsonAnomaly
-                                         arguments:(NSDictionary*)args
-                                           options:(NSDictionary*)options {
++ (double)localScoreWithJSONAnomalySync:(NSMutableDictionary*)jsonAnomaly
+                              arguments:(NSDictionary*)args
+                                options:(NSDictionary*)options {
     
     return [[[Anomaly alloc] initWithJSONAnomaly:jsonAnomaly]
             score:args

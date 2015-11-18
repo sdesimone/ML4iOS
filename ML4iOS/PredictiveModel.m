@@ -21,6 +21,7 @@
 
 @implementation PredictiveModel {
     
+    NSDictionary* fields;
     NSString* _description;
     NSMutableArray* _fieldImportance;
     NSString* _resourceId;
@@ -36,7 +37,6 @@
 
 - (instancetype)initWithJSONModel:(NSDictionary*)jsonModel {
     
-    NSDictionary* fields;
     NSString* locale;
     NSString* objectiveField;
     NSDictionary* model = jsonModel[@"object"] ?: jsonModel;
@@ -44,18 +44,18 @@
     //-- base model
     NSDictionary* status = model[@"status"];
     NSAssert([status[@"code"] intValue] == 5, @"The model is not ready");
-    if ([status[@"code"] intValue] == 5) {
+    if ([status[@"code"] intValue] != 5)
+        return nil;
         
-        fields = model[@"model"][@"model_fields"];
-        
-        NSDictionary* modelFields = model[@"model"][@"fields"];
-        for (NSString* fieldName in fields.allKeys) {
-            NSMutableDictionary* field = fields[fieldName];
-            NSAssert(field, @"Missing field %@", fieldName);
-            NSDictionary* modelField = modelFields[fieldName];
-            [field setObject:modelField[@"summary"] forKey:@"summary"];
-            [field setObject:modelField[@"name"] forKey:@"name"];
-        }
+    fields = model[@"model"][@"model_fields"];
+    
+    NSDictionary* modelFields = model[@"model"][@"fields"];
+    for (NSString* fieldName in fields.allKeys) {
+        NSMutableDictionary* field = fields[fieldName];
+        NSAssert(field, @"Missing field %@", fieldName);
+        NSDictionary* modelField = modelFields[fieldName];
+        [field setObject:modelField[@"summary"] forKey:@"summary"];
+        [field setObject:modelField[@"name"] forKey:@"name"];
     }
     
     id objectiveFields = model[@"objective_fields"];
@@ -74,7 +74,6 @@
         _maxBins = 0;
         _model = model;
         _root = _model[@"model"][@"root"];
-        
         _description = jsonModel[@"description"] ?: @"";
         NSArray* modelFieldImportance = _model[@"model"][@"importance"];
         
@@ -161,7 +160,7 @@
     return output;
 }
 
-+ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
                             arguments:(NSDictionary*)inputData
                               options:(NSDictionary*)options {
     
@@ -173,14 +172,14 @@
     return nil;
 }
 
-+ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
                             inputData:(NSString*)inputData
                               options:(NSDictionary*)options {
     
     if(jsonModel != nil && inputData != nil) {
         
         NSError *error = nil;
-        NSDictionary* arguments =
+        NSMutableDictionary* arguments =
         [NSJSONSerialization JSONObjectWithData:[inputData dataUsingEncoding:NSUTF8StringEncoding]
                                         options:NSJSONReadingMutableContainers error:&error];
         

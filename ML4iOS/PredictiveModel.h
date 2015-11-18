@@ -81,7 +81,7 @@
  *        is calculated. See predictWithArguments:options: for a list of them.
  * @return The result of the prediction encoded in a NSDictionary
  */
-+ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
                             inputData:(NSString*)args
                               options:(NSDictionary*)options;
 
@@ -94,7 +94,7 @@
  * @return The result of the prediction encoded in a NSDictionary
  */
 
-+ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
                             arguments:(NSDictionary*)args
                               options:(NSDictionary*)options;
 

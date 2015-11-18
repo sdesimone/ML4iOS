@@ -28,7 +28,7 @@
                       (vs. field IDs)
  * @return The result of the prediction
  */
-+ (NSDictionary*)localPredictionWithJSONModelSync:(NSDictionary*)jsonModel
++ (NSDictionary*)localPredictionWithJSONModelSync:(NSMutableDictionary*)jsonModel
                                         arguments:(NSDictionary*)args
                                           options:(NSDictionary*)options;
 
@@ -120,7 +120,7 @@
  (vs. field IDs)
  * @return The score
  */
-+ (double)localScoreWithJSONAnomalySync:(NSDictionary*)jsonAnomaly
++ (double)localScoreWithJSONAnomalySync:(NSMutableDictionary*)jsonAnomaly
                               arguments:(NSDictionary*)args
                                 options:(NSDictionary*)options;
 

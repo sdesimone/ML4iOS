@@ -61,9 +61,10 @@
     NSData* clusterData = [NSData dataWithContentsOfFile:path];
     
     NSError* error = nil;
-    NSDictionary* ensemble = [NSJSONSerialization JSONObjectWithData:clusterData
-                                                             options:0
-                                                               error:&error];
+    NSMutableDictionary* ensemble =
+    [NSJSONSerialization JSONObjectWithData:clusterData
+                                    options:NSJSONReadingMutableContainers
+                                      error:&error];
     
     double score = [ML4iOSLocalPredictions
                      localScoreWithJSONAnomalySync:ensemble
@@ -71,10 +72,9 @@
                                   @"sepal width": @(3.15),
                                   @"petal width": @(1.51),
                                   @"petal length": @(4.07) }
-                     options:@{ @"byName" : @YES,
-                                @"method" : @(ML4iOSPredictionMethodConfidence) }];
+                     options:@{ @"byName" : @YES }];
     
-    XCTAssert(score != NAN, @"Pass");
+    XCTAssert([self.apiLibrary compareFloat:score float:0.699], @"Pass");
 }
 
 @end

@@ -258,16 +258,15 @@ NSString* plural(NSString* string, int multiplicity) {
         Predicate* predicate = nil;
         _predicates = [NSMutableArray new];
         for (id p in predicates) {
-            if ([p isKindOfClass:[NSString class]]) {
-                predicate = [[Predicate alloc] initWithOperator:@"TRUE" field:nil value:@1 term:nil];
-            }
-            if ([p isKindOfClass:[NSDictionary class]]) {
+            if ([p isKindOfClass:[NSString class]] || [p isKindOfClass:[NSNumber class]]) {
+                predicate = [[Predicate alloc] initWithOperator:@"TRUE" field:nil value:@YES term:nil];
+            } else if ([p isKindOfClass:[NSDictionary class]]) {
                 
                 if ([p[@"op"] isKindOfClass:[NSString class]] &&
                     [p[@"field"] isKindOfClass:[NSString class]] &&
                     p[@"value"]) {
                     
-                    predicate = [[Predicate alloc] initWithOperator:p[@"operator"]
+                    predicate = [[Predicate alloc] initWithOperator:p[@"op"]
                                                               field:p[@"field"]
                                                               value:p[@"value"]
                                                                term:p[@"term"]];
