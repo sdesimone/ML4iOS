@@ -246,13 +246,12 @@ NSString* plural(NSString* string, int multiplicity) {
 
 @end
 
-
 @implementation Predicates {
     
     NSMutableArray* _predicates;
 }
 
-- (instancetype)initWithArray:(NSArray*)predicates {
+- (instancetype)initWithPredicates:(NSArray*)predicates {
     
     if (self = [super init]) {
         

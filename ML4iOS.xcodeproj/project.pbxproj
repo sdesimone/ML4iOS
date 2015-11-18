@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4910F5F81BFB49560087E85A /* Anomaly.h in Headers */ = {isa = PBXBuildFile; fileRef = 4910F5F61BFB49560087E85A /* Anomaly.h */; settings = {ASSET_TAGS = (); }; };
+		4910F5F91BFB49560087E85A /* Anomaly.m in Sources */ = {isa = PBXBuildFile; fileRef = 4910F5F71BFB49560087E85A /* Anomaly.m */; settings = {ASSET_TAGS = (); }; };
+		4910F5FB1BFB820E0087E85A /* ML4iOSAnomalyScoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4910F5FA1BFB820E0087E85A /* ML4iOSAnomalyScoreTests.m */; settings = {ASSET_TAGS = (); }; };
+		4910F5FD1BFC9C080087E85A /* testAnomaly.json in Resources */ = {isa = PBXBuildFile; fileRef = 4910F5FC1BFC9C080087E85A /* testAnomaly.json */; settings = {ASSET_TAGS = (); }; };
 		492CC71D19D2B021001829F5 /* PredictionCentroid.h in Headers */ = {isa = PBXBuildFile; fileRef = 492CC71919D2B021001829F5 /* PredictionCentroid.h */; };
 		492CC71E19D2B021001829F5 /* PredictionCentroid.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC71A19D2B021001829F5 /* PredictionCentroid.m */; };
 		492CC71F19D2B021001829F5 /* PredictiveCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 492CC71B19D2B021001829F5 /* PredictiveCluster.h */; };
@@ -73,6 +77,10 @@
 
 /* Begin PBXFileReference section */
 		4910F5F51BF9E62C0087E85A /* Credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Credentials.h; path = ML4iOSTests/Credentials.h; sourceTree = SOURCE_ROOT; };
+		4910F5F61BFB49560087E85A /* Anomaly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Anomaly.h; sourceTree = "<group>"; };
+		4910F5F71BFB49560087E85A /* Anomaly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Anomaly.m; sourceTree = "<group>"; };
+		4910F5FA1BFB820E0087E85A /* ML4iOSAnomalyScoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSAnomalyScoreTests.m; sourceTree = "<group>"; };
+		4910F5FC1BFC9C080087E85A /* testAnomaly.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testAnomaly.json; sourceTree = "<group>"; };
 		492CC71919D2B021001829F5 /* PredictionCentroid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictionCentroid.h; sourceTree = "<group>"; };
 		492CC71A19D2B021001829F5 /* PredictionCentroid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictionCentroid.m; sourceTree = "<group>"; };
 		492CC71B19D2B021001829F5 /* PredictiveCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveCluster.h; sourceTree = "<group>"; };
@@ -225,6 +233,7 @@
 				492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */,
 				494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */,
 				DC3AE9621570D0B0008D2F79 /* Supporting Files */,
+				4910F5FA1BFB820E0087E85A /* ML4iOSAnomalyScoreTests.m */,
 			);
 			path = ML4iOSTests;
 			sourceTree = "<group>";
@@ -253,6 +262,7 @@
 		DC3AE99C1570DD90008D2F79 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				4910F5FC1BFC9C080087E85A /* testAnomaly.json */,
 				492CC72319D2B240001829F5 /* testCluster.json */,
 				DCD306BC1723602400CC9364 /* iris.csv */,
 				494CAEF21BF4C40A0028D95B /* spam.tsv */,
@@ -292,6 +302,8 @@
 				494CAEDA1BECC7F50028D95B /* ML4iOSUtils.m */,
 				494CAEE61BF0CDE20028D95B /* FieldResource.h */,
 				494CAEE71BF0CDE20028D95B /* FieldResource.m */,
+				4910F5F61BFB49560087E85A /* Anomaly.h */,
+				4910F5F71BFB49560087E85A /* Anomaly.m */,
 			);
 			name = LocalProcessing;
 			sourceTree = "<group>";
@@ -303,6 +315,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4910F5F81BFB49560087E85A /* Anomaly.h in Headers */,
 				494CAEE81BF0CDE20028D95B /* FieldResource.h in Headers */,
 				497963A01BE3759D00154E4E /* MultiModel.h in Headers */,
 				DC3AE9771570D293008D2F79 /* ML4iOS.h in Headers */,
@@ -397,6 +410,7 @@
 				492CC72419D2B240001829F5 /* testCluster.json in Resources */,
 				DCD306BD1723602400CC9364 /* iris.csv in Resources */,
 				494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */,
+				4910F5FD1BFC9C080087E85A /* testAnomaly.json in Resources */,
 				494CAEF51BF4C40A0028D95B /* spam.tsv in Resources */,
 				49C6CD7D19E6E6B200891301 /* spam.cluster in Resources */,
 				494CAEF71BF4C40A0028D95B /* wines.csv in Resources */,
@@ -414,6 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4910F5F91BFB49560087E85A /* Anomaly.m in Sources */,
 				497963A11BE3759D00154E4E /* MultiModel.m in Sources */,
 				DC3AE9521570D0B0008D2F79 /* ML4iOS.m in Sources */,
 				4979639D1BE27D2100154E4E /* PredictiveEnsemble.m in Sources */,
@@ -439,6 +454,7 @@
 				494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */,
 				494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */,
 				494CAEF01BF4A3FC0028D95B /* ML4iOSTestCase.m in Sources */,
+				4910F5FB1BFB820E0087E85A /* ML4iOSAnomalyScoreTests.m in Sources */,
 				494CAEEC1BF499990028D95B /* ML4iOSModelPredictionTests.m in Sources */,
 				492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */,
 				494CAED41BEB67BB0028D95B /* PredicatesTests.m in Sources */,

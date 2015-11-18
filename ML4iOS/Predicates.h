@@ -50,4 +50,9 @@ typedef enum PredicateLanguage {
 
 
 @interface Predicates : NSObject
+
+- (instancetype)initWithPredicates:(NSArray*)predicates;
+- (BOOL)apply:(NSDictionary*)input fields:(NSDictionary*)fields;
+- (NSString*)ruleWithFields:(NSDictionary*)fields label:(NSString*)label;
+
 @end

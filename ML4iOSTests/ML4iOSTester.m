@@ -167,6 +167,20 @@
     return nil;
 }
 
+- (NSString*)createAndWaitAnomalyFromDatasetId:(NSString*)dataSetId {
+    
+    NSInteger httpStatusCode = 0;
+    NSDictionary* anomaly = [self createAnomalyWithDataSetIdSync:dataSetId
+                                                             name:@"iris_model"
+                                                       statusCode:&httpStatusCode];
+    
+    if (anomaly != nil && httpStatusCode == HTTP_CREATED) {
+        
+        return [self waitResource:anomaly finalExpectedStatus:5 sleep:3];
+    }
+    return nil;
+}
+
 - (NSString*)createAndWaitPredictionFromId:(NSString*)resourceId
                               resourceType:(NSString*)resourceType
                                  inputData:(NSDictionary*)inputData {
@@ -249,20 +263,36 @@
 
 - (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
                                         data:(NSDictionary*)inputData
-                                      options:(NSDictionary*)options {
+                                     options:(NSDictionary*)options {
     
     NSInteger httpStatusCode = 0;
-    
     if ([clusterId length] > 0) {
         
-        NSDictionary* irisModel = [self getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
+        NSDictionary* irisCluster = [self getClusterWithIdSync:clusterId statusCode:&httpStatusCode];
         NSDictionary* prediction =
-        [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisModel
+        [ML4iOSLocalPredictions localCentroidsWithJSONClusterSync:irisCluster
                                                         arguments:inputData
                                                           options:options];
         return prediction;
     }
     return nil;
+}
+
+- (double)localAnomalyScoreForAnomalyId:(NSString*)anomalyId
+                                          data:(NSDictionary*)inputData
+                                       options:(NSDictionary*)options {
+    
+    NSInteger httpStatusCode = 0;
+    if ([anomalyId length] > 0) {
+        
+        NSDictionary* anomaly = [self getAnomalyWithIdSync:anomalyId statusCode:&httpStatusCode];
+        double score =
+        [ML4iOSLocalPredictions localScoreWithJSONAnomalySync:anomaly
+                                                    arguments:inputData
+                                                      options:options];
+        return score;
+    }
+    return NAN;
 }
 
 #pragma mark - Prediction Result Check Helpers
@@ -471,6 +501,28 @@
 }
 
 -(void)ensembleIsReady:(BOOL)ready {
+}
+
+-(void)anomalyCreated:(NSDictionary*)ensemble statusCode:(NSInteger)code
+{
+}
+
+-(void)anomalyUpdated:(NSDictionary*)ensemble statusCode:(NSInteger)code
+{
+}
+
+-(void)anomalyDeletedWithStatusCode:(NSInteger)code
+{
+}
+
+-(void)anomaliesRetrieved:(NSDictionary*)ensembles statusCode:(NSInteger)code
+{
+}
+
+-(void)anomalyRetrieved:(NSDictionary*)ensemble statusCode:(NSInteger)code {
+}
+
+-(void)anomalyIsReady:(BOOL)ready {
 }
 
 @end

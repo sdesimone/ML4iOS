@@ -26,6 +26,7 @@
 - (NSString*)createAndWaitModelFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitClusterFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitEnsembleFromDatasetId:(NSString*)dataSetId;
+- (NSString*)createAndWaitAnomalyFromDatasetId:(NSString*)dataSetId;
 - (NSString*)createAndWaitPredictionFromId:(NSString*)modelId
                               resourceType:(NSString*)resourceTyp
                                  inputData:(NSDictionary*)inputData;
@@ -46,6 +47,10 @@
 - (NSDictionary*)localPredictionForClusterId:(NSString*)clusterId
                                         data:(NSDictionary*)inputData
                                      options:(NSDictionary*)options;
+
+- (double)localAnomalyScoreForAnomalyId:(NSString*)anomalyId
+                                   data:(NSDictionary*)inputData
+                                options:(NSDictionary*)options;
 
 - (BOOL)compareFloat:(double)f1 float:(float)f2;
 - (BOOL)comparePrediction:(NSDictionary*)prediction1 andPrediction:(NSDictionary*)prediction2;

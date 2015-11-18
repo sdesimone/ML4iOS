@@ -16,6 +16,7 @@
 #import "PredictiveModel.h"
 #import "PredictiveCluster.h"
 #import "PredictiveEnsemble.h"
+#import "Anomaly.h"
 #import "ML4iOS.h"
 
 @implementation ML4iOSLocalPredictions
@@ -64,6 +65,15 @@
     return [PredictiveCluster predictWithJSONCluster:jsonCluster
                                            arguments:args
                                              options:options];
+}
+
++ (double)localScoreWithJSONAnomalySync:(NSDictionary*)jsonAnomaly
+                                         arguments:(NSDictionary*)args
+                                           options:(NSDictionary*)options {
+    
+    return [[[Anomaly alloc] initWithJSONAnomaly:jsonAnomaly]
+            score:args
+            options:options];
 }
 
 @end

@@ -765,6 +765,112 @@
 -(NSOperation*)checkEnsembleIsReadyWithId:(NSString*)identifier;
 
 //*******************************************************************************
+//*************************** Anomalies  **************************************
+//************* https://bigml.com/developers/ensembles ************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Ensembles
+
+/**
+ * Creates a ensemble from a given dataset.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the ensemble to be created
+ * @param code The HTTP status code returned
+ * @return The ensemble created if success, else nil
+ */
+-(NSDictionary*)createAnomalyWithDataSetIdSync:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Creates a anomaly from a given dataset. The response is provided in the method AnomalyCreated of the delegate.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the anomaly to be created
+ * @return The async NSOperation created
+ */
+-(NSOperation*)createAnomalyWithDataSetId:(NSString*)dataSetId name:(NSString*)name;
+
+/**
+ * Updates the name of a given anomaly.
+ * @param identifier The identifier of the anomaly to update
+ * @param name The new name of the anomaly
+ * @param code The HTTP status code returned
+ * @return The anomaly updated if success, else nil
+ */
+-(NSDictionary*)updateAnomalyNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Updates the name of a given anomaly. The response is provided in the method AnomalyUpdated of the delegate.
+ * @param identifier The identifier of the anomaly to update
+ * @param name The new name of the anomaly
+ * @return The async NSOperation created
+ */
+-(NSOperation*)updateAnomalyNameWithId:(NSString*)identifier name:(NSString*)name;
+
+/**
+ * Deletes a given anomaly.
+ * @param identifier The identifier of the anomaly to delete
+ * @return The HTTP status code returned
+ */
+-(NSInteger)deleteAnomalyWithIdSync:(NSString*)identifier;
+
+/**
+ * Deletes a given anomaly. The response is provided in the method AnomalyDeletedWithStatusCode of the delegate.
+ * @param identifier The identifier of the dataset to delete
+ * @return The async NSOperation created
+ */
+-(NSOperation*)deleteAnomalyWithId:(NSString*)identifier;
+
+/**
+ * Get a list of Anomalies filtered by name.
+ * @param name This optional parameter provides the name of the Anomalies to be retrieved. If it is nil then will be
+ * retrieved all Anomalies without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @param code The HTTP status code returned
+ * @return The list of Anomalies found if success, else nil
+ */
+-(NSDictionary*)getAllAnomaliesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+
+/**
+ * Get a list of Anomalies filtered by name. The response is provided in the method AnomaliesRetrieved of the delegate.
+ * @param name This optional parameter provides the name of the Anomalies to be retrieved. If it is nil then will be
+ * retrieved all Anomalies without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getAllAnomaliesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit;
+
+/**
+ * Get a anomaly.
+ * @param identifier The identifier of the anomaly to get
+ * @param code The HTTP status code returned
+ * @return The anomaly if success, else nil
+ */
+-(NSDictionary*)getAnomalyWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code;
+
+/**
+ * Get a anomaly. The response is provided in the method AnomalyRetrieved of the delegate.
+ * @param identifier The identifier of the anomaly to get
+ * @return The async NSOperation created
+ */
+-(NSOperation*)getAnomalyWithId:(NSString*)identifier;
+
+/**
+ * Check if the status of the anomaly is FINISHED.
+ * @param identifier The identifier of the anomaly to check the status
+ * @return true if the status of the anomaly is FINISHED, else false
+ */
+-(BOOL)checkAnomalyIsReadyWithIdSync:(NSString*)identifier;
+
+/**
+ * Check if the status of the anomaly is FINISHED. The response is provided in the method AnomalyIsReady of the delegate.
+ * @param identifier The identifier of the anomaly to check the status
+ * @return The async NSOperation created
+ */
+-(NSOperation*)checkAnomalyIsReadyWithId:(NSString*)identifier;
+
+//*******************************************************************************
 //*************************** PROJECTS  **************************************
 //************* https://bigml.com/developers/projects ************************
 //*******************************************************************************

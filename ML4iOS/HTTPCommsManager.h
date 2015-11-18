@@ -332,6 +332,57 @@
 -(NSDictionary*)getEnsembleWithId:(NSString*)identifier statusCode:(NSInteger*)code;
 
 //*******************************************************************************
+//**************************  AnomalyS  *******************************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Anomalies
+
+/**
+ * Creates a model from a given dataset.
+ * @param dataSetId The identifier of the dataset
+ * @param name This optional parameter provides the name of the model to be created
+ * @param code The HTTP status code returned
+ * @return The model created if success, else nil
+ */
+-(NSDictionary*)createAnomalyWithDataSetId:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Updates the name of a given model.
+ * @param identifier The identifier of the model to update
+ * @param name The new name of the model
+ * @param code The HTTP status code returned
+ * @return The model updated if success, else nil
+ */
+-(NSDictionary*)updateAnomalyNameWithId:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code;
+
+/**
+ * Deletes a given model.
+ * @param identifier The identifier of the model to delete
+ * @return The HTTP status code returned
+ */
+-(NSInteger)deleteAnomalyWithId:(NSString*)identifier;
+
+/**
+ * Get a list of models filtered by name.
+ * @param name This optional parameter provides the name of the models to be retrieved. If it is nil then will be
+ * retrieved all models without any filtering
+ * @param offset The offset to paginate the results
+ * @param limit The maximum number of results
+ * @param code The HTTP status code returned
+ * @return The list of models found if success, else nil
+ */
+-(NSDictionary*)getAllAnomaliesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code;
+
+/**
+ * Get a model.
+ * @param identifier The identifier of the model to get
+ * @param code The HTTP status code returned
+ * @return The model if success, else nil
+ */
+-(NSDictionary*)getAnomalyWithId:(NSString*)identifier statusCode:(NSInteger*)code;
+
+//*******************************************************************************
 //**************************  PREDICTIONS  **************************************
 //*******************************************************************************
 

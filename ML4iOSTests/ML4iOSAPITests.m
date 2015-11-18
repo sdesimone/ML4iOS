@@ -53,21 +53,28 @@
     
     NSString* modelId = [apiLibrary createAndWaitModelFromDatasetId:datasetId];
     XCTAssert(modelId);
-    [apiLibrary deleteModelWithIdSync:modelId];
+    XCTAssert([apiLibrary deleteModelWithIdSync:modelId] == 204);
 }
 
 - (void)testCluster {
     
     NSString* clusterId = [apiLibrary createAndWaitClusterFromDatasetId:datasetId];
     XCTAssert(clusterId);
-    [apiLibrary deleteClusterWithIdSync:clusterId];
+    XCTAssert([apiLibrary deleteClusterWithIdSync:clusterId] == 204);
 }
 
 - (void)testEnsemble {
     
     NSString* identifier = [apiLibrary createAndWaitEnsembleFromDatasetId:datasetId];
     XCTAssert(identifier);
-    [apiLibrary deleteEnsembleWithIdSync:identifier];
+    XCTAssert([apiLibrary deleteEnsembleWithIdSync:identifier] == 204);
+}
+
+- (void)testAnomaly {
+    
+    NSString* identifier = [apiLibrary createAndWaitAnomalyFromDatasetId:datasetId];
+    XCTAssert(identifier);
+    XCTAssert([apiLibrary deleteAnomalyWithIdSync:identifier] == 204);
 }
 
 - (void)testModelPrediction {
@@ -83,9 +90,9 @@
                                                          options:@{ @"byName" : @(NO) }];
     XCTAssert(prediction);
     
-    [apiLibrary deleteModelWithIdSync:modelId];
-    [apiLibrary
-     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
+    XCTAssert([apiLibrary deleteModelWithIdSync:modelId] == 204);
+    XCTAssert([apiLibrary
+     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject] == 204);
 }
 
 - (void)testEnsemblePrediction {
@@ -100,9 +107,9 @@
                                                                    @"000003": @1.51}
                                                          options:@{ @"byName" : @(NO) }];
     XCTAssert(prediction);
-    [apiLibrary deleteEnsembleWithIdSync:ensembleId];
-    [apiLibrary
-     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject];
+    XCTAssert([apiLibrary deleteEnsembleWithIdSync:ensembleId] == 204);
+    XCTAssert([apiLibrary
+     deletePredictionWithIdSync:[prediction[@"resource"] componentsSeparatedByString:@"/"].lastObject] == 204);
 }
 
 @end

@@ -981,6 +981,167 @@
 }
 
 //*******************************************************************************
+//*************************** ANOMALIES  *******************************************
+//************* https://bigml.com/developers/ensembles *****************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark Anomalies
+
+-(NSDictionary*)createAnomalyWithDataSetIdSync:(NSString*)dataSetId name:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager createAnomalyWithDataSetId:dataSetId name:name statusCode:code];
+}
+
+-(NSOperation*)createAnomalyWithDataSetId:(NSString*)dataSetId name:(NSString*)name
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
+    params[@"dataSetId"] = dataSetId;
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(createAnomalyAction:) params:params];
+}
+
+-(void)createAnomalyAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* dataSetId = params[@"dataSetId"];
+    NSString* name = params[@"name"];
+    
+    NSDictionary* anomaly = [commsManager createAnomalyWithDataSetId:dataSetId name:name statusCode:&statusCode];
+    
+    [delegate anomalyCreated:anomaly statusCode:statusCode];
+}
+
+-(NSDictionary*)updateAnomalyNameWithIdSync:(NSString*)identifier name:(NSString*)name statusCode:(NSInteger*)code
+{
+    return [commsManager updateAnomalyNameWithId:identifier name:name statusCode:code];
+}
+
+-(NSOperation*)updateAnomalyNameWithId:(NSString*)identifier name:(NSString*)name
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:2];
+    params[@"identifier"] = identifier;
+    params[@"name"] = name;
+    
+    return [self launchOperationWithSelector:@selector(updateAnomalyAction:) params:params];
+}
+
+-(void)updateAnomalyAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* identifier = params[@"identifier"];
+    NSString* name = params[@"name"];
+    
+    NSDictionary* anomaly = [commsManager updateAnomalyNameWithId:identifier name:name statusCode:&statusCode];
+    
+    [delegate anomalyUpdated:anomaly statusCode:statusCode];
+}
+
+-(NSInteger)deleteAnomalyWithIdSync:(NSString*)identifier
+{
+    return [commsManager deleteAnomalyWithId:identifier];
+}
+
+-(NSOperation*)deleteAnomalyWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(deleteAnomalyAction:) params:params];
+}
+
+-(void)deleteAnomalyAction:(NSDictionary*)params
+{
+    NSInteger statusCode = [commsManager deleteAnomalyWithId:params[@"identifier"]];
+    
+    [delegate anomalyDeletedWithStatusCode:statusCode];
+}
+
+-(NSDictionary*)getAllAnomaliesWithNameSync:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit statusCode:(NSInteger*)code
+{
+    return [commsManager getAllAnomaliesWithName:name offset:offset limit:limit statusCode:code];
+}
+
+-(NSOperation*)getAllAnomaliesWithName:(NSString*)name offset:(NSInteger)offset limit:(NSInteger)limit
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"name"] = name;
+    params[@"offset"] = @(offset);
+    params[@"limit"] = @(limit);
+    
+    return [self launchOperationWithSelector:@selector(getAllAnomaliesAction:) params:params];
+}
+
+-(void)getAllAnomaliesAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSString* name = params[@"name"];
+    NSInteger offset = [params[@"offset"]integerValue];
+    NSInteger limit = [params[@"limit"]integerValue];
+    
+    NSDictionary* Anomalies = [commsManager getAllAnomaliesWithName:name offset:offset limit:limit statusCode:&statusCode];
+    
+    [delegate anomaliesRetrieved:Anomalies statusCode:statusCode];
+}
+
+-(NSDictionary*)getAnomalyWithIdSync:(NSString*)identifier statusCode:(NSInteger*)code
+{
+    return [commsManager getAnomalyWithId:identifier statusCode:code];
+}
+
+-(NSOperation*)getAnomalyWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:1];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(getAnomalyAction:) params:params];
+}
+
+-(void)getAnomalyAction:(NSDictionary*)params
+{
+    NSInteger statusCode = 0;
+    NSDictionary* anomaly = [commsManager getAnomalyWithId:params[@"identifier"] statusCode:&statusCode];
+    
+    [delegate anomalyRetrieved:anomaly statusCode:statusCode];
+}
+
+-(BOOL)checkAnomalyIsReadyWithIdSync:(NSString*)identifier
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* anomaly = [commsManager getAnomalyWithId:identifier statusCode:&statusCode];
+    
+    if(anomaly != nil && statusCode == HTTP_OK)
+        ready = [anomaly[@"status"][@"code"]intValue] == FINISHED;
+    
+    return ready;
+}
+
+-(NSOperation*)checkAnomalyIsReadyWithId:(NSString*)identifier
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithCapacity:3];
+    params[@"identifier"] = identifier;
+    
+    return [self launchOperationWithSelector:@selector(checkAnomalyIsReadyAction:) params:params];
+}
+
+-(void)checkAnomalyIsReadyAction:(NSDictionary*)params
+{
+    BOOL ready = NO;
+    
+    NSInteger statusCode = 0;
+    NSDictionary* anomaly = [commsManager getAnomalyWithId:params[@"identifier"]
+                                                  statusCode:&statusCode];
+    
+    if(anomaly != nil && statusCode == HTTP_OK)
+        ready = [anomaly[@"status"][@"code"]intValue] == FINISHED;
+    
+    [delegate anomalyIsReady:ready];
+}
+
+//*******************************************************************************
 //*************************** PREDICTIONS  **************************************
 //************* https://bigml.com/developers/predictions ************************
 //*******************************************************************************

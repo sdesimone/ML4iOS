@@ -220,7 +220,7 @@
 -(void)clusterIsReady:(BOOL)ready;
 
 //*******************************************************************************
-//*************************** CLUSTERS *******************************************
+//*************************** ENSEMBLES *******************************************
 //************* https://bigml.com/developers/Ensembles *****************************
 //*******************************************************************************
 
@@ -266,6 +266,54 @@
  * @param ready true if ensemble status is FINISHED, else false
  */
 -(void)ensembleIsReady:(BOOL)ready;
+
+//*******************************************************************************
+//*************************** ANOMALIES *****************************************
+//************* https://bigml.com/developers/Anomalies **************************
+//*******************************************************************************
+
+#pragma mark -
+#pragma mark anomalys
+
+/**
+ * Async response to createanomalyWithDataSetId
+ * @param anomaly The anomaly created if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)anomalyCreated:(NSDictionary*)anomaly statusCode:(NSInteger)code;
+
+/**
+ * Async response to updateanomalyNameWithId
+ * @param anomaly The anomaly updated if success, else nil
+ * @param code The HTTP status code
+ */
+-(void)anomalyUpdated:(NSDictionary*)anomaly statusCode:(NSInteger)code;
+
+/**
+ * Async response to deleteanomalyWithId
+ * @param code The HTTP status code
+ */
+-(void)anomalyDeletedWithStatusCode:(NSInteger)code;
+
+/**
+ * Async response to getAllanomalysWithName
+ * @param anomalys The anomalys retrieved
+ * @param code The HTTP status code
+ */
+-(void)anomaliesRetrieved:(NSDictionary*)anomalys statusCode:(NSInteger)code;
+
+/**
+ * Async response to getanomalyWithId
+ * @param anomaly The anomaly retrieved
+ * @param code The HTTP status code
+ */
+-(void)anomalyRetrieved:(NSDictionary*)anomaly statusCode:(NSInteger)code;
+
+/**
+ * Async response to checkanomalyIsReadyWithId
+ * @param ready true if anomaly status is FINISHED, else false
+ */
+-(void)anomalyIsReady:(BOOL)ready;
 
 //*******************************************************************************
 //*************************** PREDICTIONS  **************************************
