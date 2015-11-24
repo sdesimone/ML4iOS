@@ -148,7 +148,7 @@
         double point = [bin.firstObject doubleValue];
         count += [bin.lastObject doubleValue];
         if (count > (instances / 2)) {
-            if ((instances % 2 != 0) && count - 1 == count / 2 && previousPoint != NAN) {
+            if ((instances % 2 != 0) && count - 1 == instances / 2 && previousPoint != NAN) {
                 return (point + previousPoint) / 2;
             }
             return point;
