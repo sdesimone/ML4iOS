@@ -36,7 +36,6 @@ typedef PredictionTree TreeHolder;
 
 @implementation PredictionTree {
     
-    NSDictionary* _root;
     NSDictionary* _fields;
     NSArray* _objectiveFields;
     NSString* _nodeId;
@@ -61,15 +60,14 @@ typedef PredictionTree TreeHolder;
 
     if (self = [super init]) {
         
-        _root = root;
         _fields = fields;
         _objectiveFields = objectiveFields;
         
-        _output = _root[@"output"];
-        _confidence = [_root[@"confidence"] doubleValue];
-        _rootDistribution = rootDistribution;
+        _output = root[@"output"];
+        _confidence = [root[@"confidence"] doubleValue];
+        rootDistribution = rootDistribution;
         
-        NSObject* predicateObj = _root[@"predicate"];
+        NSObject* predicateObj = root[@"predicate"];
         
         if ([predicateObj respondsToSelector:@selector(boolValue)] &&
             [(NSNumber*)predicateObj boolValue] == YES) {
@@ -83,8 +81,8 @@ typedef PredictionTree TreeHolder;
                                                           term:predicateDict[@"term"]];
         }
         
-        if (_root[@"id"]) {
-            _nodeId = _root[@"id"];
+        if (root[@"id"]) {
+            _nodeId = root[@"id"];
             _parentId = parentId;
             [idsMap setObject:self forKey:_nodeId];
         }
@@ -332,9 +330,7 @@ typedef PredictionTree TreeHolder;
     NSMutableDictionary* finalDistribution = [NSMutableDictionary new];
     if (_children.count == 0) {
         *lastNode = self;
-        return [ML4iOSUtils
-                mergeDistribution:[NSMutableDictionary new]
-                andDistribution:[ML4iOSUtils dictionaryFromDistributionArray:_distribution]];
+        return [ML4iOSUtils dictionaryFromDistributionArray:_distribution];
     }
     if ([self isOneBranch:_children inputData:inputData]) {
         for (PredictionTree* child in _children) {
@@ -436,7 +432,8 @@ typedef PredictionTree TreeHolder;
                                              distribution:lastNode.distribution
                                          distributionUnit:lastNode.distributionUnit
                                                  children:lastNode.children];
-                }
+                } else
+                    NSAssert(NO, @"Got more than one instances in single-node case");
             }
             //-- when there's more instances, sort elements by their mean
             NSArray* distribution = [ML4iOSUtils arrayFromDistributionDictionary:finalDistribution];
