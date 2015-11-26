@@ -202,7 +202,6 @@
                      z:(double)z {
 
     double z2 = 0.0;
-    long n2 = 0.0;
     double wsSqrt = 0.0;
     double wsFactor = 0.0;
     double p = [distribution[prediction] doubleValue];
@@ -218,9 +217,8 @@
 
     z2 = z * z;
     wsFactor = z2 / n;
-    n2 = n * n;
     wsSqrt = sqrt((p * (1 - p) + wsFactor / 4) / n);
-    return (p + wsFactor / 2 - z *wsSqrt) / (1 + wsFactor);
+    return (p + wsFactor / 2 - z * wsSqrt) / (1 + wsFactor);
 }
 
 + (double)wsConfidence:(id)prediction
@@ -269,8 +267,8 @@
 
     if (field[@"suffix"]) {
         NSRange r = [value rangeOfString:field[@"suffix"]];
-        if (r.location == value.length - 6)
-            value = [value substringToIndex:value.length - 6 - 1];
+        if (r.location == value.length - [field[@"suffix"] length])
+            value = [value substringToIndex:r.location - 1];
     }
     return value;
 }
@@ -282,15 +280,9 @@
         id value = inputData[fieldId];
         NSDictionary* field = fields[fieldId];
         NSString* opType = field[@"optype"];
-        if (([opType isEqualToString:@"numeric"] && [value isKindOfClass:[NSString class]]) ||
-            (![opType isEqualToString:@"numeric"] && ![value isKindOfClass:[NSString class]])) {
-            
-            if ([opType isEqualToString:@"numeric"]) {
-                value = [self stripAffixesFromValue:value field:fields];
-            }
-//            if ([opType isEqualToString:@"numeric"]) {
-//                value = [value doubleValue];
-//            }
+        
+        if ([opType isEqualToString:@"numeric"] && [value isKindOfClass:[NSString class]]) {
+            value = [self stripAffixesFromValue:value field:field];
         }
         output[fieldId] = value;
     }
