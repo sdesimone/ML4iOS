@@ -16,20 +16,13 @@
 #import "ML4iOS.h"
 #import "ML4iOSTester.h"
 #import "ML4iOSTestCase.h"
+#import "ML4iOSLocalPredictions.h"
 
 @interface ML4iOSModelPredictionTests : ML4iOSTestCase
 
 @end
 
 @implementation ML4iOSModelPredictionTests
-
-- (void)setUp {
-    [super setUp];
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
 
 - (NSDictionary*)comparePredictionsWithModelId:(NSString*)modelId
                                   arguments:(NSDictionary*)arguments
@@ -51,6 +44,28 @@
               @"Wrong confidences: %@ -- %@", prediction1[@"confidence"], prediction2[@"confidence"]);
     
     return prediction1;
+}
+
+- (void)testStoredIrisModel {
+    
+    NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+    NSString* path = [bundle pathForResource:@"iris" ofType:@"model"];
+    NSData* data = [NSData dataWithContentsOfFile:path];
+    
+    NSError* error = nil;
+    NSDictionary* model = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:0
+                                                               error:&error];
+    
+    NSDictionary* prediction = [ML4iOSLocalPredictions
+                                localPredictionWithJSONModelSync:model
+                                arguments:@{ @"sepal length": @(6.02),
+                                             @"sepal width": @(3.15),
+                                             @"petal width": @(1.51),
+                                             @"petal length": @(4.07) }
+                                options:@{ @"byName" : @YES }];
+    
+    XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");
 }
 
 - (void)testLocalIrisPredictionAgainstRemote1 {

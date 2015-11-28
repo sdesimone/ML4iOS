@@ -233,7 +233,7 @@
     NSInteger httpStatusCode = 0;
     if ([modelId length] > 0) {
         
-        NSMutableDictionary* model = [self getModelWithIdSync:modelId statusCode:&httpStatusCode];
+        NSDictionary* model = [self getModelWithIdSync:modelId statusCode:&httpStatusCode];
         NSDictionary* prediction =
         [ML4iOSLocalPredictions localPredictionWithJSONModelSync:model
                                                        arguments:inputData
@@ -285,7 +285,7 @@
     NSInteger httpStatusCode = 0;
     if ([anomalyId length] > 0) {
         
-        NSMutableDictionary* anomaly = [self getAnomalyWithIdSync:anomalyId statusCode:&httpStatusCode];
+        NSDictionary* anomaly = [self getAnomalyWithIdSync:anomalyId statusCode:&httpStatusCode];
         double score =
         [ML4iOSLocalPredictions localScoreWithJSONAnomalySync:anomaly
                                                     arguments:inputData

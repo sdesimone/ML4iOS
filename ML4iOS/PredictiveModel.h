@@ -94,7 +94,7 @@
  * @return The result of the prediction encoded in a NSDictionary
  */
 
-+ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)args
                               options:(NSDictionary*)options;
 

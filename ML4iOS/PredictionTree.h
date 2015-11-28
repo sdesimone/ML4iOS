@@ -38,7 +38,7 @@
                              fields:(NSDictionary*)aFields
                      objectiveField:(NSString*)aObjectiveField
                    rootDistribution:(NSDictionary*)rootDistribution
-                           parentId:(NSString*)parentId
+                           parentId:(NSNumber*)parentId
                              idsMap:(NSMutableDictionary*)idsMap
                             subtree:(BOOL)subtree
                             maxBins:(NSInteger)maxBins;

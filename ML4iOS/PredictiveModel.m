@@ -24,12 +24,8 @@
     NSDictionary* fields;
     NSString* _description;
     NSMutableArray* _fieldImportance;
-    NSString* _resourceId;
-    
-    NSDictionary* _root;
     PredictionTree* _tree;
     NSMutableDictionary* _idsMap;
-    NSDictionary* _terms;
     NSInteger _maxBins;
     
     NSDictionary* _model;
@@ -46,9 +42,11 @@
     NSAssert([status[@"code"] intValue] == 5, @"The model is not ready");
     if ([status[@"code"] intValue] != 5)
         return nil;
-        
-    fields = model[@"model"][@"model_fields"];
-    
+
+    fields = CFBridgingRelease(CFPropertyListCreateDeepCopy(kCFAllocatorDefault,
+                                                            (CFDictionaryRef)model[@"model"][@"model_fields"],
+                                                            kCFPropertyListMutableContainers));
+
     NSDictionary* modelFields = model[@"model"][@"fields"];
     for (NSString* fieldName in fields.allKeys) {
         NSMutableDictionary* field = fields[fieldName];
@@ -73,7 +71,6 @@
         
         _maxBins = 0;
         _model = model;
-        _root = _model[@"model"][@"root"];
         _description = jsonModel[@"description"] ?: @"";
         NSArray* modelFieldImportance = _model[@"model"][@"importance"];
         
@@ -87,7 +84,7 @@
         }
         
         _idsMap = [NSMutableDictionary new];
-        _tree = [[PredictionTree alloc] initWithRoot:_root
+        _tree = [[PredictionTree alloc] initWithRoot:_model[@"model"][@"root"]
                                               fields:self.fields
                                       objectiveField:objectiveField
                                     rootDistribution:jsonModel[@"model"][@"distribution"][@"training"]
@@ -127,21 +124,19 @@
     NSDictionary* distributionDictionary = [ML4iOSUtils dictionaryFromDistributionArray:distribution];
     long instances = prediction.count;
     if (multiple != 0 && ![_tree isRegression]) {
-        for (NSInteger i = 0; i < distribution.count; ++i) {
+        for (NSInteger i = 0; i < MIN(distribution.count, multiple); ++i) {
+            
             NSArray* distributionElement = distribution[i];
-            if (i < multiple) {
-                
-                id category = distributionElement.firstObject;
-                double confidence =
-                [ML4iOSUtils wsConfidence:category
-                             distribution:distributionDictionary];
-                [output addObject:@{ @"prediction" : category,
-                                     @"confidence" : @([self roundedConfidence:confidence]),
-                                     @"probability" : @([distributionElement.lastObject doubleValue] / instances),
-                                     @"distribution" : distributionDictionary,
-                                     @"count" : @([distributionElement.lastObject longValue])
-                                     }];
-            }
+            id category = distributionElement.firstObject;
+            double confidence =
+            [ML4iOSUtils wsConfidence:category
+                         distribution:distributionDictionary];
+            [output addObject:@{ @"prediction" : category,
+                                 @"confidence" : @([self roundedConfidence:confidence]),
+                                 @"probability" : @([distributionElement.lastObject doubleValue] / instances),
+                                 @"distribution" : distributionDictionary,
+                                 @"count" : @([distributionElement.lastObject longValue])
+                                 }];
         }
     } else {
         
@@ -160,7 +155,7 @@
     return output;
 }
 
-+ (NSDictionary*)predictWithJSONModel:(NSMutableDictionary*)jsonModel
++ (NSDictionary*)predictWithJSONModel:(NSDictionary*)jsonModel
                             arguments:(NSDictionary*)inputData
                               options:(NSDictionary*)options {
     

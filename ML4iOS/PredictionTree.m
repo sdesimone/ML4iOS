@@ -38,8 +38,8 @@ typedef PredictionTree TreeHolder;
     
     NSDictionary* _fields;
     NSArray* _objectiveFields;
-    NSString* _nodeId;
-    NSString* _parentId;
+    NSNumber* _nodeId;
+    NSNumber* _parentId;
     Predicate* _predicate;
     long _count;
     double _impurity;
@@ -53,7 +53,7 @@ typedef PredictionTree TreeHolder;
                               fields:(NSDictionary*)fields
                       objectiveFields:(NSArray*)objectiveFields
                     rootDistribution:(NSDictionary*)rootDistribution
-                            parentId:(NSString*)parentId
+                            parentId:(NSNumber*)parentId
                               idsMap:(NSMutableDictionary*)idsMap
                              subtree:(BOOL)subtree
                              maxBins:(NSInteger)maxBins {
@@ -246,7 +246,7 @@ typedef PredictionTree TreeHolder;
                               fields:(NSDictionary*)fields
                       objectiveField:(NSString*)objectiveField
                     rootDistribution:(NSDictionary*)rootDistribution
-                            parentId:(NSString*)parentId
+                            parentId:(NSNumber*)parentId
                               idsMap:(NSMutableDictionary*)idsMap
                              subtree:(BOOL)subtree
                              maxBins:(NSInteger)maxBins {
