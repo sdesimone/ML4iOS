@@ -70,7 +70,7 @@
     return prediction;
 }
 
-- (void)testStoredEnsemble {
+- (void)testStoredIrisEnsemble {
     
     NSBundle* bundle = [NSBundle bundleForClass:[self class]];
     NSString* path = [bundle pathForResource:@"iris" ofType:@"ensemble"];
@@ -92,6 +92,55 @@
                                 ml4ios:self.apiLibrary];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-versicolor"], @"Pass");
+}
+
+- (void)testStoredBaseballEnsemble {
+    
+    NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+    NSString* path = [bundle pathForResource:@"baseball" ofType:@"ensemble"];
+    NSData* clusterData = [NSData dataWithContentsOfFile:path];
+    
+    NSError* error = nil;
+    NSDictionary* ensemble = [NSJSONSerialization JSONObjectWithData:clusterData
+                                                             options:0
+                                                               error:&error];
+    
+    NSDictionary* prediction1 = [ML4iOSLocalPredictions
+                                localPredictionWithJSONEnsembleSync:ensemble
+                                arguments:@{ @"Salary": @(18000000),
+                                             @"Team": @"Atlanta Braves" }
+                                options:@{ @"byName" : @YES,
+                                           @"method" : @(ML4iOSPredictionMethodConfidence) }
+                                ml4ios:self.apiLibrary];
+    
+    XCTAssert([prediction1[@"prediction"] isEqualToString:@"Pitcher"] &&
+              [self.apiLibrary compareFloat:[prediction1[@"confidence"] doubleValue]
+               float:0.4484], @"Pass");
+
+    NSDictionary* prediction2 = [ML4iOSLocalPredictions
+                                localPredictionWithJSONEnsembleSync:ensemble
+                                arguments:@{ @"Salary": @(18000000),
+                                             @"Team": @"Atlanta Braves" }
+                                options:@{ @"byName" : @YES,
+                                           @"method" : @(ML4iOSPredictionMethodPlurality) }
+                                ml4ios:self.apiLibrary];
+    
+    XCTAssert([prediction2[@"prediction"] isEqualToString:@"Pitcher"] &&
+              [self.apiLibrary compareFloat:[prediction2[@"confidence"] doubleValue]
+               float:0.4484], @"Pass");
+
+    NSDictionary* prediction3 = [ML4iOSLocalPredictions
+                                 localPredictionWithJSONEnsembleSync:ensemble
+                                 arguments:@{ @"Salary": @(18000000),
+                                              @"Team": @"Atlanta Braves" }
+                                 options:@{ @"byName" : @YES,
+                                            @"method" : @(ML4iOSPredictionMethodProbability) }
+                                 ml4ios:self.apiLibrary];
+    
+    XCTAssert([prediction3[@"prediction"] isEqualToString:@"Pitcher"] &&
+              [self.apiLibrary compareFloat:[prediction3[@"confidence"] doubleValue]
+               float:0.2058], @"Pass");
+    
 }
 
 - (void)testEnsemblePredictionFieldNameResolution {

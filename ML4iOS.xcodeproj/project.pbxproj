@@ -18,6 +18,7 @@
 		492CC72219D2B081001829F5 /* ML4iOSClusterPredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */; };
 		492CC72419D2B240001829F5 /* testCluster.json in Resources */ = {isa = PBXBuildFile; fileRef = 492CC72319D2B240001829F5 /* testCluster.json */; };
 		493A27A01C0720B20087AEB7 /* iris.model in Resources */ = {isa = PBXBuildFile; fileRef = 493A279F1C0720B20087AEB7 /* iris.model */; settings = {ASSET_TAGS = (); }; };
+		493A27B41C1859580087AEB7 /* baseball.ensemble in Resources */ = {isa = PBXBuildFile; fileRef = 493A27B31C1859580087AEB7 /* baseball.ensemble */; settings = {ASSET_TAGS = (); }; };
 		494CAECC1BE90BA70028D95B /* iris.ensemble in Resources */ = {isa = PBXBuildFile; fileRef = 494CAECB1BE90BA70028D95B /* iris.ensemble */; settings = {ASSET_TAGS = (); }; };
 		494CAECF1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */; settings = {ASSET_TAGS = (); }; };
 		494CAED21BE90EAA0028D95B /* ML4iOSTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 494CAED11BE90EAA0028D95B /* ML4iOSTester.m */; settings = {ASSET_TAGS = (); }; };
@@ -89,6 +90,7 @@
 		492CC72119D2B081001829F5 /* ML4iOSClusterPredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSClusterPredictionTests.m; sourceTree = "<group>"; };
 		492CC72319D2B240001829F5 /* testCluster.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCluster.json; sourceTree = "<group>"; };
 		493A279F1C0720B20087AEB7 /* iris.model */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.model; sourceTree = "<group>"; };
+		493A27B31C1859580087AEB7 /* baseball.ensemble */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = baseball.ensemble; sourceTree = "<group>"; };
 		494CAECB1BE90BA70028D95B /* iris.ensemble */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iris.ensemble; sourceTree = "<group>"; };
 		494CAECE1BE90CF10028D95B /* ML4iOSEnsemblePredictionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ML4iOSEnsemblePredictionTests.m; sourceTree = "<group>"; };
 		494CAED01BE90EAA0028D95B /* ML4iOSTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ML4iOSTester.h; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				4962DC6D19DDA73B00058FF6 /* iris.pml */,
 				49C6CD7C19E6E6B200891301 /* spam.cluster */,
 				49C6CD8419E7F07100891301 /* spam-text.cluster */,
+				493A27B31C1859580087AEB7 /* baseball.ensemble */,
 				494CAECB1BE90BA70028D95B /* iris.ensemble */,
 			);
 			path = data;
@@ -421,6 +424,7 @@
 				49C6CD8519E7F07100891301 /* spam-text.cluster in Resources */,
 				4962DC6C19DDA5DE00058FF6 /* spam.model in Resources */,
 				4962DC6E19DDA73B00058FF6 /* iris.pml in Resources */,
+				493A27B41C1859580087AEB7 /* baseball.ensemble in Resources */,
 				494CAEF61BF4C40A0028D95B /* diab.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
