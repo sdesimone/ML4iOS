@@ -49,8 +49,11 @@ to generate centroid predictions locally.
     NSDictionary* fields = jsonCluster[@"clusters"][@"fields"];
     NSMutableDictionary* inputData = [NSMutableDictionary dictionaryWithCapacity:[fields allKeys].count];
     for (NSString* key in [fields allKeys]) {
-        if (args[fields[key][@"name"]])
+        if (args[fields[key][@"name"]]) {
             [inputData setObject:args[fields[key][@"name"]] forKey:key];
+        } else {
+            NSAssert(NO, @"All input fields should be provided to calculate a centroid");
+        }
     }
     
     return [[[self alloc] initWithCluster:jsonCluster] computeNearest:inputData];
@@ -208,7 +211,7 @@ to generate centroid predictions locally.
         if ([field[@"optype"] isEqualToString:@"categorical"] &&
             ![field[@"optype"] isEqualToString:@"text"]) {
          
-            NSAssert(inputData[fieldId] && inputData[field[@"name"]], @"MIIIIII");
+            NSAssert(inputData[fieldId] && inputData[field[@"name"]], @"Cluster validateInput: Should not be here");
             return nil;
         }
     }
@@ -216,7 +219,6 @@ to generate centroid predictions locally.
     NSMutableDictionary* newInputData = [NSMutableDictionary dictionary];
     for (NSString* field in inputData) {
 
-        NSLog(@"INPUT DATA FIELD: %@ (%@)", inputData[field], self.fields[field]);
         id inputDataKey = field;
         newInputData[inputDataKey] = inputData[field];
     }

@@ -22,7 +22,7 @@
  * @param distribution current distribution as an NSArray
  * @return the distribution as an NSDictionary
  */
-+ (NSDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution;
++ (NSMutableDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution;
 
 /**
  * Convert a dictionary to an array. Dual of dictionaryFromDistributionArray:
@@ -47,7 +47,7 @@
  */
 + (NSArray*)mergeBins:(NSArray*)distribution limit:(NSInteger)limit;
 
-+ (NSDictionary*)mergeBinsDictionary:(NSDictionary*)distribution limit:(NSInteger)limit;
++ (NSMutableDictionary*)mergeBinsDictionary:(NSDictionary*)distribution limit:(NSInteger)limit;
 
 /**
  * Computes the mean of a distribution in the [[point, instances]] syntax

@@ -26,7 +26,7 @@
  * @param distribution current distribution as an NSArray
  * @return the distribution as an NSDictionary
  */
-+ (NSDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution {
++ (NSMutableDictionary*)dictionaryFromDistributionArray:(NSArray*)distribution {
     
     NSMutableDictionary* newDistribution = [NSMutableDictionary new];
     for (NSArray* distValue in distribution) {
@@ -111,7 +111,7 @@
     return [self mergeBins:newDistribution limit:limit];
 }
 
-+ (NSDictionary*)mergeBinsDictionary:(NSDictionary*)distribution limit:(NSInteger)limit {
++ (NSMutableDictionary*)mergeBinsDictionary:(NSDictionary*)distribution limit:(NSInteger)limit {
     
     NSArray* distributionArray = [self mergeBins:[self arrayFromDistributionDictionary:distribution]
                                            limit:limit];

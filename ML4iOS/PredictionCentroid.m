@@ -73,6 +73,10 @@
 
             }
         }
+        if (stopDistance2 <= distance2) {
+            return NAN;
+        }
+        
     }
     return distance2;
 }
