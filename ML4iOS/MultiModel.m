@@ -18,7 +18,6 @@
 
 @implementation MultiModel {
     
-    NSMutableDictionary* _allFields;
     NSArray* _models;
 }
 
@@ -32,15 +31,6 @@
 
 + (MultiModel*)multiModelWithModels:(NSArray*)models {
     return [[self alloc] initWithModels:models];
-}
-
-- (NSDictionary*)allFields {
-    
-    if (!_allFields) {
-        _allFields = [NSMutableDictionary new];
-        
-    }
-    return _allFields;
 }
 
 - (MultiVote*)generateVotes:(NSDictionary*)inputData

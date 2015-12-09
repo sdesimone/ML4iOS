@@ -17,12 +17,9 @@
 #import "MultiVote.h"
 #import "ML4iOSEnums.h"
 
-#define NOTHRESHOLD -1
-
 @implementation PredictiveEnsemble {
     
     NSArray* _distributions;
-    NSArray* _models;
     NSArray* _multiModels;
 }
 

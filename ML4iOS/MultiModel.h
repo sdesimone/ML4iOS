@@ -22,8 +22,6 @@
 
 + (MultiModel*)multiModelWithModels:(NSArray*)ids;
 
-- (NSDictionary*)allFields;
-
 - (MultiVote*)generateVotes:(NSDictionary*)inputData
                      byName:(BOOL)byName
             missingStrategy:(NSInteger)missingStrategy

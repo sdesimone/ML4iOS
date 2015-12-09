@@ -25,6 +25,10 @@ static NSString* const kNullCategory = @"kNullCategory";
 
 @end
 
+/**
+ * MultiVote: combiner class for ensembles voting predictions.
+ *
+ */
 @implementation MultiVote
 
 + (NSString*)combinationWeightsForMethod:(ML4iOSPredictionMethod)method {
@@ -40,10 +44,6 @@ static NSString* const kNullCategory = @"kNullCategory";
     return @[@[], @[@"confidence"], @[@"distribution", @"count"], @[]];
 }
 
-/**
- * MultiVote: combiner class for ensembles voting predictions.
- *
- */
 - (instancetype)init {
     
     return [self initWithPredictions:nil];
@@ -117,7 +117,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         
         NSInteger order = [self nextOrder];
         for (NSMutableDictionary* prediction in votes.predictions) {
-            [prediction setObject:@(++order) forKey:@"order"];
+            [prediction setObject:@(order++) forKey:@"order"];
             [_predictions addObject:prediction];
         }
     }
@@ -142,11 +142,8 @@ static NSString* const kNullCategory = @"kNullCategory";
  */
 - (NSArray*)weigthKeysForMethod:(NSUInteger)method {
  
-    NSArray* keys = [NSArray new];
-    if (keys.count > 0)
-        if (![self areKeysValid:keys])
-            return  nil;
-    return keys;
+    NSArray* keys = MultiVote.weightKeys[method];
+    return [self areKeysValid:keys] ? keys : nil;
 }
 
 /**
@@ -166,9 +163,9 @@ static NSString* const kNullCategory = @"kNullCategory";
 /**
  * Returns a distribution formed by grouping the distributions of each predicted node.
  */
-- (NSDictionary*)mergeDistributionInPrediction:(NSMutableDictionary*)prediction {
+- (NSDictionary*)groupedDistributionPrediction:(NSMutableDictionary*)prediction {
     
-    NSDictionary* joinedDist = nil;
+    NSMutableDictionary* joinedDist = [NSMutableDictionary new];
     NSString* distributionUnit = @"counts";
     for (NSMutableDictionary* p in _predictions) {
         
@@ -176,7 +173,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         if ([distribution isKindOfClass:[NSArray class]]) {
             distribution = [ML4iOSUtils dictionaryFromDistributionArray:(id)distribution];
         }
-        joinedDist = [ML4iOSUtils mergeDistribution:[NSMutableDictionary new] andDistribution:distribution];
+        joinedDist = [ML4iOSUtils mergeDistribution:joinedDist andDistribution:distribution];
         if ([distributionUnit isEqualToString:@"counts"] && joinedDist.count > BINS_LIMIT) {
             distributionUnit = @"bins";
         }
@@ -195,15 +192,17 @@ static NSString* const kNullCategory = @"kNullCategory";
  */
 - (double)normalizeErrorRange:(double)errorRange topRange:(double)topRange rangeMin:(double)min {
     
-    double normalizeFactor = _predictions.count;
-    for (NSMutableDictionary* prediction in _predictions) {
-        if (errorRange > 0.0) {
+    double normalizeFactor = 0.0;
+    if (errorRange > 0.0) {
+        for (NSMutableDictionary* prediction in _predictions) {
             double delta = min - [prediction[@"confidence"] doubleValue];
             [prediction setObject:@(exp(delta / errorRange * topRange)) forKey:@"errorWeight"];
             normalizeFactor += [prediction[@"errorWeight"] doubleValue];
-        } else {
-            [prediction setObject:@(1.0) forKey:@"errorWeight"];
         }
+    } else {
+        for (NSMutableDictionary* prediction in _predictions)
+            [prediction setObject:@(1.0) forKey:@"errorWeight"];
+        normalizeFactor = self.predictions.count;
     }
     return normalizeFactor;
 }
@@ -222,7 +221,6 @@ static NSString* const kNullCategory = @"kNullCategory";
     double errorRange = 0.0;
     double maxError = 0.0;
     double minError = HUGE_VAL;
-    double normalizeFactor = 0.0;
     for (NSDictionary* prediction in _predictions) {
         NSAssert(prediction[@"confidence"], @"No confidence data to use the selected prediction method");
         error = [prediction[@"confidence"] doubleValue];
@@ -230,7 +228,6 @@ static NSString* const kNullCategory = @"kNullCategory";
         minError = fmin(error, minError);
     }
     errorRange = maxError - minError;
-    normalizeFactor = _predictions.count;
     return [self normalizeErrorRange:errorRange topRange:topRange rangeMin:minError];
 }
 
@@ -302,7 +299,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         [newPrediction setObject:@(max) forKey:@"max"];
     }
     
-    return [self mergeDistributionInPrediction:newPrediction];
+    return [self groupedDistributionPrediction:newPrediction];
 }
 
 /**
@@ -336,7 +333,7 @@ static NSString* const kNullCategory = @"kNullCategory";
             confidenceValue += [prediction[@"confidence"] doubleValue];
         }
         if (count) {
-            instances += [prediction[@"count"] doubleValue];
+            instances += [prediction[@"count"] intValue];
         }
         if (min) {
             dMin += [prediction[@"min"] doubleValue];
@@ -362,7 +359,7 @@ static NSString* const kNullCategory = @"kNullCategory";
         [output setObject:@(confidenceValue) forKey:@"confidence"];
     }
     if (distribution) {
-        [self mergeDistributionInPrediction:output];
+        [self groupedDistributionPrediction:output];
     }
     if (count) {
         [output setObject:@(instances) forKey:@"count"];
@@ -409,6 +406,13 @@ static NSString* const kNullCategory = @"kNullCategory";
     }
 }
 
+/**
+ * Compute the combined weighted confidence from a list of predictions
+ *
+ * @param combinedPrediction {object} combinedPrediction Prediction object
+ * @param weightLabel {string} weightLabel Label of the value in the prediction object
+ *        that will be used to weight confidence
+ */
 - (NSDictionary*)weightedConfidence:(id)combinedPrediction weightLabel:(id)weightLabel {
     
     double finalConfidence = 0.0;
@@ -492,13 +496,13 @@ static NSString* const kNullCategory = @"kNullCategory";
     NSMutableArray* tuples = [NSMutableArray new];
     
     for (NSDictionary* prediction in _predictions) {
-        if (!weightLabel) {
+        if (weightLabel != kNullCategory) {
             NSAssert([[MultiVote weightLabels] indexOfObject:weightLabel] != NSNotFound,
                      @"MultiVote combineCategorical: wrong weightLabel");
             NSAssert(prediction[weightLabel],
                      @"MultiVote combineCategorical: Not enough data to use the selected prediction method.");
-        } else {
-            weight = [prediction[weightLabel] doubleValue];
+            if (prediction[weightLabel])
+                weight = [prediction[weightLabel] doubleValue];
         }
         category = prediction[@"prediction"];
         
