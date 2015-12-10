@@ -425,12 +425,7 @@ static NSString* const kNullCategory = @"kNullCategory";
             [predictionList addObject:prediction];
         }
     }
-//    NSMutableArray* predictions = [NSMutableArray new];
-//    for (NSDictionary* prediction in predictions) {
-//        [predictions addObject:predictionList[]];
-//    }
-    
-    if (weightLabel != kNullCategory) {
+    if (weightLabel && weightLabel != kNullCategory) {
         for (NSDictionary* prediction in _predictions) {
             NSAssert(prediction[@"confidence"] && prediction[weightLabel],
                      @"MultiVote weightedConfidence: not enough data to use selected method (missing %@)",
@@ -439,7 +434,7 @@ static NSString* const kNullCategory = @"kNullCategory";
     }
     
     for (NSDictionary* prediction in _predictions) {
-        if (weightLabel) {
+        if (weightLabel && weightLabel != kNullCategory) {
             weight = [prediction[@"confidence"] doubleValue];
         }
         finalConfidence += weight * [prediction[@"confidence"] doubleValue];
