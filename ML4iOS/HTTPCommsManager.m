@@ -258,17 +258,6 @@
                                              encoding:NSUTF8StringEncoding];
     _options = nil;
     return [result substringWithRange:NSMakeRange(1, [result length] - 2)];
-
-//    NSString* result = @"";
-//    for (NSString* options in [_options allValues]) {
-//        if ([options isKindOfClass:[NSString class]]) {
-//            if ([options length] > 0) {
-//                NSString* trimmedOptions = [options substringWithRange:NSMakeRange(1, [options length] - 2)];
-//                result = [NSString stringWithFormat:@"%@, %@", result, trimmedOptions];
-//            }
-//        } else
-//             result = [NSString stringWithFormat:@"%@, %@", result, options];
-//    }
 }
 
 //*******************************************************************************
