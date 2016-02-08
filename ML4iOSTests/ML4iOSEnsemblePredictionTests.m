@@ -24,16 +24,6 @@
 
 @implementation ML4iOSEnsemblePredictionTests
 
-- (void)setUp {
-    [super setUp];
-    
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
 //-- This is copied from ML4iOSModelPredictionTests -- think about refactoring
 - (NSDictionary*)comparePredictionsWithEnsembleId:(NSString*)ensembleId
                                         arguments:(NSDictionary*)arguments
@@ -61,7 +51,8 @@
                                            options:(NSDictionary*)options {
     
     self.apiLibrary.csvFileName = csvName;
-    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
+    NSString* ensembleId =
+    [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
     NSDictionary* prediction = [self comparePredictionsWithEnsembleId:ensembleId
                                                             arguments:arguments
                                                               options:options];
@@ -146,7 +137,8 @@
 - (void)testEnsemblePredictionFieldNameResolution {
     
     self.apiLibrary.csvFileName = @"iris.csv";
-    NSString* ensembleId = [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
+    NSString* ensembleId =
+    [self.apiLibrary createAndWaitEnsembleFromDatasetId:self.apiLibrary.datasetId];
     NSDictionary* prediction1 = [self comparePredictionsWithEnsembleId:ensembleId
                                                              arguments:@{ @"000001": @4.1,
                                                                           @"000002": @0.96,
@@ -179,54 +171,73 @@
 
 - (void)testIrisEnsemblePredictionAgainstRemote2 {
     
-    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
-                                                             arguments:@{ @"sepal width": @3.9,
-                                                                          @"petal length": @0.95,
-                                                                          @"petal width": @1.52,
-                                                                          @"sepal length": @7.0}
-                                                               options:@{ @"byName" : @(YES),
-                                                                          @"method" : @(ML4iOSPredictionMethodConfidence) }];
+    NSDictionary* prediction =
+    [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                  arguments:@{ @"sepal width": @3.9,
+                                               @"petal length": @0.95,
+                                               @"petal width": @1.52,
+                                               @"sepal length": @7.0}
+                                    options:@{ @"byName" : @(YES),
+                                               @"method" : @(ML4iOSPredictionMethodConfidence) }];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
 }
 
 - (void)testIrisEnsemblePredictionAgainstRemote3 {
     
-    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
-                                                             arguments:@{ @"sepal width": @3.9,
-                                                                          @"petal length": @0.95,
-                                                                          @"petal width": @1.52,
-                                                                          @"sepal length": @7.0}
-                                                               options:@{ @"byName" : @(YES),
-                                                                          @"method" : @(ML4iOSPredictionMethodProbability) }];
+    NSDictionary* prediction =
+    [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                  arguments:@{ @"sepal width": @3.9,
+                                               @"petal length": @0.95,
+                                               @"petal width": @1.52,
+                                               @"sepal length": @7.0}
+                                    options:@{ @"byName" : @(YES),
+                                               @"method" : @(ML4iOSPredictionMethodProbability) }];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
 }
 
 - (void)testIrisEnsemblePredictionAgainstRemote4 {
     
-    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"iris.csv"
-                                                             arguments:@{ @"sepal width": @3.9,
-                                                                          @"petal length": @0.95,
-                                                                          @"petal width": @1.52,
-                                                                          @"sepal length": @7.0}
-                                                               options:@{ @"byName" : @(YES),
-                                                                          @"method" : @(ML4iOSPredictionMethodThreshold),
-                                                                          @"threshold-k" : @(5),
-                                                                          @"threshold-category" : @"Iris-setosa" }];
+    NSDictionary* prediction =
+    [self comparePredictionsWithEnsembleCSV:@"iris.csv"
+                                  arguments:@{ @"sepal width": @3.9,
+                                               @"petal length": @0.95,
+                                               @"petal width": @1.52,
+                                               @"sepal length": @7.0}
+                                    options:@{ @"byName" : @(YES),
+                                               @"method" : @(ML4iOSPredictionMethodThreshold),
+                                               @"threshold-k" : @(5),
+                                               @"threshold-category" : @"Iris-setosa" }];
     
     XCTAssert([prediction[@"prediction"] isEqualToString:@"Iris-setosa"]);
 }
 
-- (void)testWinesEnsemblePredictionAgainstRemote {
+- (void)testWinesEnsemblePredictionAgainstRemote1 {
     
-    NSDictionary* prediction = [self comparePredictionsWithEnsembleCSV:@"wines.csv"
-                                                             arguments:@{ @"Price": @5.8,
-                                                                          @"Grape": @"Pinot Grigio",
-                                                                          @"Country": @"Italy",
-                                                                          @"Rating": @92}
-                                                               options:@{ @"byName" : @(YES),
-                                                                          @"confidence" : @(YES) }];
+    NSDictionary* prediction =
+    [self comparePredictionsWithEnsembleCSV:@"wines.csv"
+                                  arguments:@{ @"Price": @5.8,
+                                               @"Grape": @"Pinot Grigio",
+                                               @"Country": @"Italy",
+                                               @"Rating": @92}
+                                    options:@{ @"byName" : @(YES),
+                                               @"confidence" : @(YES) }];
+    
+    XCTAssert(prediction && prediction[@"prediction"]);
+}
+
+- (void)testWinesEnsemblePredictionAgainstRemote2 {
+    
+    NSDictionary* prediction =
+    [self comparePredictionsWithEnsembleCSV:@"wines.csv"
+                                  arguments:@{ @"Price": @5.8,
+                                               @"Grape": @"Pinot Grigio",
+                                               @"Country": @"Italy",
+                                               @"Rating": @89}
+                                    options:@{ @"byName" : @(YES),
+                                               @"method" : @(ML4iOSPredictionMethodConfidence),
+                                               @"confidence" : @(YES) }];
     
     XCTAssert(prediction && prediction[@"prediction"]);
 }
